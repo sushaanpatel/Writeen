@@ -3,7 +3,6 @@
         <title>Writeen</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- <link rel="stylesheet" href="{{url_for('static', filename = 'css/app.css')}}"> -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -15,6 +14,7 @@
            }
            body{
                font-family: 'Open Sans', sans-serif;
+               background-color: whitesmoke;
                /* font-family: 'Playfair Display', serif; */
            }
            #topbutton{
@@ -31,6 +31,7 @@
             }
             input,select{
                 height: 35px;
+                border-radius: 5px;
             }
         </style>
     </head>
@@ -45,26 +46,25 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                        
                 </button>
-                <a class="navbar-brand" href="#" style="color: black;"><b>Writeen</b></a>
+                <a class="navbar-brand" href="index.html" style="color: black;"><b>Writeen</b></a>
               </div>
               <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
-                <li><a href="#" style="color: black;font-weight: 400;">Home</a></li>
                 <li><a href="#" style="color: black;font-weight: 400;">About Us</a></li>
-                <li><a href="#" style="color: black;font-weight: 400;">Contact Us</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="#" style="color: black;font-weight: 400;"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                <li><a href="create.html" style="color: black;font-weight: 400;"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
                 <li><a href="#" style="color: black;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                <li><a href="#" style="color: black;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
               </ul>
             </div>
             </div>
         </nav>
         <!-- Search Bar -->
-        <div id="search-div" style="float: right;margin-right: 1%;">
+        <div id="search_div" style="float: right;margin-right: 1%;">
             <form action="/search" method="POST">
                 <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
-                <select id="filter" style="border-radius: 5px;border: 0px;">
+                <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
                     <option value="author">Author</option>
@@ -91,6 +91,68 @@
                 document.documentElement.scrollTop = 0;
             }
             // write changeopt
+            function changeopt(){
+                var search_div = document.getElementById('search_div');
+                var filter = document.getElementById('filter');
+                if (filter.value == "genre"){
+                    search_div.innerHTML = 
+                `<form action="/search" method="POST">
+                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;">
+                        <option value="business">Business</option>
+                        <option value="sports">Sports</option>
+                        <option value="news">News</option>
+                        <option value="science">Science</option>
+                        <option value="tech">Technology</option>
+                    </select>    
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                        <option value="title">Title</option>
+                        <option value="genre" selected>Genre</option>
+                        <option value="author">Author</option>
+                        <option value="questions">Question</option>
+                    </select>
+                    <input type="submit" class="btn" value="Sort">
+                </form>`
+                }
+                else if (filter.value == "title"){
+                    search_div.innerHTML = 
+                `<form action="/search" method="POST">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                        <option value="title" selected>Title</option>
+                        <option value="genre">Genre</option>
+                        <option value="author">Author</option>
+                        <option value="questions">Question</option>
+                    </select>
+                    <input type="submit" class="btn" value="Sort">
+                </form>`
+                }
+                else if (filter.value == "author"){
+                    search_div.innerHTML = 
+                `<form action="/search" method="POST">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                        <option value="title">Title</option>
+                        <option value="genre">Genre</option>
+                        <option value="author" selected>Author</option>
+                        <option value="questions">Question</option>
+                    </select>
+                    <input type="submit" class="btn" value="Sort">
+                </form>`
+                }
+                else if (filter.value == "questions"){
+                    search_div.innerHTML = 
+                `<form action="/search" method="POST">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                        <option value="title">Title</option>
+                        <option value="genre">Genre</option>
+                        <option value="author">Author</option>
+                        <option value="questions" selected>Question</option>
+                    </select>
+                    <input type="submit" class="btn" value="Sort">
+                </form>`
+                }
+            }
         </script>
     </body>
 </html>
