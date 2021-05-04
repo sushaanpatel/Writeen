@@ -11,11 +11,12 @@
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
         <style>
            .nav.navbar-nav li a:hover{
-               background-color: #ececec;
+               background-color: #424242;
            }
            body{
                font-family: 'Open Sans', sans-serif;
-               background-color: whitesmoke;
+               background-color: #222222;
+               color: white;
                /* font-family: 'Playfair Display', serif; */
            }
            #topbutton{
@@ -27,19 +28,30 @@
                 font-size: 18px;
                 border: none;
                 outline: none;
-                border-radius: 100%;
-                padding: 12px;
+                border-radius: 20px;
+                padding-top: 8px;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 6px;
             }
-            input,select{
+            input,select,textarea{
                 height: 35px;
                 border-radius: 5px;
+                background-color: #3a3a3a;
+            }
+            input[type=file]{
+                border-radius: 5px;
+            }
+            div.form-group select.form-control, input.form-control, textarea.form-control{
+                background-color: #3a3a3a;
+                color: white;
             }
         </style>
     </head>
     <body>
         <!-- Nav Bar and Top Button -->
-        <button id="topbutton" class="btn" style="background-color: #d1d1d1;" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
-        <nav class="navbar navbar-default navbar-static-top" style="font-family: 'Playfair Display', serif;">
+        <button id="topbutton" class="btn" style="background-color: #424242;" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
+        <nav class="navbar navbar-inverse navbar-static-top" style="font-family: 'Playfair Display', serif;">
             <div class="container-fluid">
               <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -47,49 +59,68 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                        
                 </button>
-                <a class="navbar-brand" href="index.html" style="color: black;"><b>Writeen</b></a>
+                <a class="navbar-brand" href="index.html" style="color: white;"><b>Writeen</b></a>
               </div>
               <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
-                <li><a href="#" style="color: black;font-weight: 400;">About Us</a></li>
+                <li><a href="#" style="color: white;font-weight: 400;">About Us</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="create.html" style="color: black;font-weight: 400;"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
-                <li><a href="#" style="color: black;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                <li><a href="#" style="color: black;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
+                <li><a href="create.html" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
+                <li><a href="login.html" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Log-in</a></li>
+                <li><a href="#" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
               </ul>
             </div>
             </div>
         </nav>
-        <select id="post_type" name="post_name" style="float: right;margin-right: 1%;">
+        <select id="post_type" name="post_name" style="float: right;margin-right: 3%;border: 0px;" onclick="changeformat()">
             <option value="txt">Text</option>
             <option value="art">Art</option>
             <option value="ques">Question</option>
         </select>
         <!-- add line wrap -->
         <!-- start at top line -->
-        <div id="post_div" style="margin-left: 2.5%;width: auto;">
+        <div id="post_div" style="margin-left: 3%;">
             <form action="/create" method="GET">
-                <input type="text" id="post_title" name="post_title" placeholder="Title (Required or *)" style="width: 65%;height: 40px;">
-                <br><br>
+                <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="width: 65%;font-size: 16px;"></textarea></b>
+                <br>
+                <div class="form-group">
                     <label for="post_genre">Genre : </label>
-                    <select id="post_genre" name="post_genre">
+                    <select id="post_genre" name="post_genre" class="form-control" style="width: 15%;border: 0px;">
                         <option value="business">Business*</option>
                         <option value="sports">Sports*</option>
                         <option value="news">News*</option>
                         <option value="science">Science*</option>
                         <option value="tech">Technology*</option>
+                        <option value='fiction'>Fiction*</option>
+                        <option value='comedy'>Comedy*</option>
+                        <option value='rom-com'>Rom-Com*</option>
+                        <option value='fantasy'>Fantasy*</option>
+                        <option value='horror'>Horror*</option>
+                        <option value='mystery'>Mystery*</option>
+                        <option value='drama'>Drama*</option>
+                        <option value='histroy'>Histroy*</option>
+                        <option value='politics'>Politics*</option>
+                        <option value='sci-fi'>Sci-fi*</option>
+                        <option value='poetry'>Poetry*</option>
+                        <option value='adventure'>Adventure*</option>
                     </select>
-                <br><br>
-                <input type="text" id="post_content" name="post_content" placeholder="Content (Required or *)" style="width: 65%;height: 400px;">
-                <br><br>
-                <input type="text" id="post_media" name="post_media" placeholder="Media Links" style="width: 65%;height: 40px;">
-                <br><br>
-                <input type="text" id="post_citation" name="post_citation" placeholder="Citation" style="width: 65%;height: 40px;">
-                <br><br>
+                </div>
+                <br>
+                <textarea type="text" class="form-control" id="post_content" name="post_content" placeholder="Content (Required or *)" style="width: 65%;height: 400px;"></textarea>
+                <br>
+                <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Media Links" style="width: 65%;"></textarea>
+                <br>
+                <textarea type="text" class="form-control" id="post_citation" name="post_citation" placeholder="Citation" style="width: 65%;"></textarea>
+                <br>
+                <div class="form-group">
+                    <label for="anonymous">Anonymous : </label><select style="width: 10%;border: 0px;" class="form-control" id="anonymous" name="anonymous"><option value="yes">Yes</option><option value="no" selected>No</option></select>
+                </div>
+                <br>
+                <input type="submit" class="btn btn-primary" style="font-size: 18px; height: 40px;margin-left: 31%;" value="Post">
             </form>
         </div>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <br><br>
         <script>
             var mybutton = document.getElementById("topbutton");
             window.onscroll = function(){scrollFunction()};
@@ -105,6 +136,93 @@
             function topFunction(){
                 document.body.scrollTop = 0;
                 document.documentElement.scrollTop = 0;
+            }
+
+            function changeformat(){
+                var post_div = document.getElementById('post_div');
+                var post_type = document.getElementById('post_type').value;
+                if (post_type == "txt"){
+                    post_div.innerHTML = 
+                `<form action="/create" method="GET">
+                    <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="width: 65%;font-size: 16px;"></textarea></b>
+                    <br>
+                    <div class="form-group">
+                        <label for="post_genre">Genre : </label>
+                        <select id="post_genre" name="post_genre" class="form-control" style="width: 15%;border: 0px;">
+                            <option value="business">Business*</option>
+                            <option value="sports">Sports*</option>
+                            <option value="news">News*</option>
+                            <option value="science">Science*</option>
+                            <option value="tech">Technology*</option>
+                            <option value='fiction'>Fiction*</option>
+                            <option value='comedy'>Comedy*</option>
+                            <option value='rom-com'>Rom-Com*</option>
+                            <option value='fantasy'>Fantasy*</option>
+                            <option value='horror'>Horror*</option>
+                            <option value='mystery'>Mystery*</option>
+                            <option value='drama'>Drama*</option>
+                            <option value='histroy'>Histroy*</option>
+                            <option value='politics'>Politics*</option>
+                            <option value='sci-fi'>Sci-fi*</option>
+                            <option value='poetry'>Poetry*</option>
+                            <option value='adventure'>Adventure*</option>
+                        </select>
+                    </div>
+                    <br>
+                    <textarea type="text" class="form-control" id="post_content" name="post_content" placeholder="Content (Required or *)" style="width: 65%;height: 400px;"></textarea>
+                    <br>
+                    <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Media Links" style="width: 65%;"></textarea>
+                    <br>
+                    <textarea type="text" class="form-control" id="post_citation" name="post_citation" placeholder="Citation" style="width: 65%;"></textarea>
+                    <br>
+                    <div class="form-group">
+                        <label for="anonymous">Anonymous : </label><select style="width: 10%;border: 0px;" class="form-control" id="anonymous" name="anonymous"><option value="yes">Yes</option><option value="no" selected>No</option></select>
+                    </div>
+                    <br>
+                    <input type="submit" class="btn btn-primary" style="font-size: 18px; height: 40px;margin-left: 31%;" value="Post">
+                </form>`
+                }
+                if (post_type == "art"){
+                    post_div.innerHTML = 
+                `<form action="/create" method="GET">
+                    <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="width: 65%;font-size: 16px;"></textarea></b>
+                    <br>
+                    <div class="form-group">
+                        <label for="post_genre">Genre : </label>
+                        <select id="post_genre" name="post_genre" class="form-control" style="width: 15%;border: 0px;">
+                            <option value="business">Business*</option>
+                            <option value="sports">Sports*</option>
+                            <option value="news">News*</option>
+                            <option value="science">Science*</option>
+                            <option value="tech">Technology*</option>
+                            <option value='fiction'>Fiction*</option>
+                            <option value='comedy'>Comedy*</option>
+                            <option value='rom-com'>Rom-Com*</option>
+                            <option value='fantasy'>Fantasy*</option>
+                            <option value='horror'>Horror*</option>
+                            <option value='mystery'>Mystery*</option>
+                            <option value='drama'>Drama*</option>
+                            <option value='histroy'>Histroy*</option>
+                            <option value='politics'>Politics*</option>
+                            <option value='sci-fi'>Sci-fi*</option>
+                            <option value='poetry'>Poetry*</option>
+                            <option value='adventure'>Adventure*</option>
+                        </select>
+                    </div>
+                    <br>
+                    <input type="file" class="btn" id="post_content" name="post_content" placeholder="Content (Required or *)" style="font-size:15px;">
+                    <br>
+                    <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Media Links" style="width: 65%;"></textarea>
+                    <br>
+                    <textarea type="text" class="form-control" id="post_citation" name="post_citation" placeholder="Citation" style="width: 65%;"></textarea>
+                    <br>
+                    <div class="form-group">
+                        <label for="anonymous">Anonymous : </label><select style="width: 10%;border: 0px;" class="form-control" id="anonymous" name="anonymous"><option value="yes">Yes</option><option value="no" selected>No</option></select>
+                    </div>
+                    <br>
+                    <input type="submit" class="btn btn-primary" style="font-size: 18px; height: 40px;margin-left: 31%;" value="Post">
+                </form>`
+                }
             }
         </script>
     </body>

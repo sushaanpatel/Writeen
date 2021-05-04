@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Writeen</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+           .nav.navbar-nav li a:hover{
+               background-color: #424242;
+           }
+           body{
+               font-family: 'Open Sans', sans-serif;
+               background-color: #222222;
+               color: white;
+               /* font-family: 'Playfair Display', serif; */
+           }
+           #topbutton{
+                display: none;
+                position: fixed;
+                bottom: 20px;
+                right: 30px;
+                z-index: 99;
+                font-size: 18px;
+                border: none;
+                outline: none;
+                border-radius: 20px;
+                padding-top: 8px;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 6px;
+            }
+            input,select,textarea{
+                height: 35px;
+                border-radius: 5px;
+                background-color: #3a3a3a;
+            }
+            input[type=file]{
+                border-radius: 5px;
+            }
+            div.form-group select.form-control, input.form-control, textarea.form-control{
+                background-color: #3a3a3a;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Nav Bar and Top Button -->
+        <button id="topbutton" class="btn" style="background-color: #424242;" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
+        <nav class="navbar navbar-inverse navbar-static-top" style="font-family: 'Playfair Display', serif;">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>                        
+                </button>
+                <a class="navbar-brand" href="index.html" style="color: white;"><b>Writeen</b></a>
+              </div>
+              <div class="collapse navbar-collapse" id="myNavbar">
+              <ul class="nav navbar-nav">
+                <li><a href="#" style="color: white;font-weight: 400;">About Us</a></li>
+              </ul>
+              <ul class="nav navbar-nav navbar-right">
+                <li><a href="create.html" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
+                <li><a href="login.html" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Log-in</a></li>
+                <li><a href="#" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
+              </ul>
+            </div>
+            </div>
+        </nav>
+        <center>
+        <div style="background-color: #3a3a3a;height: 400px;width: 40%;border-radius:10px;">
+            <h1><span class="glyphicon glyphicon-list-alt" style="font-size: 26px;margin-top: 11%;"></span> Sign-up</h1>
+            <form action="/signup" method="POST">
+                <input type="text" id="new_name" name="new_name" class="form-control" placeholder="username" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
+                <input type="password" id="new_password" name="new_password" class="form-control" placeholder="password" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
+                <input type="date" id="birth_date" name="birth_date" class="form-control" placeholder="birth date" style="width: 70%;font-size: 20px;">
+                <br>
+                <input type="submit" class="btn btn-primary" value="Continue" style="font-size: 20px;height: 45px;">
+            </form>
+            <br>
+            <a href="/login" style="font-size: 20px;">Have an account?</a>
+        </div>
+        </center>
+        <script>
+            var mybutton = document.getElementById("topbutton");
+            window.onscroll = function(){scrollFunction()};
+
+            function scrollFunction(){
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    mybutton.style.display = "block";
+                } else {
+                    mybutton.style.display = "none";
+                }
+            }
+
+            function topFunction(){
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+        </script>
+    </body>
+</html>
