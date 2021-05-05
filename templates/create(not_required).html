@@ -10,11 +10,12 @@
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
         <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
            .nav.navbar-nav li a:hover{
                background-color: #424242;
            }
            body{
-               font-family: 'Open Sans', sans-serif;
+               font-family: 'Poppins', sans-serif;
                background-color: #222222;
                color: white;
                /* font-family: 'Playfair Display', serif; */
@@ -78,11 +79,10 @@
             <option value="art">Art</option>
             <option value="ques">Question</option>
         </select>
-        <!-- add line wrap -->
-        <!-- start at top line -->
+        <!-- convert to pop-up -->
         <div id="post_div" style="margin-left: 3%;">
             <form action="/create" method="GET">
-                <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="width: 65%;font-size: 16px;"></textarea></b>
+                <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="width: 65%;font-size: 16px;height: 40px;"></textarea></b>
                 <br>
                 <div class="form-group">
                     <label for="post_genre">Genre : </label>
