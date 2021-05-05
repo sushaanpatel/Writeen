@@ -39,6 +39,7 @@
                 height: 35px;
                 border-radius: 5px;
                 background-color: #3a3a3a;
+                border-color: lightgray;
             }
             input[type=file]{
                 border-radius: 5px;
@@ -54,7 +55,7 @@
     </head>
     <body>
         <!-- Nav Bar and Top Button -->
-        <button id="topbutton" class="btn" style="background-color: #424242;" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
+        <button id="topbutton" class="btn" style="background-color: #424242" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
         <nav class="navbar navbar-inverse navbar-static-top" style="font-family: 'Playfair Display', serif;">
             <div class="container-fluid">
               <div class="navbar-header">
@@ -70,7 +71,7 @@
                 <li><a href="#" style="color: white;font-weight: 400;">About Us</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a data-toggle="modal" data-target="#myModal" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
+                <li><a style="color: white;font-weight: 400;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
                 <li><a href="login.html" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Log-in</a></li>
                 <li><a href="account.html" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
               </ul>
@@ -136,19 +137,33 @@
                 </div>
             </div>
         </div>
+        <!-- delete account popup -->
+        <div id="yourModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content" style="background-color: #222222;">
+                <div class="modal-header" style="background-color: #222222;border-radius: 4px;">
+                  <button type="button" style="color: white;" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" style="color: white;"></span></button>
+                  <h4 class="modal-title">Are you Sure?</h4>
+                </div>
+                <div class="modal-body">
+                  <p>Sure you want to delete your account?</p>
+                </div>
+                <div class="modal-footer">
+                  <a type="button" href="" class="btn btn-danger">Delete Account</a>
+                  <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </div>
         <center>
-        <div style="background-color: #3a3a3a;height: 400px;width: 40%;border-radius:10px;">
-            <h1><span class="glyphicon glyphicon-list-alt" style="font-size: 26px;margin-top: 11%;"></span> Sign-up</h1>
-            <form action="/signup" method="POST">
-                <input type="text" id="new_name" name="new_name" class="form-control" placeholder="username" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
-                <input type="password" id="new_password" name="new_password" class="form-control" placeholder="password" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
-                <input type="date" id="birth_date" name="birth_date" class="form-control" placeholder="birth date" style="width: 70%;font-size: 20px;">
-                <br>
-                <input type="submit" class="btn btn-primary" value="Continue" style="font-size: 20px;height: 45px;">
-            </form>
-            <br>
-            <a href="/login" style="font-size: 20px;">Have an account?</a>
+        <div id="mypost_div">
+            <!-- add jinija -->
         </div>
+        <hr style="background-color: #424242;height: 3px;border: 2px;width: 90%;">
+        <a href="" class="btn btn-danger">Sign Out</a>
+        <hr style="background-color: #424242;height: 3px;border: 2px;width: 90%;">
+        <button class="btn btn-danger" data-toggle="modal" data-target="#yourModal">Delete Account</button>
+        <hr style="background-color: #424242;height: 3px;border: 2px;width: 90%;">
         </center>
         <script>
             var mybutton = document.getElementById("topbutton");
