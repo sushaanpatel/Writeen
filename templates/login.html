@@ -137,17 +137,32 @@
             </div>
         </div>
         <center>
+        {% if a == 2 %}
         <div style="background-color: #3a3a3a;height: 400px;width: 40%;border-radius:10px;">
             <h1><span class="glyphicon glyphicon-log-in" style="font-size: 26px;margin-top: 14%;"></span> Log-in</h1>
             <form action="/login" method="POST">
+                <p style="color: red;">Wrong Credentials, account not found</p>
                 <input type="text" id="acc_username" name="acc_username" class="form-control" placeholder="username" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
-                <input type="password" id="password" name="password" class="form-control" placeholder="password" style="width: 70%;font-size: 20px;">
+                <input type="password" id="acc_password" name="acc_password" class="form-control" placeholder="password" style="width: 70%;font-size: 20px;">
                 <br>
                 <input type="submit" class="btn btn-primary" value="Continue" style="font-size: 20px;height: 45px;">
             </form>
             <br>
             <a href="/signup" style="font-size: 20px;">Dont have an account?</a>
         </div>
+        {% else %}
+        <div style="background-color: #3a3a3a;height: 400px;width: 40%;border-radius:10px;">
+            <h1><span class="glyphicon glyphicon-log-in" style="font-size: 26px;margin-top: 14%;"></span> Log-in</h1>
+            <form action="/login" method="POST">
+                <input type="text" id="acc_username" name="acc_username" class="form-control" placeholder="username" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
+                <input type="password" id="acc_password" name="acc_password" class="form-control" placeholder="password" style="width: 70%;font-size: 20px;">
+                <br>
+                <input type="submit" class="btn btn-primary" value="Continue" style="font-size: 20px;height: 45px;">
+            </form>
+            <br>
+            <a href="/signup" style="font-size: 20px;">Dont have an account?</a>
+        </div>
+        {% endif %}
         </center>
         <script>
             var mybutton = document.getElementById("topbutton");

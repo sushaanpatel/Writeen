@@ -1,0 +1,19 @@
+create table users(
+user_id int auto_increment,
+username varchar(25),
+pass varchar(25),
+birth_date varchar(20),
+primary key(user_id)
+);
+
+create table posts(
+post_id int auto_increment,
+post_title varchar(500),
+post_genre varchar(20),
+post_content text(60000),
+post_medialinks varchar(1000),
+post_citation varchar(1000),
+post_anonymity varchar(10),
+post_creator varchar(25),
+primary key(post_id)
+);
