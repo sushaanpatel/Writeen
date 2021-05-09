@@ -14,16 +14,27 @@ con = mysql.connector.connect(
 
 global a
 a = 0
+global b
+b = 0
+global name
 
 @app.route('/', methods=["POST", "GET"])
 def index():
   global a
+  global name
   a = 0
-  return render_template('index.html')
+  if b == 0:
+    return render_template('index.html', b=b)
+  if b == 1:
+    return render_template('index.html', b=b, name=name)
 
 @app.route('/signup', methods=["POST","GET"])
 def signup():
   global a
+  global b
+  global name
+  name = 0
+  b = 0
   if request.method == "POST":
     new_name = request.form['new_name'].lower()
     new_pass = request.form['new_password']
@@ -56,8 +67,11 @@ def signup():
 @app.route('/login', methods=["POST", "GET"])
 def login():
   global a
+  global b
+  global name
+  name = 0
+  b = 0
   if request.method == "POST":
-    global name
     name = request.form['acc_username'].lower()
     password = request.form['acc_password']
     con.reconnect()
@@ -65,6 +79,7 @@ def login():
     db.execute(f"SELECT * from users WHERE username = '{name}'")
     x = db.fetchall()
     if x[0][2] == password:
+      b = 1
       return redirect('/')
     else:
       a = 2
@@ -72,10 +87,39 @@ def login():
   else:
     return render_template('login.html', a=a)
 
+#add get route for art
+@app.route('/create', methods=["POST", "GET"])
+def create():
+  if request.method == "POST":
+    title = request.form["post_title"]
+    genre = request.form.get("post_genre")
+    content = request.form["post_content"]
+    media = request.form["post_media"]
+    citation = request.form["post_citation"]
+    anonymity = request.form.get("anonymous")
+    creator = name
+    con.reconnect()
+    db = con.cursor()
+    db.execute(f"""INSERT INTO posts(post_title, post_genre, post_content, post_medialinks, post_citation, post_anonymity, post_creator) VALUES("{title}","{genre}","{content}","{media}","{citation}","{anonymity}","{creator}")""")
+    con.commit()
+    return redirect('/acc')
+
+@app.route('/acc')
+def acc():
+  if b == 0:
+    return render_template('account.html', b=b)
+  if b == 1:
+    return render_template('account.html', b=b, name=name)
+
+
 if __name__ == "__main__":
   app.run(debug=True)
 
 # db = con.cursor()
-# db.execute("SELECT * FROM users")
+# # db.execute(f"INSERT INTO posts(post_title) VALUES('abcd')")
+# # con.commit()
+# db.execute("DELETE from posts WHERE post_title = 'acbd'")
+# con.commit()
+# db.execute("SELECT * FROM posts")
 # x = db.fetchall()
 # print(x)

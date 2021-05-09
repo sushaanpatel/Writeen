@@ -11,6 +11,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
            .nav.navbar-nav li a:hover{
                background-color: #424242;
            }
@@ -56,7 +57,7 @@
     <body>
         <!-- Nav Bar and Top Button -->
         <button id="topbutton" class="btn" style="background-color: #424242" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
-        <nav class="navbar navbar-inverse navbar-static-top" style="font-family: 'Playfair Display', serif;">
+        <nav class="navbar navbar-inverse navbar-static-top" style="font-family: 'Lato', serif;">
             <div class="container-fluid">
               <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -64,16 +65,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                        
                 </button>
-                <a class="navbar-brand" href="index.html" style="color: white;"><b>Writeen</b></a>
+                <a class="navbar-brand" href="/" style="color: white;font-family: 'Playfair Display', serif;vertical-align: top;"><b>Writeen</b></a>
               </div>
               <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
                 <li><a href="#" style="color: white;font-weight: 400;">About Us</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a style="color: white;font-weight: 400;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
-                <li><a href="login.html" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Log-in</a></li>
-                <li><a href="account.html" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
+                <li><a href="/create" style="color: white;font-weight: 400;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
+                {% if b == 1 %}
+                <li><a href="/login" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-out"></span> Log-out</a></li>
+                <li><a href="/acc" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> {{name}}</a></li>
+                {% else %}
+                <li><a href="/login" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Log-in</a></li>
+                <li><a href="/acc" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
+                {% endif %}
               </ul>
             </div>
             </div>
@@ -92,7 +98,7 @@
                     </div>
                     <div class="modal-body">
                         <div id="post_div">
-                            <form action="/create" method="GET">
+                            <form action="/create" method="POST">
                                 <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                                 <br>
                                 <div class="form-group">
@@ -160,7 +166,7 @@
             <!-- add jinija -->
         </div>
         <hr style="background-color: #424242;height: 3px;border: 2px;width: 90%;">
-        <a href="" class="btn btn-danger">Sign Out</a>
+        <a href="/login" class="btn btn-danger">Log Out</a>
         <hr style="background-color: #424242;height: 3px;border: 2px;width: 90%;">
         <button class="btn btn-danger" data-toggle="modal" data-target="#yourModal">Delete Account</button>
         <hr style="background-color: #424242;height: 3px;border: 2px;width: 90%;">
@@ -187,7 +193,7 @@
                 var post_type = document.getElementById('post_type').value;
                 if (post_type == "txt"){
                     post_div.innerHTML = 
-                `<form action="/create" method="GET">
+                `<form action="/create" method="POST">
                     <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                     <br>
                     <div class="form-group">
@@ -230,7 +236,7 @@
                 }
                 if (post_type == "art"){
                     post_div.innerHTML = 
-                `<form action="/create" method="GET">
+                `<form action="/create" method="POST">
                     <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                     <br>
                     <div class="form-group">
