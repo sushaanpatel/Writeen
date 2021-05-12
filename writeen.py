@@ -1,94 +1,111 @@
 #Made by Sushaan Patel
-import mysql.connector
 import random
 import time
-from flask import Flask, render_template, url_for, request, redirect
+from datetime import datetime
+from werkzeug.security import generate_password_hash, check_password_hash
+from flask import Flask, render_template, url_for, request, redirect, flash
+from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
+from flask_sqlalchemy import SQLAlchemy
+from db_init import db, app, Users, Posts
 
-app = Flask(__name__)
-con = mysql.connector.connect(
-  host="localhost",
-  user="root",
-  password="password",
-  database="writeen"
-)
+login_manager = LoginManager()
+login_manager.init_app(app)
+@login_manager.user_loader
+def load_user(user_id):
+  return Users.query.get(user_id)
 
-global a
-a = 0
-global b
-b = 0
-global name
+@login_manager.unauthorized_handler
+def unauthorized():
+  return render_template('unauthorized.html')
 
+global errmsg
+errmsg = ""
+
+# try like button
 @app.route('/', methods=["POST", "GET"])
 def index():
-  global a
-  global name
-  a = 0
-  if b == 0:
-    return render_template('index.html', b=b)
-  if b == 1:
-    return render_template('index.html', b=b, name=name)
+  global errmsg
+  errmsg = ""
+  return render_template('index.html', current_user = current_user)
 
 @app.route('/signup', methods=["POST","GET"])
 def signup():
-  global a
-  global b
-  global name
-  name = 0
-  b = 0
+  global errmsg
   if request.method == "POST":
-    new_name = request.form['new_name'].lower()
+    new_name = request.form['new_username'].lower()
     new_pass = request.form['new_password']
-    birth_date = request.form['birth_date']
-    con.reconnect()
-    db = con.cursor()
-    db.execute("SELECT username FROM users")
-    x = db.fetchall()
+    new_email = request.form['new_email']
+    new_rememeber = True if request.form.get('new_remember_me') else False
+    if new_name == "" and new_pass == "" and new_email == "":
+      errmsg = "Please enter your Credentails"
+      return redirect('/signup')
+    if new_name != "" and new_pass == "" and new_email =="":
+      errmsg = "Please enter your Credentails"
+      return redirect('/signup')
+    if new_name != "" and new_pass != "" and new_email == "":
+      errmsg = "Please enter your Credentails"
+      return redirect('/signup')
+    if new_name == "" and new_pass == "" and new_email != "":
+      errmsg = "Please enter your Credentails"
+      return redirect('/signup')
+    if new_name == "" and new_pass != "" and new_email != "":
+      errmsg = "Please enter your Credentails"
+      return redirect('/signup')
+    x = Users.query.all() 
     for i in x:
-      if new_name == i[0]:
-        a = 1
+      if new_name == i.username:
+        errmsg = "Username Already Taken"
         return redirect('/signup')
-    db.execute(f"INSERT INTO users(username, pass, birth_date) VALUES('{new_name}','{new_pass}','{birth_date}')")
-    con.commit()
-    db.execute(f"""CREATE TABLE posts_{new_name}(
-      post_id int auto_increment,
-      post_title varchar(500),
-      post_genre varchar(20),
-      post_content text(60000),
-      post_medialinks varchar(1000),
-      post_citation varchar(1000),
-      post_anonymity varchar(10),
-      primary key(post_id)
-    )""")
-    con.commit()
-    return redirect('/login')
+    y = Users(username = new_name, password = generate_password_hash(new_pass, method = "sha256"), email = new_email)
+    db.session.add(y)
+    db.session.commit()
+    user = Users.query.filter_by(username = new_name).first()
+    login_user(user, remember=new_rememeber)
+    return redirect('/')
   else:
-    return render_template('signup.html', a=a)
+    return render_template('signup.html', errmsg=errmsg)
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
-  global a
-  global b
-  global name
-  name = 0
-  b = 0
+  global errmsg
   if request.method == "POST":
     name = request.form['acc_username'].lower()
     password = request.form['acc_password']
-    con.reconnect()
-    db = con.cursor()
-    db.execute(f"SELECT * from users WHERE username = '{name}'")
-    x = db.fetchall()
-    if x[0][2] == password:
-      b = 1
-      return redirect('/')
-    else:
-      a = 2
+    remember = True if request.form.get('remember_me') else False
+    x = Users.query.all()
+    if name == "" and password == "":
+      errmsg = "Please enter your Credentails"
       return redirect('/login')
+    if name != "" and password == "":
+      errmsg = "Please enter your Credentails"
+      return redirect('/login')
+    if name == "" and password != "":
+      errmsg = "Please enter your Credentails"
+      return redirect('/login')
+    for i in x:
+      if name == i.username: #if exists
+        if check_password_hash(i.password, password): #checks passwords
+          user = Users.query.filter_by(username = name).first()
+          login_user(user, remember=remember)
+          return redirect('/')
+        else:
+          errmsg = "Password is incorret"
+          return redirect('/login')
+      else:
+        errmsg = "Account not found"
+        return redirect('/login')
   else:
-    return render_template('login.html', a=a)
+    return render_template('login.html', errmsg=errmsg)
 
-#add get route for art
-@app.route('/create', methods=["POST", "GET"])
+@app.route('/logout')
+@login_required
+def logout():
+  logout_user()
+  return redirect('/login')
+
+#add sub-route(/create/art), and add if empty statments
+@app.route('/create/text', methods=["POST", "GET"])
+@login_required
 def create():
   if request.method == "POST":
     title = request.form["post_title"]
@@ -97,29 +114,26 @@ def create():
     media = request.form["post_media"]
     citation = request.form["post_citation"]
     anonymity = request.form.get("anonymous")
-    creator = name
-    con.reconnect()
-    db = con.cursor()
-    db.execute(f"""INSERT INTO posts(post_title, post_genre, post_content, post_medialinks, post_citation, post_anonymity, post_creator) VALUES("{title}","{genre}","{content}","{media}","{citation}","{anonymity}","{creator}")""")
-    con.commit()
-    return redirect('/acc')
+    creator = current_user.username
+    x = datetime.now()
+    post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
+    db.session.add(post)
+    db.session.commit()
+    return redirect('/account')
 
-@app.route('/acc')
+#add change password route
+@app.route('/account')
 def acc():
-  if b == 0:
-    return render_template('account.html', b=b)
-  if b == 1:
-    return render_template('account.html', b=b, name=name)
+  return render_template('account.html', current_user = current_user)
 
 
 if __name__ == "__main__":
+  app.secret_key = 'writeenkeykavishiandsushaan'
   app.run(debug=True)
 
-# db = con.cursor()
-# # db.execute(f"INSERT INTO posts(post_title) VALUES('abcd')")
-# # con.commit()
-# db.execute("DELETE from posts WHERE post_title = 'acbd'")
-# con.commit()
-# db.execute("SELECT * FROM posts")
-# x = db.fetchall()
-# print(x)
+# x = Users(username = "sushaan", password = "1234", email = "sushaanpatel@gmail.com")
+# db.session.add(x)
+# db.session.commit()
+# y = Users.query.all()
+# for i in y:
+#   print(i.id, i.username, i.password, i.birth_date)

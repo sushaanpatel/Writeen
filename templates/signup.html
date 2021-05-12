@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Writeen</title>
+        <title>Sign-up</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -44,7 +44,7 @@
             input[type=file]{
                 border-radius: 5px;
             }
-            div.form-group select.form-control, input.form-control, textarea.form-control{
+            div.form-group select.form-control, input.form-control, textarea.form-control, div.form-group input{
                 background-color: #3a3a3a;
                 color: white;
             }
@@ -71,9 +71,9 @@
                 <li><a href="#" style="color: white;font-weight: 400;">About Us</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="/create" data-toggle="modal" data-target="#myModal" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
+                <li><a data-toggle="modal" data-target="#myModal" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
                 <li><a href="/login" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Log-in</a></li>
-                <li><a href="/acc" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
+                <li><a href="/account" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
               </ul>
             </div>
             </div>
@@ -92,7 +92,7 @@
                     </div>
                     <div class="modal-body">
                         <div id="post_div">
-                            <form action="/create" method="POST">
+                            <form action="/create/text" method="POST">
                                 <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                                 <br>
                                 <div class="form-group">
@@ -138,34 +138,24 @@
             </div>
         </div>
         <center>
-        {% if a == 1 %}
-        <div style="background-color: #3a3a3a;height: 400px;width: 40%;border-radius:10px;">
-            <h1><span class="glyphicon glyphicon-list-alt" style="font-size: 26px;margin-top: 11%;"></span> Sign-up</h1>
+        <div style="background-color: #3a3a3a;height: 425px;width: 40%;border-radius:10px;">
+            <h1><span class="glyphicon glyphicon-list-alt" style="font-size: 26px;margin-top: 9%;"></span> Sign-up</h1>
             <form action="/signup" method="POST">
-                <p style="color: red;">Username already taken</p>
-                <input type="text" id="new_name" name="new_name" class="form-control" placeholder="username" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
-                <input type="password" id="new_password" name="new_password" class="form-control" placeholder="password" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
-                <input type="date" id="birth_date" name="birth_date" class="form-control" placeholder="birth date" style="width: 70%;font-size: 20px;">
-                <br>
+                <p style="color: red;">{{ errmsg }}</p>
+                <input type="text" id="new_email" name="new_email" class="form-control" placeholder="Email" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
+                <input type="text" id="new_username" name="new_username" class="form-control" placeholder="Username" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
+                <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Password" style="width: 70%;font-size: 20px;">
+                <table style="margin-bottom: 10px;">
+                    <tr>
+                        <th><input type="checkbox" id="new_remember_me" name="new_remember_me"></th>
+                        <td>Remember Me</td>
+                    </tr>
+                </table>
                 <input type="submit" class="btn btn-primary" value="Continue" style="font-size: 20px;height: 45px;">
             </form>
             <br>
             <a href="/login" style="font-size: 20px;">Have an account?</a>
         </div>
-        {% else %}
-        <div style="background-color: #3a3a3a;height: 400px;width: 40%;border-radius:10px;">
-            <h1><span class="glyphicon glyphicon-list-alt" style="font-size: 26px;margin-top: 11%;"></span> Sign-up</h1>
-            <form action="/signup" method="POST">
-                <input type="text" id="new_name" name="new_name" class="form-control" placeholder="username" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
-                <input type="password" id="new_password" name="new_password" class="form-control" placeholder="password" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
-                <input type="date" id="birth_date" name="birth_date" class="form-control" placeholder="birth date" style="width: 70%;font-size: 20px;">
-                <br>
-                <input type="submit" class="btn btn-primary" value="Continue" style="font-size: 20px;height: 45px;">
-            </form>
-            <br>
-            <a href="/login" style="font-size: 20px;">Have an account?</a>
-        </div>
-        {% endif %}
         </center>
         <script>
             var mybutton = document.getElementById("topbutton");
@@ -189,7 +179,7 @@
                 var post_type = document.getElementById('post_type').value;
                 if (post_type == "txt"){
                     post_div.innerHTML = 
-                `<form action="/create" method="POST">
+                `<form action="/create/text" method="POST">
                     <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                     <br>
                     <div class="form-group">
@@ -232,7 +222,7 @@
                 }
                 if (post_type == "art"){
                     post_div.innerHTML = 
-                `<form action="/create" method="POST">
+                `<form action="/create/art" method="POST">
                     <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                     <br>
                     <div class="form-group">

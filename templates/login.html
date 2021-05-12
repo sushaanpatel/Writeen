@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Writeen</title>
+        <title>Log-in</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -71,9 +71,9 @@
                 <li><a href="#" style="color: white;font-weight: 400;">About Us</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="/create" data-toggle="modal" data-target="#myModal" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
+                <li><a data-toggle="modal" data-target="#myModal" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
                 <li><a href="/login" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Log-in</a></li>
-                <li><a href="/acc" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
+                <li><a href="/account" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
               </ul>
             </div>
             </div>
@@ -92,7 +92,7 @@
                     </div>
                     <div class="modal-body">
                         <div id="post_div">
-                            <form action="/create" method="POST">
+                            <form action="/create/text" method="POST">
                                 <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                                 <br>
                                 <div class="form-group">
@@ -138,32 +138,23 @@
             </div>
         </div>
         <center>
-        {% if a == 2 %}
         <div style="background-color: #3a3a3a;height: 400px;width: 40%;border-radius:10px;">
-            <h1><span class="glyphicon glyphicon-log-in" style="font-size: 26px;margin-top: 14%;"></span> Log-in</h1>
+            <h1><span class="glyphicon glyphicon-log-in" style="font-size: 26px;margin-top: 10%;"></span> Log-in</h1>
             <form action="/login" method="POST">
-                <p style="color: red;">Wrong Credentials, account not found</p>
+                <p style="color: red;">{{ errmsg }}</p>
                 <input type="text" id="acc_username" name="acc_username" class="form-control" placeholder="username" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
                 <input type="password" id="acc_password" name="acc_password" class="form-control" placeholder="password" style="width: 70%;font-size: 20px;">
-                <br>
+                <table style="margin-bottom: 10px;">
+                    <tr>
+                        <th><input type="checkbox" id="remember_me" name="remember_me"></th>
+                        <td>Remember Me</td>
+                    </tr>
+                </table>
                 <input type="submit" class="btn btn-primary" value="Continue" style="font-size: 20px;height: 45px;">
             </form>
             <br>
             <a href="/signup" style="font-size: 20px;">Dont have an account?</a>
         </div>
-        {% else %}
-        <div style="background-color: #3a3a3a;height: 400px;width: 40%;border-radius:10px;">
-            <h1><span class="glyphicon glyphicon-log-in" style="font-size: 26px;margin-top: 14%;"></span> Log-in</h1>
-            <form action="/login" method="POST">
-                <input type="text" id="acc_username" name="acc_username" class="form-control" placeholder="username" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
-                <input type="password" id="acc_password" name="acc_password" class="form-control" placeholder="password" style="width: 70%;font-size: 20px;">
-                <br>
-                <input type="submit" class="btn btn-primary" value="Continue" style="font-size: 20px;height: 45px;">
-            </form>
-            <br>
-            <a href="/signup" style="font-size: 20px;">Dont have an account?</a>
-        </div>
-        {% endif %}
         </center>
         <script>
             var mybutton = document.getElementById("topbutton");
@@ -187,7 +178,7 @@
                 var post_type = document.getElementById('post_type').value;
                 if (post_type == "txt"){
                     post_div.innerHTML = 
-                `<form action="/create" method="POST">
+                `<form action="/create/text" method="POST">
                     <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                     <br>
                     <div class="form-group">
@@ -230,7 +221,7 @@
                 }
                 if (post_type == "art"){
                     post_div.innerHTML = 
-                `<form action="/create" method="POST">
+                `<form action="/create/art" method="POST">
                     <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                     <br>
                     <div class="form-group">

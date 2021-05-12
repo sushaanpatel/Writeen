@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>401 Error</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
+           .nav.navbar-nav li a:hover{
+               background-color: #424242;
+           }
+           body{
+               font-family: 'Poppins', sans-serif;
+               background-color: #222222;
+               color: white;
+               /* font-family: 'Playfair Display', serif; */
+           }
+           #topbutton{
+                display: none;
+                position: fixed;
+                bottom: 20px;
+                right: 30px;
+                z-index: 99;
+                font-size: 18px;
+                border: none;
+                outline: none;
+                border-radius: 20px;
+                padding-top: 8px;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 6px;
+            }
+            input,select,textarea{
+                height: 35px;
+                border-radius: 5px;
+                background-color: #3a3a3a;
+            }
+            input[type=file]{
+                border-radius: 5px;
+            }
+            div.form-group select.form-control, input.form-control, textarea.form-control, div.form-group input{
+                background-color: #3a3a3a;
+                color: white;
+            }
+            input.btn[type=file]:hover{
+                color: grey;
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+        <br><br><br>
+        <div class="container">
+            <div class="alert alert-danger">
+                <h1>Please Log-in to Continue</h1>
+                <h3>You dont have permission to this page, loging in might help<br>Click <a href="/login">this</a> to Log-in</h3>
+            </div>
+        </div>
+        </center>
+    </body>
+</html>

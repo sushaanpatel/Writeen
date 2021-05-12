@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Writeen</title>
+        <title>Your Account</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -72,13 +72,13 @@
                 <li><a href="#" style="color: white;font-weight: 400;">About Us</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="/create" style="color: white;font-weight: 400;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
-                {% if b == 1 %}
-                <li><a href="/login" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-out"></span> Log-out</a></li>
-                <li><a href="/acc" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> {{name}}</a></li>
+                <li><a style="color: white;font-weight: 400;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
+                {% if current_user.is_authenticated == True %}
+                <li><a href="/logout" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-out"></span> Log-out</a></li>
+                <li><a href="/account" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> {{current_user.username}}</a></li>
                 {% else %}
                 <li><a href="/login" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Log-in</a></li>
-                <li><a href="/acc" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
+                <li><a href="/account" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
                 {% endif %}
               </ul>
             </div>
@@ -166,7 +166,7 @@
             <!-- add jinija -->
         </div>
         <hr style="background-color: #424242;height: 3px;border: 2px;width: 90%;">
-        <a href="/login" class="btn btn-danger">Log Out</a>
+        <a href="/logout" class="btn btn-danger">Log Out</a>
         <hr style="background-color: #424242;height: 3px;border: 2px;width: 90%;">
         <button class="btn btn-danger" data-toggle="modal" data-target="#yourModal">Delete Account</button>
         <hr style="background-color: #424242;height: 3px;border: 2px;width: 90%;">

@@ -72,13 +72,13 @@
                 <li><a href="#" style="color: white;font-weight: 400;">About Us</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
-                <li><a href="/create" style="color: white;font-weight: 400;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
-                {% if b == 1 %}
-                <li><a href="/login" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-out"></span> Log-out</a></li>
-                <li><a href="/acc" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> {{name}}</a></li>
+                <li><a style="color: white;font-weight: 400;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
+                {% if current_user.is_authenticated == True %}
+                <li><a href="/logout" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-out"></span> Log-out</a></li>
+                <li><a href="/account" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> {{current_user.username}}</a></li>
                 {% else %}
                 <li><a href="/login" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Log-in</a></li>
-                <li><a href="/acc" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
+                <li><a href="/account" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
                 {% endif %}
               </ul>
             </div>
@@ -98,7 +98,7 @@
                     </div>
                     <div class="modal-body">
                         <div id="post_div">
-                            <form action="/create" method="POST">
+                            <form action="/create/text" method="POST">
                                 <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                                 <br>
                                 <div class="form-group">
@@ -253,7 +253,7 @@
                 var post_type = document.getElementById('post_type').value;
                 if (post_type == "txt"){
                     post_div.innerHTML = 
-                `<form action="/create" method="POST">
+                `<form action="/create/text" method="POST">
                     <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                     <br>
                     <div class="form-group">
@@ -296,7 +296,7 @@
                 }
                 if (post_type == "art"){
                     post_div.innerHTML = 
-                `<form action="/create" method="POST">
+                `<form action="/create/art" method="POST">
                     <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
                     <br>
                     <div class="form-group">
