@@ -1,7 +1,8 @@
 #Made by Sushaan Patel
 import random
-import time
+import os
 from datetime import datetime
+from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
@@ -103,10 +104,10 @@ def logout():
   logout_user()
   return redirect('/login')
 
-#add sub-route(/create/art), and add if empty statments
 @app.route('/create/text', methods=["POST", "GET"])
 @login_required
 def create():
+  global errmsg
   if request.method == "POST":
     title = request.form["post_title"]
     genre = request.form.get("post_genre")
@@ -116,16 +117,51 @@ def create():
     anonymity = request.form.get("anonymous")
     creator = current_user.username
     x = datetime.now()
+    if anonymity == "yes":
+      creator = "Anonymous" 
     post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
     db.session.add(post)
     db.session.commit()
     return redirect('/account')
 
-#add change password route
+@app.route('/create/art', methods=["POST", "GET"])
+@login_required
+def create_art():
+  global errmsg
+  if request.method == "POST":
+    title = request.form["post_title"]
+    genre = request.form.get("post_genre")
+    content = request.files["post_content"]
+    media = request.form["post_media"]
+    citation = request.form["post_citation"]
+    anonymity = request.form.get("anonymous")
+    creator = current_user.username
+    x = datetime.now()
+    allowed = ['png','jpg','jpeg','gif']
+    if anonymity == "yes":
+      creator = "Anonymous"
+    y = content.filename.split('.')
+    if y[1].lower() in allowed:
+      content.save(app.config['UPLOAD_FOLDER'] + secure_filename(current_user.username + "_" + content.filename))
+    post = Posts(post_title = title, post_genre = genre, post_content =current_user.username + "_" + content.filename, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
+    db.session.add(post)
+    db.session.commit()
+    return redirect('/account')
+
+#add change password route, also add no login page
 @app.route('/account')
 def acc():
   return render_template('account.html', current_user = current_user)
 
+#add html, and code
+@app.route('/yourposts')
+def yourposts():
+  return render_template("")
+
+#add code
+@app.route('/deleteacc')
+def deleteacc():
+  ""
 
 if __name__ == "__main__":
   app.secret_key = 'writeenkeykavishiandsushaan'

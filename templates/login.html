@@ -93,7 +93,7 @@
                     <div class="modal-body">
                         <div id="post_div">
                             <form action="/create/text" method="POST">
-                                <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
+                                <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;" oninput="changebtn()"></textarea></b>
                                 <br>
                                 <div class="form-group">
                                     <label for="post_genre">Genre : </label>
@@ -118,7 +118,7 @@
                                     </select>
                                 </div>
                                 <br>
-                                <textarea type="text" class="form-control" id="post_content" name="post_content" placeholder="Content (Required or *)" style="height: 400px;"></textarea>
+                                <textarea type="text" class="form-control" id="post_content" name="post_content" placeholder="Content (Required or *)" style="height: 400px;" oninput="changebtn()"></textarea>
                                 <br>
                                 <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Media Links"></textarea>
                                 <br>
@@ -129,7 +129,7 @@
                                 </div>
                                 <br>
                                 <center>
-                                <input type="submit" class="btn btn-primary" style="font-size: 18px; height: 40px;" value="Post">
+                                <input type="submit" class="btn btn-default" id="submit_btn" style="font-size: 18px; height: 40px;" value="Post" disabled=true>
                                 </center>
                             </form>
                         </div>
@@ -179,7 +179,7 @@
                 if (post_type == "txt"){
                     post_div.innerHTML = 
                 `<form action="/create/text" method="POST">
-                    <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
+                    <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;" oninput="changebtn()"></textarea></b>
                     <br>
                     <div class="form-group">
                         <label for="post_genre">Genre : </label>
@@ -204,7 +204,7 @@
                         </select>
                     </div>
                     <br>
-                    <textarea type="text" class="form-control" id="post_content" name="post_content" placeholder="Content (Required or *)" style="height: 400px;"></textarea>
+                    <textarea type="text" class="form-control" id="post_content" name="post_content" placeholder="Content (Required or *)" style="height: 400px;" oninput="changebtn()"></textarea>
                     <br>
                     <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Media Links"></textarea>
                     <br>
@@ -215,14 +215,14 @@
                     </div>
                     <br>
                     <center>
-                    <input type="submit" class="btn btn-primary" style="font-size: 18px; height: 40px;" value="Post">
+                    <input type="submit" class="btn btn-default" id="submit_btn" style="font-size: 18px; height: 40px;" value="Post" disabled=true>
                     </center>
                 </form>`
                 }
                 if (post_type == "art"){
                     post_div.innerHTML = 
-                `<form action="/create/art" method="POST">
-                    <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;"></textarea></b>
+                `<form action="/create/art" method="POST" enctype="multipart/form-data">
+                    <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;" oninput="changebtn()"></textarea></b>
                     <br>
                     <div class="form-group">
                         <label for="post_genre">Genre : </label>
@@ -247,7 +247,7 @@
                         </select>
                     </div>
                     <br>
-                    <input type="file" class="btn" id="post_content" name="post_content" placeholder="Content (Required or *)" style="font-size:15px;">
+                    <input type="file" class="btn" id="post_content" name="post_content" placeholder="Content (Required or *)" style="font-size:15px;" oninput="changebtn()">
                     <br>
                     <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Media Links"></textarea>
                     <br>
@@ -258,9 +258,23 @@
                     </div>
                     <br>
                     <center>
-                    <input type="submit" class="btn btn-primary" style="font-size: 18px; height: 40px;" value="Post">
+                    <input type="submit" class="btn btn-default" id="submit_btn" style="font-size: 18px; height: 40px;" value="Post" disabled=true>
                     </center>
                 </form>`
+                }
+            }
+
+            function changebtn(){
+                var btn = document.getElementById('submit_btn');
+                var title = document.getElementById('post_title').value;
+                var content = document.getElementById('post_content').value;
+                if (title !== "" && content !== ""){
+                    btn.disabled = false;
+                    btn.className = "btn btn-primary"
+                }
+                else{
+                    btn.disabled = true;
+                    btn.className = "btn btn-default"
                 }
             }
         </script>

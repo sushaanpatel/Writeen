@@ -6,6 +6,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:password@localhost/writeen'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECERT_KEY'] = 'writeenkeykavishiandsushaan'
+app.config['UPLOAD_FOLDER'] = '../Writeen/userfiles/'
 db = SQLAlchemy(app)
 
 class Users(db.Model, UserMixin):
