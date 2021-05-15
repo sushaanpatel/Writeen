@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Writeen</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
+           .nav.navbar-nav li a:hover{
+               background-color: #424242;
+           }
+           body{
+               font-family: 'Poppins', sans-serif;
+               background-color: #222222;
+               color: white;
+               /* font-family: 'Playfair Display', serif; */
+           }
+           #topbutton{
+                display: none;
+                position: fixed;
+                bottom: 20px;
+                right: 30px;
+                z-index: 99;
+                font-size: 18px;
+                border: none;
+                outline: none;
+                border-radius: 20px;
+                padding-top: 8px;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 6px;
+            }
+            input,select,textarea{
+                height: 35px;
+                border-radius: 5px;
+                background-color: #3a3a3a;
+                border-color: lightgray;
+            }
+            input[type=file]{
+                border-radius: 5px;
+            }
+            div.form-group select.form-control, input.form-control, textarea.form-control{
+                background-color: #3a3a3a;
+                color: white;
+            }
+            input.btn[type=file]:hover{
+                color: grey;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Nav Bar and Top Button -->
+        <button id="topbutton" class="btn" style="background-color: #424242" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
+        <a href="/account"><span class="glyphicon glyphicon-arrow-left" style="color: white;font-size:25px;margin-top:0.7%;margin-left:0.7%;"></span></a>
+        <div id="search_div" style="float: right;margin-right: 1%;">
+            <form action="/" method="POST">
+                <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
+                <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                    <option value="title">Title</option>
+                    <option value="genre">Genre</option>
+                    <option value="author">Author</option>
+                    <!-- <option value="questions">Question</option> -->
+                </select>
+                <input type="submit" class="btn btn-primary" value="Sort">
+            </form>
+        </div>
+        <script>
+            var mybutton = document.getElementById("topbutton");
+            window.onscroll = function(){scrollFunction()};
+
+            function scrollFunction(){
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    mybutton.style.display = "block";
+                } else {
+                    mybutton.style.display = "none";
+                }
+            }
+
+            function topFunction(){
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+
+            function changeopt(){
+                var search_div = document.getElementById('search_div');
+                var filter = document.getElementById('filter');
+                if (filter.value == "genre"){
+                    search_div.innerHTML = 
+                `<form action="/" method="POST">
+                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;">
+                        <option value="business">Business</option>
+                        <option value="sports">Sports</option>
+                        <option value="news">News</option>
+                        <option value="science">Science</option>
+                        <option value="tech">Technology</option>
+                        <option value='fiction'>Fiction</option>
+                        <option value='comedy'>Comedy</option>
+                        <option value='rom-com'>Rom-Com</option>
+                        <option value='fantasy'>Fantasy</option>
+                        <option value='horror'>Horror</option>
+                        <option value='mystery'>Mystery</option>
+                        <option value='drama'>Drama</option>
+                        <option value='histroy'>Histroy</option>
+                        <option value='politics'>Politics</option>
+                        <option value='sci-fi'>Sci-fi</option>
+                        <option value='poetry'>Poetry</option>
+                        <option value='adventure'>Adventure</option>
+                    </select>    
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                        <option value="title">Title</option>
+                        <option value="genre" selected>Genre</option>
+                        <option value="author">Author</option>
+                        <!-- <option value="questions">Question</option> -->
+                    </select>
+                    <input type="submit" class="btn btn-primary" value="Sort">
+                </form>`
+                }
+                else if (filter.value == "title"){
+                    search_div.innerHTML = 
+                `<form action="/" method="POST">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                        <option value="title" selected>Title</option>
+                        <option value="genre">Genre</option>
+                        <option value="author">Author</option>
+                        <!-- <option value="questions">Question</option> -->
+                    </select>
+                    <input type="submit" class="btn btn-primary" value="Sort">
+                </form>`
+                }
+                else if (filter.value == "author"){
+                    search_div.innerHTML = 
+                `<form action="/" method="POST">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                        <option value="title">Title</option>
+                        <option value="genre">Genre</option>
+                        <option value="author" selected>Author</option>
+                        <!-- <option value="questions">Question</option> -->
+                    </select>
+                    <input type="submit" class="btn btn-primary" value="Sort">
+                </form>`
+                }
+                //else if (filter.value == "questions"){
+                //    search_div.innerHTML = 
+                //`<form action="/search" method="POST">
+                //    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
+                //    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                //        <option value="title">Title</option>
+                //        <option value="genre">Genre</option>
+                //        <option value="author">Author</option>
+                //        <option value="questions" selected>Question</option>
+                //    </select>
+                //    <input type="submit" class="btn" value="Sort">
+                //</form>`
+                //}
+            }
+        </script>
+    </body>
+</html>

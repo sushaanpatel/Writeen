@@ -138,22 +138,22 @@
             </div>
         </div>
         <center>
-        <div style="background-color: #3a3a3a;height: 400px;width: 40%;border-radius:10px;">
-            <h1><span class="glyphicon glyphicon-log-in" style="font-size: 26px;margin-top: 10%;"></span> Log-in</h1>
+        <div class="container" style="background-color: #3a3a3a;height: 350px;border-radius:10px;">
+            <h1><span class="glyphicon glyphicon-log-in" style="font-size: 26px;margin-top: 2.5%;"></span> Log-in</h1>
             <form action="/login" method="POST">
                 <p style="color: red;">{{ errmsg }}</p>
-                <input type="text" id="acc_username" name="acc_username" class="form-control" placeholder="username" style="width: 70%;font-size: 20px;margin-bottom: 1%;">
-                <input type="password" id="acc_password" name="acc_password" class="form-control" placeholder="password" style="width: 70%;font-size: 20px;">
+                <input type="text" id="acc_username" name="acc_username" class="form-control" placeholder="username" style="width: 80%;font-size: 20px;margin-bottom: 1%;">
+                <input type="password" id="acc_password" name="acc_password" class="form-control" placeholder="password" style="width: 80%;font-size: 20px;">
                 <table style="margin-bottom: 10px;">
                     <tr>
                         <th><input type="checkbox" id="remember_me" name="remember_me"></th>
                         <td>Remember Me</td>
                     </tr>
                 </table>
-                <input type="submit" class="btn btn-primary" value="Continue" style="font-size: 20px;height: 45px;">
+                <input type="submit" class="btn btn-primary" value="Continue" style="font-size:medium;height: auto;">
             </form>
             <br>
-            <a href="/signup" style="font-size: 20px;">Dont have an account?</a>
+            <a href="/signup" style="font-size: 16.5px;">Dont have an account?</a>
         </div>
         </center>
         <script>

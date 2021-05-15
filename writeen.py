@@ -21,13 +21,46 @@ def unauthorized():
 
 global errmsg
 errmsg = ""
+global posts_list
+posts_list = []
 
-# try like button
+@app.route('/clearfilters/index')
+def clear():
+  global posts_list
+  posts_list = []
+  return redirect('/')
+
+@app.route('/clearfilters/post')
+def clear1():
+  global posts_list
+  posts_list = []
+  return redirect('/yourposts')
+
+#try google login, comment, report post, profile pic
+#add like button
 @app.route('/', methods=["POST", "GET"])
 def index():
   global errmsg
   errmsg = ""
-  return render_template('index.html', current_user = current_user)
+  global posts_list
+  if request.method == "POST":
+    search = request.form['search_bar'].lower()
+    filters = request.form['filter']
+    if filters == "title":
+      query = Posts.query.filter(Posts.post_title.like(f"%{search}%")).all()
+      for post in query:
+        posts_list.append(post)
+    if filters == "genre":
+      query = Posts.query.filter_by(post_genre=search).all()
+      for post in query:
+        posts_list.append(post)
+    if filters == "author":
+      query = Posts.query.filter(Posts.post_creator.like(f"%{search}%")).all()
+      for post in query:
+        posts_list.append(post)
+    return redirect('/')
+  else:
+    return render_template('index.html', current_user = current_user, posts=posts_list)
 
 @app.route('/signup', methods=["POST","GET"])
 def signup():
@@ -106,7 +139,7 @@ def logout():
 
 @app.route('/create/text', methods=["POST", "GET"])
 @login_required
-def create():
+def create_text():
   global errmsg
   if request.method == "POST":
     title = request.form["post_title"]
@@ -139,7 +172,7 @@ def create_art():
     x = datetime.now()
     allowed = ['png','jpg','jpeg','gif']
     if anonymity == "yes":
-      creator = "Anonymous"
+      creator = ["Anonymous", current_user.username]
     y = content.filename.split('.')
     if y[1].lower() in allowed:
       content.save(app.config['UPLOAD_FOLDER'] + secure_filename(current_user.username + "_" + content.filename))
@@ -150,13 +183,14 @@ def create_art():
 
 #add change password route, also add no login page
 @app.route('/account')
+@login_required
 def acc():
   return render_template('account.html', current_user = current_user)
 
 #add html, and code
 @app.route('/yourposts')
 def yourposts():
-  return render_template("")
+  return render_template("posts.html")
 
 #add code
 @app.route('/deleteacc')
@@ -170,6 +204,6 @@ if __name__ == "__main__":
 # x = Users(username = "sushaan", password = "1234", email = "sushaanpatel@gmail.com")
 # db.session.add(x)
 # db.session.commit()
-# y = Users.query.all()
+# y = Posts.query.filter(Posts.post_title.like("%winter%")).all()
 # for i in y:
-#   print(i.id, i.username, i.password, i.birth_date)
+#   print(i.post_title)

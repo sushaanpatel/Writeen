@@ -151,12 +151,19 @@
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
                     <option value="author">Author</option>
-                    <option value="questions">Question</option>
+                    <!-- <option value="questions">Question</option> -->
                 </select>
-                <input type="submit" class="btn" value="Sort">
+                <input type="submit" class="btn btn-primary" value="Sort">
+                <a class="btn btn-default" href="/clearfilters/index">Clear</a>
             </form>
         </div>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+        <div class="container">
+            {% for post in posts %}
+            <h3>{{post.post_title}}</h3>
+            <br>
+            <span>{{post.post_genre}}, {{post.post_creator}}</span>
+            {% endfor %}
+        </div>
         <script>
             var mybutton = document.getElementById("topbutton");
             window.onscroll = function(){scrollFunction()};
@@ -178,7 +185,7 @@
                 var filter = document.getElementById('filter');
                 if (filter.value == "genre"){
                     search_div.innerHTML = 
-                `<form action="/search" method="POST">
+                `<form action="/" method="POST">
                     <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;">
                         <option value="business">Business</option>
                         <option value="sports">Sports</option>
@@ -202,50 +209,53 @@
                         <option value="title">Title</option>
                         <option value="genre" selected>Genre</option>
                         <option value="author">Author</option>
-                        <option value="questions">Question</option>
+                        <!-- <option value="questions">Question</option> -->
                     </select>
-                    <input type="submit" class="btn" value="Sort">
+                    <input type="submit" class="btn btn-primary" value="Sort">
+                    <a class="btn btn-default" href="/clearfilters/index">Clear</a>
                 </form>`
                 }
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
-                `<form action="/search" method="POST">
+                `<form action="/" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
                         <option value="genre">Genre</option>
                         <option value="author">Author</option>
-                        <option value="questions">Question</option>
+                        <!-- <option value="questions">Question</option> -->
                     </select>
-                    <input type="submit" class="btn" value="Sort">
+                    <input type="submit" class="btn btn-primary" value="Sort">
+                    <a class="btn btn-default" href="/clearfilters/index">Clear</a>
                 </form>`
                 }
                 else if (filter.value == "author"){
                     search_div.innerHTML = 
-                `<form action="/search" method="POST">
+                `<form action="/" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre">Genre</option>
                         <option value="author" selected>Author</option>
-                        <option value="questions">Question</option>
+                        <!-- <option value="questions">Question</option> -->
                     </select>
-                    <input type="submit" class="btn" value="Sort">
+                    <input type="submit" class="btn btn-primary" value="Sort">
+                    <a class="btn btn-default" href="/clearfilters/index">Clear</a>
                 </form>`
                 }
-                else if (filter.value == "questions"){
-                    search_div.innerHTML = 
-                `<form action="/search" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
-                        <option value="title">Title</option>
-                        <option value="genre">Genre</option>
-                        <option value="author">Author</option>
-                        <option value="questions" selected>Question</option>
-                    </select>
-                    <input type="submit" class="btn" value="Sort">
-                </form>`
-                }
+                //else if (filter.value == "questions"){
+                //    search_div.innerHTML = 
+                //`<form action="/search" method="POST">
+                //    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
+                //    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                //        <option value="title">Title</option>
+                //        <option value="genre">Genre</option>
+                //        <option value="author">Author</option>
+                //        <option value="questions" selected>Question</option>
+                //    </select>
+                //    <input type="submit" class="btn" value="Sort">
+                //</form>`
+                //}
             }
 
             function changeformat(){
