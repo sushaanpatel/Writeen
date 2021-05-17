@@ -4,6 +4,9 @@
         <title>Sign-up</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -98,23 +101,23 @@
                                 <div class="form-group">
                                     <label for="post_genre">Genre : </label>
                                     <select id="post_genre" name="post_genre" class="form-control" style="border: 0px;">
-                                        <option value="business">Business*</option>
-                                        <option value="sports">Sports*</option>
-                                        <option value="news">News*</option>
-                                        <option value="science">Science*</option>
-                                        <option value="tech">Technology*</option>
-                                        <option value='fiction'>Fiction*</option>
-                                        <option value='comedy'>Comedy*</option>
-                                        <option value='rom-com'>Rom-Com*</option>
-                                        <option value='fantasy'>Fantasy*</option>
-                                        <option value='horror'>Horror*</option>
-                                        <option value='mystery'>Mystery*</option>
-                                        <option value='drama'>Drama*</option>
-                                        <option value='histroy'>Histroy*</option>
-                                        <option value='politics'>Politics*</option>
-                                        <option value='sci-fi'>Sci-fi*</option>
-                                        <option value='poetry'>Poetry*</option>
-                                        <option value='adventure'>Adventure*</option>
+                                        <option value="Business">Business*</option>
+                                        <option value="Sports">Sports*</option>
+                                        <option value="News">News*</option>
+                                        <option value="Science">Science*</option>
+                                        <option value="Tech">Technology*</option>
+                                        <option value='Fiction'>Fiction*</option>
+                                        <option value='Comedy'>Comedy*</option>
+                                        <option value='Rom-com'>Rom-Com*</option>
+                                        <option value='Fantasy'>Fantasy*</option>
+                                        <option value='Horror'>Horror*</option>
+                                        <option value='Mystery'>Mystery*</option>
+                                        <option value='Drama'>Drama*</option>
+                                        <option value='Histroy'>Histroy*</option>
+                                        <option value='Politics'>Politics*</option>
+                                        <option value='Sci-fi'>Sci-fi*</option>
+                                        <option value='Poetry'>Poetry*</option>
+                                        <option value='Adventure'>Adventure*</option>
                                     </select>
                                 </div>
                                 <br>
@@ -138,20 +141,20 @@
             </div>
         </div>
         <center>
-        <div class="container" style="background-color: #3a3a3a;height: 400px;border-radius:10px;">
+        <div class="container" style="background-color: #3a3a3a;height: 420px;border-radius:10px;">
             <h1><span class="glyphicon glyphicon-list-alt" style="font-size: 26px;margin-top: 3%;"></span> Sign-up</h1>
             <form action="/signup" method="POST">
-                <p style="color: red;">{{ errmsg }}</p>
-                <input type="text" id="new_email" name="new_email" class="form-control" placeholder="Email" style="width: 80%;font-size: 20px;margin-bottom: 1%;">
-                <input type="text" id="new_username" name="new_username" class="form-control" placeholder="Username" style="width: 80%;font-size: 20px;margin-bottom: 1%;">
-                <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Password" style="width: 80%;font-size: 20px;">
+                <p style="color: #ff4d4d;font-size:19px;">{{ errmsg }}</p>
+                <input type="text" id="new_email" name="new_email" class="form-control" placeholder="Email" style="width: 60%;font-size: 20px;margin-bottom: 1%;">
+                <input type="text" id="new_username" name="new_username" class="form-control" placeholder="Username" style="width: 60%;font-size: 20px;margin-bottom: 1%;" oninput="checkusername()">
+                <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Password" style="width: 60%;font-size: 20px;">
                 <table style="margin-bottom: 10px;">
                     <tr>
                         <th><input type="checkbox" id="new_remember_me" name="new_remember_me"></th>
                         <td>Remember Me</td>
                     </tr>
                 </table>
-                <input type="submit" class="btn btn-primary" value="Continue" style="font-size: medium;height: auto;">
+                <input type="submit" class="btn btn-primary" id="signupbtn" value="Contiune" style="font-size: medium;height: auto;">
             </form>
             <br>
             <a href="/login" style="font-size: 16.5px;">Have an account?</a>
@@ -185,23 +188,23 @@
                     <div class="form-group">
                         <label for="post_genre">Genre : </label>
                         <select id="post_genre" name="post_genre" class="form-control" style="border: 0px;">
-                            <option value="business">Business*</option>
-                            <option value="sports">Sports*</option>
-                            <option value="news">News*</option>
-                            <option value="science">Science*</option>
-                            <option value="tech">Technology*</option>
-                            <option value='fiction'>Fiction*</option>
-                            <option value='comedy'>Comedy*</option>
-                            <option value='rom-com'>Rom-Com*</option>
-                            <option value='fantasy'>Fantasy*</option>
-                            <option value='horror'>Horror*</option>
-                            <option value='mystery'>Mystery*</option>
-                            <option value='drama'>Drama*</option>
-                            <option value='histroy'>Histroy*</option>
-                            <option value='politics'>Politics*</option>
-                            <option value='sci-fi'>Sci-fi*</option>
-                            <option value='poetry'>Poetry*</option>
-                            <option value='adventure'>Adventure*</option>
+                            <option value="Business">Business*</option>
+                            <option value="Sports">Sports*</option>
+                            <option value="News">News*</option>
+                            <option value="Science">Science*</option>
+                            <option value="Tech">Technology*</option>
+                            <option value='Fiction'>Fiction*</option>
+                            <option value='Comedy'>Comedy*</option>
+                            <option value='Rom-com'>Rom-Com*</option>
+                            <option value='Fantasy'>Fantasy*</option>
+                            <option value='Horror'>Horror*</option>
+                            <option value='Mystery'>Mystery*</option>
+                            <option value='Drama'>Drama*</option>
+                            <option value='Histroy'>Histroy*</option>
+                            <option value='Politics'>Politics*</option>
+                            <option value='Sci-fi'>Sci-fi*</option>
+                            <option value='Poetry'>Poetry*</option>
+                            <option value='Adventure'>Adventure*</option>
                         </select>
                     </div>
                     <br>
@@ -228,29 +231,29 @@
                     <div class="form-group">
                         <label for="post_genre">Genre : </label>
                         <select id="post_genre" name="post_genre" class="form-control" style="border: 0px;">
-                            <option value="business">Business*</option>
-                            <option value="sports">Sports*</option>
-                            <option value="news">News*</option>
-                            <option value="science">Science*</option>
-                            <option value="tech">Technology*</option>
-                            <option value='fiction'>Fiction*</option>
-                            <option value='comedy'>Comedy*</option>
-                            <option value='rom-com'>Rom-Com*</option>
-                            <option value='fantasy'>Fantasy*</option>
-                            <option value='horror'>Horror*</option>
-                            <option value='mystery'>Mystery*</option>
-                            <option value='drama'>Drama*</option>
-                            <option value='histroy'>Histroy*</option>
-                            <option value='politics'>Politics*</option>
-                            <option value='sci-fi'>Sci-fi*</option>
-                            <option value='poetry'>Poetry*</option>
-                            <option value='adventure'>Adventure*</option>
+                            <option value="Business">Business*</option>
+                            <option value="Sports">Sports*</option>
+                            <option value="News">News*</option>
+                            <option value="Science">Science*</option>
+                            <option value="Tech">Technology*</option>
+                            <option value='Fiction'>Fiction*</option>
+                            <option value='Comedy'>Comedy*</option>
+                            <option value='Rom-com'>Rom-Com*</option>
+                            <option value='Fantasy'>Fantasy*</option>
+                            <option value='Horror'>Horror*</option>
+                            <option value='Mystery'>Mystery*</option>
+                            <option value='Drama'>Drama*</option>
+                            <option value='Histroy'>Histroy*</option>
+                            <option value='Politics'>Politics*</option>
+                            <option value='Sci-fi'>Sci-fi*</option>
+                            <option value='Poetry'>Poetry*</option>
+                            <option value='Adventure'>Adventure*</option>
                         </select>
                     </div>
                     <br>
                     <input type="file" class="btn" id="post_content" name="post_content" placeholder="Content (Required or *)" style="font-size:15px;" oninput="changebtn()">
                     <br>
-                    <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Media Links"></textarea>
+                    <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Caption"></textarea>
                     <br>
                     <textarea type="text" class="form-control" id="post_citation" name="post_citation" placeholder="Citation"></textarea>
                     <br>

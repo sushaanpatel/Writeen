@@ -21,28 +21,38 @@ def unauthorized():
 
 global errmsg
 errmsg = ""
+global ermsg
+ermsg =""
 global posts_list
 posts_list = []
+global current_page
+current_page = ""
 
-@app.route('/clearfilters/index')
+@app.route('/clearfilters')
 def clear():
   global posts_list
+  global current_page
   posts_list = []
-  return redirect('/')
-
-@app.route('/clearfilters/post')
-def clear1():
-  global posts_list
-  posts_list = []
-  return redirect('/yourposts')
+  return redirect(current_page)
 
 #try google login, comment, report post, profile pic
-#add like button
-@app.route('/', methods=["POST", "GET"])
+#add like button, add display of filter, display of images use listdir from os
+@app.route('/')
 def index():
+  global current_page
+  current_page = "/"
   global errmsg
   errmsg = ""
+  global ermsg
+  ermsg = ""
   global posts_list
+  return render_template('index.html', current_user = current_user, posts=posts_list, len = len)
+
+@app.route('/search', methods=["POST", "GET"])
+def filter():
+  global posts_list
+  global current_page
+  posts_list = []
   if request.method == "POST":
     search = request.form['search_bar'].lower()
     filters = request.form['filter']
@@ -58,9 +68,7 @@ def index():
       query = Posts.query.filter(Posts.post_creator.like(f"%{search}%")).all()
       for post in query:
         posts_list.append(post)
-    return redirect('/')
-  else:
-    return render_template('index.html', current_user = current_user, posts=posts_list)
+    return redirect(current_page)
 
 @app.route('/signup', methods=["POST","GET"])
 def signup():
@@ -85,6 +93,9 @@ def signup():
     if new_name == "" and new_pass != "" and new_email != "":
       errmsg = "Please enter your Credentails"
       return redirect('/signup')
+    if '~' in new_name:
+      errmsg = "'~' is not allowed in username"
+      return redirect('/signup')
     x = Users.query.all() 
     for i in x:
       if new_name == i.username:
@@ -101,20 +112,20 @@ def signup():
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
-  global errmsg
+  global ermsg
   if request.method == "POST":
     name = request.form['acc_username'].lower()
     password = request.form['acc_password']
     remember = True if request.form.get('remember_me') else False
     x = Users.query.all()
     if name == "" and password == "":
-      errmsg = "Please enter your Credentails"
+      ermsg = "Please enter your Credentails"
       return redirect('/login')
     if name != "" and password == "":
-      errmsg = "Please enter your Credentails"
+      ermsg = "Please enter your Credentails"
       return redirect('/login')
     if name == "" and password != "":
-      errmsg = "Please enter your Credentails"
+      ermsg = "Please enter your Credentails"
       return redirect('/login')
     for i in x:
       if name == i.username: #if exists
@@ -123,13 +134,13 @@ def login():
           login_user(user, remember=remember)
           return redirect('/')
         else:
-          errmsg = "Password is incorret"
+          ermsg = "Password is incorret"
           return redirect('/login')
       else:
-        errmsg = "Account not found"
+        ermsg = "Account not found"
         return redirect('/login')
   else:
-    return render_template('login.html', errmsg=errmsg)
+    return render_template('login.html', errmsg=ermsg)
 
 @app.route('/logout')
 @login_required
@@ -137,6 +148,7 @@ def logout():
   logout_user()
   return redirect('/login')
 
+#add markdown
 @app.route('/create/text', methods=["POST", "GET"])
 @login_required
 def create_text():
@@ -151,11 +163,11 @@ def create_text():
     creator = current_user.username
     x = datetime.now()
     if anonymity == "yes":
-      creator = "Anonymous" 
+      creator = "Anonymous~" + current_user.username 
     post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
     db.session.add(post)
     db.session.commit()
-    return redirect('/account')
+    return redirect('/yourposts')
 
 @app.route('/create/art', methods=["POST", "GET"])
 @login_required
@@ -172,10 +184,13 @@ def create_art():
     x = datetime.now()
     allowed = ['png','jpg','jpeg','gif']
     if anonymity == "yes":
-      creator = ["Anonymous", current_user.username]
+      creator = "Anonymous~" + current_user.username
     y = content.filename.split('.')
     if y[1].lower() in allowed:
       content.save(app.config['UPLOAD_FOLDER'] + secure_filename(current_user.username + "_" + content.filename))
+    else:
+      flash("File type not allowed")
+      return redirect(current_page)
     post = Posts(post_title = title, post_genre = genre, post_content =current_user.username + "_" + content.filename, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
     db.session.add(post)
     db.session.commit()
@@ -185,17 +200,28 @@ def create_art():
 @app.route('/account')
 @login_required
 def acc():
+  global current_page
+  current_page = "/account"
   return render_template('account.html', current_user = current_user)
 
 #add html, and code
 @app.route('/yourposts')
+@login_required
 def yourposts():
-  return render_template("posts.html")
+  global current_page
+  current_page = "/yourposts"
+  global posts_list
+  return render_template('posts.html', posts=posts_list, len = len)
 
 #add code
 @app.route('/deleteacc')
+@login_required
 def deleteacc():
-  ""
+  delete = Users.query.filter_by(username = current_user.username).first()
+  logout_user()
+  db.session.delete(delete)
+  db.session.commit()
+  return redirect('/signup')
 
 if __name__ == "__main__":
   app.secret_key = 'writeenkeykavishiandsushaan'
