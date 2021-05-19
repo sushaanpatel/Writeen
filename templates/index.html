@@ -4,6 +4,7 @@
         <title>Home - Writeen</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
@@ -147,10 +148,10 @@
             </div>
         </div>
         <!-- Search Bar -->
-        <div id="search_div" style="float: right;margin-right: 1%;">
+        <div id="search_div" style="float: right;margin-right: 1.3%;max-width:500px">
             <form action="/search" method="POST">
-                <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
-                <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:265px;" placeholder="Search">
+                <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:80px;" oninput="changeopt()">
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
                     <option value="author">Author</option>
@@ -161,28 +162,39 @@
             </form>
         </div>
         <br><br>
-        <div style="margin-left:6%; text-align:left;">
+        <div style="margin-left:4.5%;">
             {% for post in posts %}
-            <h3 style="width: 60%;"><b>{{post.post_title}}</b></h3>
+            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a onclick=""><span class="fa fa-heart-o" style="color: #ff4d4d;"></span></a></b></h3>
             {% if len(post.post_creator.split('~')) == 2 %}
-            <span><i>By {{post.post_creator.split('~')[0]}}</i>, Genre : {{post.post_genre}}</span>
+            <span><i>By {{post.post_creator.split('~')[0]}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
             {% endif %}
             {% if len(post.post_creator.split('~')) == 1 %}
-            <span><i>By {{post.post_creator}}</i>, Genre : {{post.post_genre}}</span>
+            <span><i>By {{post.post_creator}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
             {% endif %}
             <hr style="width: 20%; text-align:left;margin-left:0;">
+            {% if post.post_content in art %}
+            <img style="max-width: 75%;max-height: 75%;min-width: 20%;min-height: 20%;" src=../static/{{post.post_content}}>
+            <br>
+            {% else %}
             <p style="font-size: 16px;width:90%;">{{post.post_content}}</p>
-            <br>
+            {% endif %}
             {% if post.post_media != "" %}
-            <p>Media Links</p>
-            <li> {{post.post_media}}</li>
+            {% if post .post_content in art%}
             <br>
+            <p style="font-size:14px;width:80%;word-break:break-all;"><b>Caption : </b>{{post.post_media}}</p>
+            <br>
+            {% else %}
+            <br>
+            <p>Media Links</p>
+            <p style="font-size:14px;width:80%;word-break:break-all;">{{post.post_media}}</p>
+            <br>
+            {% endif %}
             {% endif %}
             {% if post.post_citation != "" %}
             <p>Citation</p>
-            <li> {{post.post_citation}}</li>
+            <p style="font-size: 14px;width:80%;word-break:break-all;">{{post.post_citation}}</p>
             {% endif %}
-            <br><br>
+            <br><hr width="90%" style="margin-left: 0;"><br>
             {% endfor %}
         </div>
         {% with messages = get_flashed_messages() %}
@@ -214,7 +226,7 @@
                 if (filter.value == "genre"){
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
-                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;">
+                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;width:265px;">
                         <option value="Business">Business*</option>
                         <option value="Sports">Sports*</option>
                         <option value="News">News*</option>
@@ -233,7 +245,7 @@
                         <option value='Poetry'>Poetry*</option>
                         <option value='Adventure'>Adventure*</option>
                     </select>    
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:80px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre" selected>Genre</option>
                         <option value="author">Author</option>
@@ -245,30 +257,30 @@
                 }
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
-                `<form action="/searh" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                `<form action="/search" method="POST">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:265px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:80px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
                         <option value="genre">Genre</option>
                         <option value="author">Author</option>
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters/index">Clear</a>
+                    <a class="btn btn-default" href="/clearfilters">Clear</a>
                 </form>`
                 }
                 else if (filter.value == "author"){
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:265px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:80px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre">Genre</option>
                         <option value="author" selected>Author</option>
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters/index">Clear</a>
+                    <a class="btn btn-default" href="/clearfilters">Clear</a>
                 </form>`
                 }
                 //else if (filter.value == "questions"){

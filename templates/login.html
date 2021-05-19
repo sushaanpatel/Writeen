@@ -55,6 +55,10 @@
             input.btn[type=file]:hover{
                 color: grey;
             }
+            div.contain{
+                max-width: 40%;
+                min-width: 400px;
+            }
         </style>
     </head>
     <body>
@@ -142,12 +146,12 @@
             </div>
         </div>
         <center>
-        <div class="container" style="background-color: #3a3a3a;height: 380px;border-radius:10px;">
-            <h1><span class="glyphicon glyphicon-log-in" style="font-size: 26px;margin-top: 2.5%;"></span> Log-in</h1>
+        <div class="contain" style="background-color: #3a3a3a;height: 380px;border-radius:10px;">
+            <h1><span class="glyphicon glyphicon-log-in" style="font-size: 26px;margin-top: 7%;"></span> Log-in</h1>
             <form action="/login" method="POST">
                 <p style="color: #ff4d4d;font-size:19px;">{{ errmsg }}</p>
-                <input type="text" id="acc_username" name="acc_username" class="form-control" placeholder="username" style="width: 60%;font-size: 20px;margin-bottom: 1%;">
-                <input type="password" id="acc_password" name="acc_password" class="form-control" placeholder="password" style="width: 60%;font-size: 20px;">
+                <input type="text" id="acc_username" name="acc_username" class="form-control" placeholder="username" style="width: 80%;font-size: 20px;margin-bottom: 1%;">
+                <input type="password" id="acc_password" name="acc_password" class="form-control" placeholder="password" style="width: 80%;font-size: 20px;">
                 <table style="margin-bottom: 10px;">
                     <tr>
                         <th><input type="checkbox" id="remember_me" name="remember_me"></th>
@@ -160,6 +164,13 @@
             <a href="/signup" style="font-size: 16.5px;">Dont have an account?</a>
         </div>
         </center>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <script>
+            window.onload = function(){alertify.notify('File type not allowed', 'error', 3)};
+        </script>
+        {% endif %}
+        {% endwith %}
         <script>
             var mybutton = document.getElementById("topbutton");
             window.onscroll = function(){scrollFunction()};
@@ -253,7 +264,7 @@
                     <br>
                     <input type="file" class="btn" id="post_content" name="post_content" placeholder="Content (Required or *)" style="font-size:15px;" oninput="changebtn()">
                     <br>
-                    <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Media Links"></textarea>
+                    <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Captions"></textarea>
                     <br>
                     <textarea type="text" class="form-control" id="post_citation" name="post_citation" placeholder="Citation"></textarea>
                     <br>

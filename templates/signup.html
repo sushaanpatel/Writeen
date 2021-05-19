@@ -54,6 +54,10 @@
             input.btn[type=file]:hover{
                 color: grey;
             }
+            div.contain{
+                max-width: 40%;
+                min-width: 400px;
+            }
         </style>
     </head>
     <body>
@@ -141,13 +145,13 @@
             </div>
         </div>
         <center>
-        <div class="container" style="background-color: #3a3a3a;height: 420px;border-radius:10px;">
-            <h1><span class="glyphicon glyphicon-list-alt" style="font-size: 26px;margin-top: 3%;"></span> Sign-up</h1>
+        <div class="contain" style="background-color: #3a3a3a;height: 400px;border-radius:10px;">
+            <h1><span class="glyphicon glyphicon-list-alt" style="font-size: 26px;margin-top: 7%;"></span> Sign-up</h1>
             <form action="/signup" method="POST">
                 <p style="color: #ff4d4d;font-size:19px;">{{ errmsg }}</p>
-                <input type="text" id="new_email" name="new_email" class="form-control" placeholder="Email" style="width: 60%;font-size: 20px;margin-bottom: 1%;">
-                <input type="text" id="new_username" name="new_username" class="form-control" placeholder="Username" style="width: 60%;font-size: 20px;margin-bottom: 1%;" oninput="checkusername()">
-                <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Password" style="width: 60%;font-size: 20px;">
+                <input type="text" id="new_email" name="new_email" class="form-control" placeholder="Email" style="width: 80%;font-size: 20px;margin-bottom: 1%;">
+                <input type="text" id="new_username" name="new_username" class="form-control" placeholder="Username" style="width: 80%;font-size: 20px;margin-bottom: 1%;" oninput="checkusername()">
+                <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Password" style="width: 80%;font-size: 20px;">
                 <table style="margin-bottom: 10px;">
                     <tr>
                         <th><input type="checkbox" id="new_remember_me" name="new_remember_me"></th>
@@ -160,6 +164,13 @@
             <a href="/login" style="font-size: 16.5px;">Have an account?</a>
         </div>
         </center>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <script>
+            window.onload = function(){alertify.notify('File type not allowed', 'error', 3)};
+        </script>
+        {% endif %}
+        {% endwith %}
         <script>
             var mybutton = document.getElementById("topbutton");
             window.onscroll = function(){scrollFunction()};

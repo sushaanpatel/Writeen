@@ -19,6 +19,11 @@ def load_user(user_id):
 def unauthorized():
   return render_template('unauthorized.html')
 
+
+global ypcond
+ypcond = 0
+global incond
+incond = 0
 global errmsg
 errmsg = ""
 global ermsg
@@ -27,16 +32,24 @@ global posts_list
 posts_list = []
 global current_page
 current_page = ""
+global art_list
+art_list = []
+global yourposts_list
+yourposts_list = []
 
 @app.route('/clearfilters')
 def clear():
   global posts_list
+  global yourposts_list
   global current_page
-  posts_list = []
+  if current_page == "/yourposts":
+    yourposts_list = []
+  else:
+    posts_list = []
   return redirect(current_page)
 
 #try google login, comment, report post, profile pic
-#add like button, add display of filter, display of images use listdir from os
+#add like button, random post display, also add publish time
 @app.route('/')
 def index():
   global current_page
@@ -46,7 +59,9 @@ def index():
   global ermsg
   ermsg = ""
   global posts_list
-  return render_template('index.html', current_user = current_user, posts=posts_list, len = len)
+  global art_list
+  art_list = os.listdir("../Writeen/static")
+  return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list)
 
 @app.route('/search', methods=["POST", "GET"])
 def filter():
@@ -68,7 +83,7 @@ def filter():
       query = Posts.query.filter(Posts.post_creator.like(f"%{search}%")).all()
       for post in query:
         posts_list.append(post)
-    return redirect(current_page)
+    return redirect('/')
 
 @app.route('/signup', methods=["POST","GET"])
 def signup():
@@ -95,6 +110,9 @@ def signup():
       return redirect('/signup')
     if '~' in new_name:
       errmsg = "'~' is not allowed in username"
+      return redirect('/signup')
+    if new_name == "anonymous":
+      errmsg = "'Anonymous' can not used as a username"
       return redirect('/signup')
     x = Users.query.all() 
     for i in x:
@@ -187,31 +205,74 @@ def create_art():
       creator = "Anonymous~" + current_user.username
     y = content.filename.split('.')
     if y[1].lower() in allowed:
-      content.save(app.config['UPLOAD_FOLDER'] + secure_filename(current_user.username + "_" + content.filename))
+      filename = content.filename
+      content.save(app.config['UPLOAD_FOLDER'] + secure_filename(current_user.username + "_" + str(filename).replace(" ", "_")))
     else:
       flash("File type not allowed")
       return redirect(current_page)
-    post = Posts(post_title = title, post_genre = genre, post_content =current_user.username + "_" + content.filename, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
+    post = Posts(post_title = title, post_genre = genre, post_content =current_user.username + "_" + str(content.filename).replace(" ", "_"), post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
     db.session.add(post)
     db.session.commit()
-    return redirect('/account')
+    return redirect('/yourposts')
 
-#add change password route, also add no login page
+#add change password route
 @app.route('/account')
 @login_required
 def acc():
   global current_page
+  global ypcond 
+  ypcond = 0
   current_page = "/account"
   return render_template('account.html', current_user = current_user)
 
-#add html, and code
+# add publish time, post display and the edit and delete besides title
+@app.route('/searchyourposts', methods = ["POST"])
+def searchposts():
+  global ypcond
+  global yourposts_list
+  global current_page
+  ypcond = 1
+  yourposts_list = []
+  if request.method == "POST":
+    search = request.form['search_bar'].lower()
+    filters = request.form['filter']
+    if filters == "title":
+      query = Posts.query.filter(Posts.post_title.like(f"%{search}%")).all()
+      for post in query:
+        if current_user.username in post.post_creator.split('~'):
+          yourposts_list.append(post)
+    if filters == "genre":
+      query = Posts.query.filter_by(post_genre=search).all()
+      for post in query:
+        if current_user.username in post.post_creator.split('~'):
+          yourposts_list.append(post)
+    if filters == "all":
+      query = Posts.query.filter_by(post_creator = current_user.username).all()
+      for post in query:
+        yourposts_list.append(post)
+      query2 = Posts.query.filter_by(post_creator = "Anonymous~" + current_user.username).all()
+      for post2 in query2:
+        yourposts_list.append(post2)
+    return redirect('/yourposts')
+
+#add html, and code, add edit and delete
 @app.route('/yourposts')
 @login_required
 def yourposts():
+  global ypcond
   global current_page
   current_page = "/yourposts"
-  global posts_list
-  return render_template('posts.html', posts=posts_list, len = len)
+  global yourposts_list
+  global art_list
+  art_list = os.listdir("../Writeen/static")
+  if ypcond == 0:
+    query = Posts.query.filter_by(post_creator = current_user.username).all()
+    for post in query:
+      yourposts_list.append(post)
+    query2 = Posts.query.filter_by(post_creator = "Anonymous~" + current_user.username).all()
+    for post2 in query2:
+      yourposts_list.append(post2)
+  return render_template('posts.html', posts=yourposts_list, art = art_list,len = len)
 
 #add code
 @app.route('/deleteacc')
