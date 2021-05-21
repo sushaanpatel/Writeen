@@ -5,7 +5,7 @@ from flask_login import UserMixin
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://bee0263bfc535e:f9f02f07@us-cdbr-east-03.cleardb.com/heroku_c02aad4223f7e7a'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECERT_KEY'] = 'writeenkeykavishiandsushaan'
+app.secret_key = 'writeenkeykavishiandsushaan'
 app.config['UPLOAD_FOLDER'] = 'static/'
 db = SQLAlchemy(app)
 

@@ -19,7 +19,6 @@ def load_user(user_id):
 def unauthorized():
   return redirect('/login')
 
-
 global ypcond
 ypcond = 0
 global incond
@@ -206,7 +205,7 @@ def create_text():
     x = datetime.now()
     if anonymity == "yes":
       creator = "Anonymous~" + current_user.username 
-    post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
+    post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_likes = 0)
     db.session.add(post)
     db.session.commit()
     return redirect('/yourposts')
@@ -234,7 +233,7 @@ def create_art():
     else:
       flash("File type not allowed")
       return redirect(current_page)
-    post = Posts(post_title = title, post_genre = genre, post_content =current_user.username + "_" + str(content.filename).replace(" ", "_"), post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
+    post = Posts(post_title = title, post_genre = genre, post_content =current_user.username + "_" + str(content.filename).replace(" ", "_"), post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_likes = 0)
     db.session.add(post)
     db.session.commit()
     return redirect('/yourposts')
@@ -308,7 +307,6 @@ def deleteacc():
   return redirect('/signup')
 
 if __name__ == "__main__":
-  # app.secret_key = 'writeenkeykavishiandsushaan'
   app.run(debug=True)
 
 # x = Users(username = "sushaan", password = "1234", email = "sushaanpatel@gmail.com")
