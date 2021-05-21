@@ -150,8 +150,8 @@
         <!-- Search Bar -->
         <div id="search_div" style="float: right;margin-right: 1.3%;max-width:500px">
             <form action="/search" method="POST">
-                <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:265px;" placeholder="Search">
-                <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:80px;" oninput="changeopt()">
+                <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:225px;" placeholder="Search">
+                <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
                     <option value="author">Author</option>
@@ -228,7 +228,7 @@
                 if (filter.value == "genre"){
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
-                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;width:265px;">
+                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;width:210px;">
                         <option value="Business">Business*</option>
                         <option value="Sports">Sports*</option>
                         <option value="News">News*</option>
@@ -247,10 +247,12 @@
                         <option value='Poetry'>Poetry*</option>
                         <option value='Adventure'>Adventure*</option>
                     </select>    
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:80px;" oninput="changeopt()">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:75px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre" selected>Genre</option>
                         <option value="author">Author</option>
+                        <option value="newest">Newest</option>
+                        <option value="oldest">Oldest</option>
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
@@ -260,8 +262,8 @@
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:265px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:80px;" oninput="changeopt()">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:210px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:75px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
                         <option value="genre">Genre</option>
                         <option value="author">Author</option>
@@ -276,8 +278,8 @@
                 else if (filter.value == "author"){
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:265px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:80px;" oninput="changeopt()">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:210px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:75px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre">Genre</option>
                         <option value="author" selected>Author</option>
@@ -293,10 +295,10 @@
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:350px;" oninput="changeopt()">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:290px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre">Genre</option>
-                        <option value="author">author</option>
+                        <option value="author">Author</option>
                         <option value="newest" selected>Newest</option>
                         <option value="oldest">Oldest</option>
                         <!-- <option value="questions">Question</option> -->
@@ -309,10 +311,10 @@
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:350px;" oninput="changeopt()">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:290px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre">Genre</option>
-                        <option value="author">author</option>
+                        <option value="author">Author</option>
                         <option value="newest">Newest</option>
                         <option value="oldest" selected>Oldest</option>
                         <!-- <option value="questions">Question</option> -->

@@ -62,8 +62,8 @@
         <!-- Search Bar -->
         <div id="search_div" style="float: right;margin-right: 1%;max-width:500px;margin-top:1%;">
             <form action="/searchyourposts" method="POST">
-                <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;width:225px;" placeholder="Search">
-                <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:70px;" oninput="changeopt()">
+                <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;width:180px;" placeholder="Search">
+                <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
                     <option value="all">All</option>
@@ -130,7 +130,7 @@
                 if (filter.value == "genre"){
                     search_div.innerHTML = 
                 `<form action="/searchyourposts" method="POST">
-                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;width:225px;">
+                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;width:175px;">
                         <option value="Business">Business*</option>
                         <option value="Sports">Sports*</option>
                         <option value="News">News*</option>
@@ -149,7 +149,7 @@
                         <option value='Poetry'>Poetry*</option>
                         <option value='Adventure'>Adventure*</option>
                     </select>    
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:80px;" oninput="changeopt()">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:65px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre" selected>Genre</option>
                         <option value="all">All</option>
@@ -162,8 +162,8 @@
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
                 `<form action="/searchyourposts" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:225px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:80px;" oninput="changeopt()">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:180px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
                         <option value="genre">Genre</option>
                         <option value="all">All</option>
@@ -177,7 +177,7 @@
                     search_div.innerHTML = 
                 `<form action="/searchyourposts" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:300px;" oninput="changeopt()">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:240px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre">Genre</option>
                         <option value="all" selected>All</option>
