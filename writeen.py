@@ -17,7 +17,7 @@ def load_user(user_id):
 
 @login_manager.unauthorized_handler
 def unauthorized():
-  return render_template('unauthorized.html')
+  return redirect('/login')
 
 
 global ypcond
@@ -37,6 +37,16 @@ art_list = []
 global yourposts_list
 yourposts_list = []
 
+@app.route('/home')
+def home():
+  global ypcond
+  ypcond = 0
+  global incond
+  incond = 0
+  global posts_list
+  posts_list = []
+  return redirect('/')
+
 @app.route('/clearfilters')
 def clear():
   global posts_list
@@ -49,9 +59,10 @@ def clear():
   return redirect(current_page)
 
 #try google login, comment, report post, profile pic
-#add like button, random post display, also add publish time
+#add like button, add refeshed 
 @app.route('/')
 def index():
+  global incond
   global current_page
   current_page = "/"
   global errmsg
@@ -61,13 +72,25 @@ def index():
   global posts_list
   global art_list
   art_list = os.listdir("../Writeen/static")
+  if incond == 0:
+    max_id = Posts.query.all()
+    random_list = list(range(0, len(max_id)))
+    count = 0
+    random.shuffle(random_list)
+    # while count < 3:
+    #   query = Posts.query.all()
+    #   posts_list.append(query[random_list[count]])
+    #   count += 1
   return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list)
 
+#add newest and oldest
 @app.route('/search', methods=["POST", "GET"])
 def filter():
   global posts_list
   global current_page
+  global incond
   posts_list = []
+  incond = 1
   if request.method == "POST":
     search = request.form['search_bar'].lower()
     filters = request.form['filter']
@@ -131,6 +154,7 @@ def signup():
 @app.route('/login', methods=["POST", "GET"])
 def login():
   global ermsg
+  global current_page
   if request.method == "POST":
     name = request.form['acc_username'].lower()
     password = request.form['acc_password']
@@ -150,7 +174,7 @@ def login():
         if check_password_hash(i.password, password): #checks passwords
           user = Users.query.filter_by(username = name).first()
           login_user(user, remember=remember)
-          return redirect('/')
+          return redirect(current_page)
         else:
           ermsg = "Password is incorret"
           return redirect('/login')
@@ -225,7 +249,7 @@ def acc():
   current_page = "/account"
   return render_template('account.html', current_user = current_user)
 
-# add publish time, post display and the edit and delete besides title
+# add the edit and delete besides title, add newest and oldest
 @app.route('/searchyourposts', methods = ["POST"])
 def searchposts():
   global ypcond
@@ -274,7 +298,6 @@ def yourposts():
       yourposts_list.append(post2)
   return render_template('posts.html', posts=yourposts_list, art = art_list,len = len)
 
-#add code
 @app.route('/deleteacc')
 @login_required
 def deleteacc():
