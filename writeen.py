@@ -308,7 +308,7 @@ def deleteacc():
   return redirect('/signup')
 
 if __name__ == "__main__":
-  app.secret_key = 'writeenkeykavishiandsushaan'
+  # app.secret_key = 'writeenkeykavishiandsushaan'
   app.run(debug=True)
 
 # x = Users(username = "sushaan", password = "1234", email = "sushaanpatel@gmail.com")
