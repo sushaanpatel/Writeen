@@ -150,7 +150,7 @@
         <!-- Search Bar -->
         <div id="search_div" style="float: right;margin-right: 1.3%;max-width:500px">
             <form action="/search" method="POST">
-                <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:225px;" placeholder="Search">
+                <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:150px;" placeholder="Search">
                 <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
@@ -228,7 +228,7 @@
                 if (filter.value == "genre"){
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
-                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;width:210px;">
+                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;width:160px;">
                         <option value="Business">Business*</option>
                         <option value="Sports">Sports*</option>
                         <option value="News">News*</option>
@@ -262,7 +262,7 @@
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:210px;" placeholder="Search">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:160px;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:75px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
                         <option value="genre">Genre</option>
@@ -278,7 +278,7 @@
                 else if (filter.value == "author"){
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:210px;" placeholder="Search">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:160px;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:75px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre">Genre</option>
@@ -295,7 +295,7 @@
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:290px;" oninput="changeopt()">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:190px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre">Genre</option>
                         <option value="author">Author</option>
@@ -311,7 +311,7 @@
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:290px;" oninput="changeopt()">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:190px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre">Genre</option>
                         <option value="author">Author</option>
