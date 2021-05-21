@@ -71,7 +71,7 @@ def index():
   ermsg = ""
   global posts_list
   global art_list
-  art_list = os.listdir("../static")
+  art_list = os.listdir("static")
   if incond == 0:
     max_id = Posts.query.all()
     random_list = list(range(0, len(max_id)))
@@ -288,7 +288,7 @@ def yourposts():
   current_page = "/yourposts"
   global yourposts_list
   global art_list
-  art_list = os.listdir("../static")
+  art_list = os.listdir("static")
   if ypcond == 0:
     query = Posts.query.filter_by(post_creator = current_user.username).all()
     for post in query:
