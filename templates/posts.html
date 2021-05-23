@@ -62,7 +62,7 @@
         <!-- Search Bar -->
         <div id="search_div" style="float: right;margin-right: 1%;max-width:500px;margin-top:1%;">
             <form action="/searchyourposts" method="POST">
-                <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;width:180px;" placeholder="Search">
+                <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;width:max-content;" placeholder="Search">
                 <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
@@ -75,6 +75,17 @@
         </div>
         <br><br>
         <div style="margin-left:4.5%;">
+            {% if posts == [] %}
+            <center>
+                <div style="margin-right: 10%;" >
+                    <br>
+                    <table style="margin-top:0.5%;max-width:800px;min-width:45px;">
+                        <td><img style="max-width: 100%;max-height:100%;" src="static/icons/404robot.png"></td>
+                        <td><p style="font-size: 18px;">404 No Posts Found :(<br>Please Check your search again</p><p><li style="font-size: 13px;">Make sure that all words are spelled correctly.</li><li style="font-size: 13px;">Try different keywords.</li><li style="font-size: 13px;">Try more general keywords.</li><li style="font-size: 13px;">Try fewer keywords.</li></p></td>
+                    </table>
+                </div>
+            </center>
+            {% else %}
             {% for post in posts %}
             <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a style="font-size: 14px;height:max-content;" class="btn btn-danger">0 Likes</a></b></h3>
             {% if len(post.post_creator.split('~')) == 2 %}
@@ -107,6 +118,7 @@
             {% endif %}
             <br><hr width="90%" style="margin-left: 0;"><br>
             {% endfor %}
+            {% endif %}
         </div>
         <script>
             var mybutton = document.getElementById("topbutton");
@@ -130,7 +142,7 @@
                 if (filter.value == "genre"){
                     search_div.innerHTML = 
                 `<form action="/searchyourposts" method="POST">
-                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;width:175px;">
+                    <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;width:max-content;">
                         <option value="Business">Business*</option>
                         <option value="Sports">Sports*</option>
                         <option value="News">News*</option>
@@ -162,7 +174,7 @@
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
                 `<form action="/searchyourposts" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:180px;" placeholder="Search">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:max-content;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
                         <option value="genre">Genre</option>
@@ -177,7 +189,7 @@
                     search_div.innerHTML = 
                 `<form action="/searchyourposts" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
-                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:240px;" oninput="changeopt()">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:150px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre">Genre</option>
                         <option value="all" selected>All</option>

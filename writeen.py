@@ -44,6 +44,8 @@ def home():
   incond = 0
   global posts_list
   posts_list = []
+  global yourposts_list
+  yourposts_list = 0
   return redirect('/')
 
 @app.route('/clearfilters')
@@ -51,10 +53,16 @@ def clear():
   global posts_list
   global yourposts_list
   global current_page
+  global ypcond
+  global incond
+  Users.query.session.close()
+  Posts.query.session.close()
   if current_page == "/yourposts":
     yourposts_list = []
+    ypcond = 0
   else:
     posts_list = []
+    incond = 0
   return redirect(current_page)
 
 #try google login, comment, report post, profile pic
@@ -72,11 +80,12 @@ def index():
   global art_list
   art_list = os.listdir("static")
   if incond == 0:
+    Posts.query.session.close()
     max_id = Posts.query.all()
     random_list = list(range(0, len(max_id)))
     count = 0
     random.shuffle(random_list)
-    # while count < 3:
+    # while count < 30:
     #   query = Posts.query.all()
     #   posts_list.append(query[random_list[count]])
     #   count += 1
@@ -93,6 +102,7 @@ def filter():
   if request.method == "POST":
     search = request.form['search_bar'].lower()
     filters = request.form['filter']
+    Posts.query.session.close()
     if filters == "title":
       query = Posts.query.filter(Posts.post_title.like(f"%{search}%")).all()
       for post in query:
@@ -114,6 +124,7 @@ def signup():
     new_name = request.form['new_username'].lower()
     new_pass = request.form['new_password']
     new_email = request.form['new_email']
+    Users.query.session.close()
     new_rememeber = True if request.form.get('new_remember_me') else False
     if new_name == "" and new_pass == "" and new_email == "":
       errmsg = "Please enter your Credentails"
@@ -158,6 +169,7 @@ def login():
     name = request.form['acc_username'].lower()
     password = request.form['acc_password']
     remember = True if request.form.get('remember_me') else False
+    Users.query.session.close()
     x = Users.query.all()
     if name == "" and password == "":
       ermsg = "Please enter your Credentails"
@@ -205,6 +217,7 @@ def create_text():
     x = datetime.now()
     if anonymity == "yes":
       creator = "Anonymous~" + current_user.username 
+    Posts.query.session.close()
     post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_likes = 0)
     db.session.add(post)
     db.session.commit()
@@ -233,6 +246,7 @@ def create_art():
     else:
       flash("File type not allowed")
       return redirect(current_page)
+    Posts.query.session.close()
     post = Posts(post_title = title, post_genre = genre, post_content =current_user.username + "_" + str(content.filename).replace(" ", "_"), post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_likes = 0)
     db.session.add(post)
     db.session.commit()
@@ -246,6 +260,8 @@ def acc():
   global ypcond 
   ypcond = 0
   current_page = "/account"
+  Users.query.session.close()
+  Posts.query.session.close()
   return render_template('account.html', current_user = current_user)
 
 # add the edit and delete besides title, add newest and oldest
@@ -259,6 +275,7 @@ def searchposts():
   if request.method == "POST":
     search = request.form['search_bar'].lower()
     filters = request.form['filter']
+    Posts.query.session.close()
     if filters == "title":
       query = Posts.query.filter(Posts.post_title.like(f"%{search}%")).all()
       for post in query:
@@ -288,6 +305,7 @@ def yourposts():
   global yourposts_list
   global art_list
   art_list = os.listdir("static")
+  Posts.query.session.close()
   if ypcond == 0:
     query = Posts.query.filter_by(post_creator = current_user.username).all()
     for post in query:
@@ -300,6 +318,7 @@ def yourposts():
 @app.route('/deleteacc')
 @login_required
 def deleteacc():
+  Users.query.session.close()
   delete = Users.query.filter_by(username = current_user.username).first()
   logout_user()
   db.session.delete(delete)
