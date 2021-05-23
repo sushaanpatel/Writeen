@@ -45,7 +45,7 @@ def home():
   global posts_list
   posts_list = []
   global yourposts_list
-  yourposts_list = 0
+  yourposts_list = []
   return redirect('/')
 
 @app.route('/clearfilters')
