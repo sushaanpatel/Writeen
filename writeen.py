@@ -97,9 +97,9 @@ def filter():
   global posts_list
   global current_page
   global incond
-  posts_list = []
-  incond = 1
   if request.method == "POST":
+    posts_list = []
+    incond = 1
     search = request.form['search_bar'].lower()
     filters = request.form['filter']
     Posts.query.session.close()
@@ -270,9 +270,9 @@ def searchposts():
   global ypcond
   global yourposts_list
   global current_page
-  ypcond = 1
-  yourposts_list = []
   if request.method == "POST":
+    ypcond = 1
+    yourposts_list = []
     search = request.form['search_bar'].lower()
     filters = request.form['filter']
     Posts.query.session.close()
