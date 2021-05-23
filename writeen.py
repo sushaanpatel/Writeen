@@ -85,10 +85,10 @@ def index():
     random_list = list(range(0, len(max_id)))
     count = 0
     random.shuffle(random_list)
-    # while count < 30:
-    #   query = Posts.query.all()
-    #   posts_list.append(query[random_list[count]])
-    #   count += 1
+    while count < len(max_id):
+      query = Posts.query.all()
+      posts_list.append(query[random_list[count]])
+      count += 1
   return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list)
 
 #add newest and oldest
