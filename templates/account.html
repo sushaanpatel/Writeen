@@ -84,7 +84,7 @@
               <ul class="nav navbar-nav navbar-right">
                 <li><a style="color: white;font-weight: 400;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
                 {% if current_user.is_authenticated == True %}
-                <li><a href="/logout" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-out"></span> Log-out</a></li>
+                <li><a href="/yourposts" style="color: white;font-weight: 400;">Your Posts</a></li>
                 <li><a href="/account" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> {{current_user.username}}</a></li>
                 {% else %}
                 <li><a href="/login" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Log-in</a></li>
@@ -100,7 +100,7 @@
                 <div class="modal-content" style="background-color: #222222;">
                     <div class="modal-header" style="background-color: #222222;border-radius: 4px;">
                         <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" style="color: white;"></span></button>
-                        <p style="font-size: 20px;">Create : <select id="post_type" name="post_name" style="border: 0px;font-size: 16px;" onclick="changeformat()">
+                        <p style="font-size: 20px;">Create : <select id="post_type" name="post_name" style="border: 0px;font-size: 16px;" oninput="changeformat()">
                             <option value="txt">Writing Piece</option>
                             <option value="art">Art</option>
                             <!-- <option value="ques">Question</option> -->
@@ -171,9 +171,58 @@
               </div>
             </div>
           </div>
+        <!-- change username -->
+        <div id="changeusername" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content" style="background-color: #222222;">
+                <div class="modal-header" style="background-color: #222222;border-radius: 4px;">
+                  <button type="button" style="color: white;" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" style="color: white;"></span></button>
+                  <h4 class="modal-title">Change Username</h4>
+                </div>
+                <div class="modal-body">
+                  <form action="/change/username" method="POST">
+                    <input name="new_username" type="text" placeholder="New Username" class="form-control"><br>
+                    <center>
+                    <input type="submit" value="Contiune" class="btn btn-primary">
+                    </center>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- change password -->
+        <div id="changepass" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <div class="modal-content" style="background-color: #222222;">
+                <div class="modal-header" style="background-color: #222222;border-radius: 4px;">
+                  <button type="button" style="color: white;" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" style="color: white;"></span></button>
+                  <h4 class="modal-title">Change Password</h4>
+                </div>
+                <div class="modal-body">
+                  <form action="/change/password" method="POST">
+                    <input name="current_pass" type="password" placeholder="Current Password" id="psw" class="form-control" style="margin-bottom: 1%;">
+                    <input name="new_pass" type="password" placeholder="New Password" id="psw1" class="form-control"><br>
+                    <center>
+                    <table style="margin-bottom: 10px;">
+                        <tr>
+                            <th><input type="checkbox" onclick="pswvisible(); pswvisible1()"></th>
+                            <td>Show Password</td>
+                        </tr>
+                    </table>
+                    <input type="submit" value="Contiune" class="btn btn-primary">
+                    </center>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         <center>
         <hr>
         <a href="/yourposts" class="btn btn-default">Your Posts</a>    
+        <hr>
+        <a data-toggle="modal" data-target="#changeusername" class="btn btn-default">Change Username</a>
+        <hr>
+        <a data-toggle="modal" data-target="#changepass" class="btn btn-default">Change Password</a>
         <hr>
         <a href="/logout" class="btn btn-danger">Log Out</a>
         <hr>
@@ -182,9 +231,29 @@
         </center>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
+        {% for x in messages %}
+        {% if x == '1' %}
+        <script>
+            window.onload = function(){alertify.notify('Username Already Taken', 'error', 3)};
+        </script>
+        {% elif x == '2' %}
         <script>
             window.onload = function(){alertify.notify('File type not allowed', 'error', 3)};
         </script>
+        {% elif x == '3' %}
+        <script>
+            window.onload = function(){alertify.notify('Username Changed', 'success', 3)};
+        </script>
+        {% elif x == '4' %}
+        <script>
+            window.onload = function(){alertify.notify('Passsword Changed', 'success', 3)};
+        </script>
+        {% elif x == '5' %}
+        <script>
+            window.onload = function(){alertify.notify('Password was Incorrect', 'error', 3)};
+        </script>
+        {% endif %}
+        {% endfor %}
         {% endif %}
         {% endwith %}
         <script>
@@ -306,6 +375,24 @@
                 else{
                     btn.disabled = true;
                     btn.className = "btn btn-default"
+                }
+            }
+
+            function pswvisible(){
+                var x = document.getElementById("psw");
+                if (x.type === "password") {
+                  x.type = "text";
+                } else {
+                  x.type = "password";
+                }
+            }
+
+            function pswvisible1(){
+                var x = document.getElementById("psw1");
+                if (x.type === "password") {
+                  x.type = "text";
+                } else {
+                  x.type = "password";
                 }
             }
         </script>

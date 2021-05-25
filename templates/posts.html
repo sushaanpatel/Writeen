@@ -62,7 +62,7 @@
         <!-- Search Bar -->
         <div id="search_div" style="float: right;margin-right: 1%;max-width:500px;margin-top:1%;">
             <form action="/searchyourposts" method="POST">
-                <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
+                <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;width:45%;" placeholder="Search">
                 <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
@@ -81,7 +81,7 @@
                     <br>
                     <table style="margin-top:0.5%;max-width:800px;min-width:45px;">
                         <td><img style="max-width: 100%;max-height:100%;" src="static/icons/404robot.png"></td>
-                        <td><p style="font-size: 18px;">404 No Posts Found :(<br>Please Check your search again</p><p><li style="font-size: 13px;">Make sure that all words are spelled correctly.</li><li style="font-size: 13px;">Try different keywords.</li><li style="font-size: 13px;">Try more general keywords.</li><li style="font-size: 13px;">Try fewer keywords.</li></p></td>
+                        <td><p style="font-size: 16px;">404 No Posts Found :(<br>Please Check your search again</p><p><li style="font-size: 13px;">Make sure that all words are spelled correctly.</li><li style="font-size: 13px;">Try different keywords.</li><li style="font-size: 13px;">Try more general keywords.</li><li style="font-size: 13px;">Try fewer keywords.</li></p></td>
                     </table>
                 </div>
             </center>
@@ -174,7 +174,7 @@
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
                 `<form action="/searchyourposts" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:45%;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
                         <option value="genre">Genre</option>

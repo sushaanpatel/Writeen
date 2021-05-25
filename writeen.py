@@ -27,6 +27,8 @@ global errmsg
 errmsg = ""
 global ermsg
 ermsg =""
+global errormsg
+errormsg = ""
 global posts_list
 posts_list = []
 global current_page
@@ -76,6 +78,8 @@ def index():
   errmsg = ""
   global ermsg
   ermsg = ""
+  global errormsg
+  errormsg = ""
   global posts_list
   global art_list
   art_list = os.listdir("static")
@@ -157,7 +161,7 @@ def signup():
     db.session.commit()
     user = Users.query.filter_by(username = new_name).first()
     login_user(user, remember=new_rememeber)
-    return redirect('/')
+    return redirect('/home')
   else:
     return render_template('signup.html', errmsg=errmsg)
 
@@ -185,7 +189,7 @@ def login():
         if check_password_hash(i.password, password): #checks passwords
           user = Users.query.filter_by(username = name).first()
           login_user(user, remember=remember)
-          return redirect(current_page)
+          return redirect('/home')
         else:
           ermsg = "Password is incorret"
           return redirect('/login')
@@ -244,7 +248,7 @@ def create_art():
       filename = content.filename
       content.save(app.config['UPLOAD_FOLDER'] + secure_filename(current_user.username + "_" + str(filename).replace(" ", "_")))
     else:
-      flash("File type not allowed")
+      flash("2")
       return redirect(current_page)
     Posts.query.session.close()
     post = Posts(post_title = title, post_genre = genre, post_content =current_user.username + "_" + str(content.filename).replace(" ", "_"), post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_likes = 0)
@@ -258,11 +262,12 @@ def create_art():
 def acc():
   global current_page
   global ypcond 
+  global errormsg
   ypcond = 0
   current_page = "/account"
   Users.query.session.close()
   Posts.query.session.close()
-  return render_template('account.html', current_user = current_user)
+  return render_template('account.html', current_user = current_user, errmsg=errormsg)
 
 # add the edit and delete besides title, add newest and oldest
 @app.route('/searchyourposts', methods = ["POST"])
@@ -294,6 +299,39 @@ def searchposts():
       for post2 in query2:
         yourposts_list.append(post2)
     return redirect('/yourposts')
+
+@app.route('/change/username', methods = ["POST", "GET"])
+@login_required
+def changeusername():
+  if request.method == "POST":
+    Users.query.session.close()
+    new_username = request.form['new_username']
+    x = Users.query.all()
+    for i in x:
+      if new_username == i.username:
+        flash("1")
+        return redirect('/account')
+    user = Users.query.filter_by(username = current_user.username).first()
+    user.username = new_username
+    db.session.commit()
+    flash("3")
+    return redirect('/account')
+
+@app.route('/change/password', methods = ["POST", "GET"])
+def changepassword():
+  if request.method == "POST":
+    Users.query.session.close()
+    current_pass = request.form["current_pass"]
+    new_pass = request.form["new_pass"]
+    user = Users.query.filter_by(username = current_user.username).first()
+    if check_password_hash(user.password, current_pass):
+      flash("4")
+      user.password = generate_password_hash(new_pass, method = "sha256")
+      db.session.commit()
+      return redirect('/account')
+    else:
+      flash("5")
+      return redirect('/account')
 
 #add html, and code, add edit and delete
 @app.route('/yourposts')

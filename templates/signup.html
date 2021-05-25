@@ -79,8 +79,13 @@
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <li><a data-toggle="modal" data-target="#myModal" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
+                {% if current_user.is_authenticated == True %}
+                <li><a href="/yourposts" style="color: white;font-weight: 400;">Your Posts</a></li>
+                <li><a href="/account" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> {{current_user.username}}</a></li>
+                {% else %}
                 <li><a href="/login" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-log-in"></span> Log-in</a></li>
                 <li><a href="/account" style="color: white;font-weight: 400;"><span class='glyphicon glyphicon-user'></span> Account</a></li>
+                {% endif %}
               </ul>
             </div>
             </div>
@@ -91,7 +96,7 @@
                 <div class="modal-content" style="background-color: #222222;">
                     <div class="modal-header" style="background-color: #222222;border-radius: 4px;">
                         <button type="button" class="close" data-dismiss="modal"><span class="glyphicon glyphicon-remove" style="color: white;"></span></button>
-                        <p style="font-size: 20px;">Create : <select id="post_type" name="post_name" style="border: 0px;font-size: 16px;" onclick="changeformat()">
+                        <p style="font-size: 20px;">Create : <select id="post_type" name="post_name" style="border: 0px;font-size: 16px;" oninput="changeformat()">
                             <option value="txt">Writing Piece</option>
                             <option value="art">Art</option>
                             <!-- <option value="ques">Question</option> -->
