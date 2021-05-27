@@ -80,6 +80,8 @@ def index():
   ermsg = ""
   global errormsg
   errormsg = ""
+  global yourposts_list
+  yourposts_list = []
   global posts_list
   global art_list
   art_list = os.listdir("static")
@@ -124,6 +126,8 @@ def filter():
 @app.route('/signup', methods=["POST","GET"])
 def signup():
   global errmsg
+  global yourposts_list
+  yourposts_list = []
   if request.method == "POST":
     new_name = request.form['new_username'].lower()
     new_pass = request.form['new_password']
@@ -169,6 +173,8 @@ def signup():
 def login():
   global ermsg
   global current_page
+  global yourposts_list
+  yourposts_list = []
   if request.method == "POST":
     name = request.form['acc_username'].lower()
     password = request.form['acc_password']
@@ -222,7 +228,7 @@ def create_text():
     if anonymity == "yes":
       creator = "Anonymous~" + current_user.username 
     Posts.query.session.close()
-    post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_likes = 0)
+    post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
     db.session.add(post)
     db.session.commit()
     return redirect('/yourposts')
@@ -251,7 +257,7 @@ def create_art():
       flash("2")
       return redirect(current_page)
     Posts.query.session.close()
-    post = Posts(post_title = title, post_genre = genre, post_content =current_user.username + "_" + str(content.filename).replace(" ", "_"), post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_likes = 0)
+    post = Posts(post_title = title, post_genre = genre, post_content =current_user.username + "_" + str(content.filename).replace(" ", "_"), post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
     db.session.add(post)
     db.session.commit()
     return redirect('/yourposts')
@@ -263,7 +269,9 @@ def acc():
   global current_page
   global ypcond 
   global errormsg
+  global yourposts_list
   ypcond = 0
+  yourposts_list = []
   current_page = "/account"
   Users.query.session.close()
   Posts.query.session.close()
@@ -333,7 +341,52 @@ def changepassword():
       flash("5")
       return redirect('/account')
 
-#add html, and code, add edit and delete
+@app.route('/edit/text/<int:post_id>', methods = ["POST", "GET"])
+def edit_text(post_id):
+  global yourposts_list 
+  yourposts_list = []
+  global ypcond
+  ypcond = 0
+  if request.method == "POST":
+    Posts.query.session.close()
+    title = request.form["post_title"]
+    genre = request.form.get("post_genre")
+    content = request.form["post_content"]
+    media = request.form["post_media"]
+    citation = request.form["post_citation"]
+    anonymity = request.form.get("anonymous")
+    creator = current_user.username
+    x = datetime.now()
+    if anonymity == "yes":
+      creator = "Anonymous~" + current_user.username
+    post = Posts.query.get(post_id)
+    post.post_title = title
+    post.post_genre = genre
+    post.post_content = content
+    post.post_media = media
+    post.post_citation = citation
+    post.post_anonymity = anonymity
+    post.post_creator = creator
+    post.post_publishtime = x.date()
+    db.session.commit()
+    return redirect('/yourposts')
+  else:
+    edit_post = Posts.query.get(post_id)
+    return render_template('edit_text.html', post = edit_post)
+
+@app.route('/delete/post/<int:post_id>')
+def deletepost(post_id):
+  global yourposts_list 
+  yourposts_list = []
+  global ypcond
+  ypcond = 0
+  Posts.query.session.close()
+  delete_post = Posts.query.get(post_id)
+  db.session.delete(delete_post)
+  db.session.commit()
+  return redirect('/yourposts')
+
+# imgur api and edit art
 @app.route('/yourposts')
 @login_required
 def yourposts():
@@ -353,14 +406,18 @@ def yourposts():
       yourposts_list.append(post2)
   return render_template('posts.html', posts=yourposts_list, art = art_list,len = len)
 
-@app.route('/deleteacc')
+@app.route('/delete/account')
 @login_required
 def deleteacc():
   Users.query.session.close()
   delete = Users.query.filter_by(username = current_user.username).first()
+  deletepost = Posts.query.filter_by(post_creator = current_user.username).all()
   logout_user()
   db.session.delete(delete)
   db.session.commit()
+  for post in deletepost:
+    db.session.delete(post)
+    db.session.commit()
   return redirect('/signup')
 
 if __name__ == "__main__":

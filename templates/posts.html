@@ -62,7 +62,7 @@
         <!-- Search Bar -->
         <div id="search_div" style="float: right;margin-right: 1%;max-width:500px;margin-top:1%;">
             <form action="/searchyourposts" method="POST">
-                <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;width:45%;" placeholder="Search">
+                <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;width:40%;" placeholder="Search">
                 <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
@@ -87,7 +87,11 @@
             </center>
             {% else %}
             {% for post in posts %}
-            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a style="font-size: 14px;height:max-content;" class="btn btn-danger">0 Likes</a></b></h3>
+            {% if post.post_content in art%}
+            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a style="font-size: 14px;height:max-content;" class="btn btn-danger">0 Likes</a> <a style="font-size: 14px;height:max-content;" href="/edit/art/{{post.post_id}}" class="btn btn-primary">Edit</a> <a style="font-size: 14px;height:max-content;" href="/delete/post/{{post.post_id}}" class="btn btn-default">Delete</a></b></h3>            
+            {% else %}
+            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a style="font-size: 14px;height:max-content;" class="btn btn-danger">0 Likes</a> <a style="font-size: 14px;height:max-content;" href="/edit/text/{{post.post_id}}" class="btn btn-primary">Edit</a> <a style="font-size: 14px;height:max-content;" href="/delete/post/{{post.post_id}}" class="btn btn-default">Delete</a></b></h3>
+            {% endif %}
             {% if len(post.post_creator.split('~')) == 2 %}
             <span><i>By {{post.post_creator.split('~')[0]}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
             {% endif %}
@@ -174,7 +178,7 @@
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
                 `<form action="/searchyourposts" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:45%;" placeholder="Search">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:40%;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
                         <option value="genre">Genre</option>

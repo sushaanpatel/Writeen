@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Edit Post - Writeen</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap');
+           .nav.navbar-nav li a:hover{
+               background-color: #424242;
+           }
+           body{
+               font-family: 'Poppins', sans-serif;
+               background-color: #222222;
+               color: white;
+               /* font-family: 'Playfair Display', serif; */
+           }
+           #topbutton{
+                display: none;
+                position: fixed;
+                bottom: 20px;
+                right: 30px;
+                z-index: 99;
+                font-size: 18px;
+                border: none;
+                outline: none;
+                border-radius: 20px;
+                padding-top: 8px;
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 6px;
+            }
+            input,select,textarea{
+                height: 35px;
+                border-radius: 5px;
+                background-color: #3a3a3a;
+                border-color: lightgray;
+            }
+            input[type=file]{
+                border-radius: 5px;
+            }
+            div.form-group select.form-control, input.form-control, textarea.form-control{
+                background-color: #3a3a3a;
+                color: white;
+            }
+            input.btn[type=file]:hover{
+                color: grey;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Nav Bar and Top Button -->
+        <button id="topbutton" class="btn" style="background-color: #424242" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
+        <a href="/yourposts"><span class="glyphicon glyphicon-arrow-left" style="color: white;font-size:25px;margin-top:1%;margin-left:1%;margin-left:20px"></span></a>
+        <center>
+        <div id="post_div" style="border:2px solid white;width: 42%;text-align: left;border-radius:10px;min-width:450px;font-size:15px;margin-top:-5px;">
+            <form action="/edit/text/{{post.post_id}}" method="POST" style="margin: 13px;">
+                <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 18px;height: 40px;" oninput="changebtn()">{{post.post_title}}</textarea></b>
+                <br>
+                <div class="form-group">
+                    <label for="post_genre">Genre : </label>
+                    <select id="post_genre" name="post_genre" class="form-control" style="border: 0px;">
+                        <option value="Business">Business*</option>
+                        <option value="Sports">Sports*</option>
+                        <option value="News">News*</option>
+                        <option value="Science">Science*</option>
+                        <option value="Tech">Technology*</option>
+                        <option value='Fiction'>Fiction*</option>
+                        <option value='Comedy'>Comedy*</option>
+                        <option value='Rom-com'>Rom-Com*</option>
+                        <option value='Fantasy'>Fantasy*</option>
+                        <option value='Horror'>Horror*</option>
+                        <option value='Mystery'>Mystery*</option>
+                        <option value='Drama'>Drama*</option>
+                        <option value='Histroy'>Histroy*</option>
+                        <option value='Politics'>Politics*</option>
+                        <option value='Sci-fi'>Sci-fi*</option>
+                        <option value='Poetry'>Poetry*</option>
+                        <option value='Adventure'>Adventure*</option>
+                    </select>
+                </div>
+                <br>
+                <textarea type="text" class="form-control" id="post_content" name="post_content" placeholder="Content (Required or *)" style="height: 400px;" oninput="changebtn()">{{post.post_content}}</textarea>
+                <br>
+                <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Media Links">{{post.post_media}}</textarea>
+                <br>
+                <textarea type="text" class="form-control" id="post_citation" name="post_citation" placeholder="Citation">{{post.post_citation}}</textarea>
+                <br>
+                <div class="form-group">
+                    <label for="anonymous">Anonymous : </label><select style="border: 0px;" class="form-control" id="anonymous" name="anonymous"><option value="yes">Yes</option><option value="no" selected>No</option></select>
+                </div>
+                <br>
+                <center>
+                <input type="submit" class="btn btn-default" id="submit_btn" style="font-size: 18px; height: 40px;" value="Edit" disabled=true>
+                </center> 
+            </form>
+        </div>
+        </center>
+        <br><br>
+        <script>
+            var mybutton = document.getElementById("topbutton");
+            window.onscroll = function(){scrollFunction()};
+
+            function scrollFunction(){
+                if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                    mybutton.style.display = "block";
+                } else {
+                    mybutton.style.display = "none";
+                }
+            }
+
+            function topFunction(){
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+
+            function changebtn(){
+                var btn = document.getElementById('submit_btn');
+                var title = document.getElementById('post_title').value;
+                var content = document.getElementById('post_content').value;
+                if (title !== "" && content !== ""){
+                    btn.disabled = false;
+                    btn.className = "btn btn-primary"
+                }
+                else{
+                    btn.disabled = true;
+                    btn.className = "btn btn-default"
+                }
+            }
+        </script>
+    </body>
+</html>

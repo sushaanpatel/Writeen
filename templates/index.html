@@ -148,7 +148,7 @@
             </div>
         </div>
         <!-- Search Bar -->
-        <div id="search_div" style="float: right;margin-right: 1.3%;max-width:500px">
+        <div id="search_div" style="float: right;margin-right: 1%;max-width:500px">
             <form action="/search" method="POST">
                 <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:45%;" placeholder="Search">
                 <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
@@ -165,7 +165,6 @@
         </div>
         <br><br>
         <div style="margin-left:4.5%;">
-            {% with i = 0 %}
             {% if posts == [] %}
             <center>
             <div style="margin-right: 10%;" >
@@ -177,49 +176,53 @@
             </div>
             </center>
             {% else %}
-            {% for i in range(len(posts)) %}
-            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{posts[i].post_title}} <button class="btn btn-danger" onclick="changelike()"><span id="like_span{{posts[i].post_id}}" style="font-size: 18px;" name="true" class="fa fa-heart-o"></span></button></b></h3>
-            {% if len(posts[i].post_creator.split('~')) == 2 %}
-            <span><i>By {{posts[i].post_creator.split('~')[0]}}</i>, Genre : {{posts[i].post_genre}}, {{posts[i].post_publishtime}}</span>
+            {% for post in posts %}
+            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <button class="btn btn-danger"><span onclick="changelike(this)" style="font-size: 20px;" id="unliked" class="fa">&#xf08a;</span></button></b></h3>
+            {% if len(post.post_creator.split('~')) == 2 %}
+            <span><i>By {{post.post_creator.split('~')[0]}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
             {% endif %}
-            {% if len(posts[i].post_creator.split('~')) == 1 %}
-            <span><i>By {{posts[i].post_creator}}</i>, Genre : {{posts[i].post_genre}}, {{posts[i].post_publishtime}}</span>
+            {% if len(post.post_creator.split('~')) == 1 %}
+            <span><i>By {{post.post_creator}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
             {% endif %}
             <hr style="width: 20%; text-align:left;margin-left:0;">
-            {% if posts[i].post_content in art %}
-            <img style="max-width: 75%;max-height: 75%;min-width: 20%;min-height: 20%;" src=../static/{{posts[i].post_content}}>
+            {% if post.post_content in art %}
+            <img style="max-width: 75%;max-height: 75%;min-width: 20%;min-height: 20%;" src=../static/{{post.post_content}}>
             <br>
             {% else %}
-            <p style="font-size: 16px;width:90%;">{{posts[i].post_content}}</p>
+            <p style="font-size: 16px;width:90%;">{{post.post_content}}</p>
             {% endif %}
-            {% if posts[i].post_media != "" %}
-            {% if posts[i].post_content in art%}
+            {% if post.post_media != "" %}
+            {% if post.post_content in art%}
             <br>
-            <p style="font-size:14px;width:80%;word-break:break-all;"><b>Caption : </b>{{posts[i].post_media}}</p>
+            <p style="font-size:14px;width:80%;word-break:break-all;"><b>Caption : </b>{{post.post_media}}</p>
             <br>
             {% else %}
             <br>
             <p>Media Links</p>
-            <p style="font-size:14px;width:80%;word-break:break-all;">{{posts[i].post_media}}</p>
+            <p style="font-size:14px;width:80%;word-break:break-all;">{{post.post_media}}</p>
             <br>
             {% endif %}
             {% endif %}
-            {% if posts[i].post_citation != "" %}
+            {% if post.post_citation != "" %}
             <p>Citation</p>
-            <p style="font-size: 14px;width:80%;word-break:break-all;">{{posts[i].post_citation}}</p>
+            <p style="font-size: 14px;width:80%;word-break:break-all;">{{post.post_citation}}</p>
             {% endif %}
             <br><hr width="90%" style="margin-left: 0;"><br>
-            <script>
-                function changelike(){
-                    var span = document.getElementById('like_span{{posts[i].post_id}}')
-                    alert(span.id)
-                    span.className = 'fa fa-heart'
-                }
-            </script>
             {% endfor %}
             {% endif %}
-            <a href="/home" style="margin-left: 40%;" class="btn btn-default">Load More Posts</a><br><br>
-            {% endwith %}
+            <a href="/home" class="btn btn-default" style="width: 50%;margin-left:19%;">Load More Posts</a><br><br>
+        <script>
+            function changelike(x){
+                if (x.id == "liked"){
+                    x.innerHTML = "&#xf08a;";
+                    x.id = "unliked"
+                } 
+                else if (x.id == "unliked"){
+                    x.innerHTML = "&#xf004;";
+                    x.id = "liked"
+                }
+            }
+        </script>
         </div>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
