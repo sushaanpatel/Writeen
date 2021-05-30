@@ -12,8 +12,8 @@ from flask_sqlalchemy import SQLAlchemy
 from db_init import db, app, Users, Posts
 
 dotenv.load_dotenv(dotenv_path = ".env")
-client_id = os.getenv('IMGUR_ID')
-client_secret = os.getenv('IMGUR_SECRET')
+client_id = os.environ.get('IMGUR_ID')
+client_secret = os.environ.get('IMGUR_SECRET')
 client = pyimgur.Imgur(client_id, client_secret=client_secret)
 login_manager = LoginManager()
 login_manager.init_app(app)
