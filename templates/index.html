@@ -197,7 +197,11 @@
             </center>
             {% else %}
             {% for post in posts %}
+            {% if current_user.username in post.post_liked_by.split(',') %}
+            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a href="/like/{{post.post_id}}" class="btn btn-danger"><span style="font-size: 20px;" class="fa">&#xf004;</span></a></b></h3>
+            {% else %}
             <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a href="/like/{{post.post_id}}" class="btn btn-danger"><span style="font-size: 20px;" class="fa">&#xf08a;</span></a></b></h3>
+            {% endif %}
             {% if len(post.post_creator.split('~')) == 2 %}
             <span><i>By {{post.post_creator.split('~')[0]}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
             {% endif %}
@@ -230,18 +234,22 @@
             <br><hr width="90%" style="margin-left: 0;"><br>
             {% endfor %}
             {% endif %}
-            <a href="/home" class="btn btn-default" style="width: 50%;margin-left:19%;">Load More Posts</a><br><br>
+            <a href="/home" class="btn btn-default" style="width: 50%;margin-left:20%;">Load More Posts</a><br><br>
         </div>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         {% for x in messages %}
-        {% if x == 1 %}
+        {% if x == "1" %}
         <script>
-            window.onload = function(){alertify.notify('Username Already Taken', 'error', 3)};
+            alertify.notify('Username Already Taken', 'error', 3)
         </script>
-        {% elif x == 2 %}
+        {% elif x == "2" %}
         <script>
-            window.onload = function(){alertify.notify('File type not allowed', 'error', 3)};
+            alertify.notify('File type not allowed', 'error', 3)
+        </script>
+        {% elif x == "6" %}
+        <script>
+            alertify.notify("Please <a href='/login'>Login</a> to like Posts", 'error', 3)
         </script>
         {% endif %}
         {% endfor %}
@@ -250,6 +258,18 @@
         <script>
             var mybutton = document.getElementById("topbutton");
             window.onscroll = function(){scrollFunction()};
+            window.onscroll = function(){save_scroll()};
+            window.onload = function(){apply_scroll()};
+
+            function apply_scroll(){
+                document.body.scrollTop = sessionStorage.getItem("bodyscroll")
+                document.documentElement.scrollTop = sessionStorage.getItem("elemscroll")
+            }
+
+            function save_scroll(){
+                sessionStorage.setItem("bodyscroll", document.body.scrollTop)
+                sessionStorage.setItem("elemscroll", document.documentElement.scrollTop)
+            }
 
             function scrollFunction(){
                 if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {

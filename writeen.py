@@ -2,6 +2,7 @@
 import os
 import random
 import pyimgur
+import dotenv
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -10,7 +11,10 @@ from flask_login import LoginManager, UserMixin, login_required, current_user, l
 from flask_sqlalchemy import SQLAlchemy
 from db_init import db, app, Users, Posts
 
-client = pyimgur.Imgur("9b830a0c2ba9625")
+dotenv.load_dotenv(dotenv_path = ".env")
+client_id = os.getenv('IMGUR_ID')
+client_secret = os.getenv('IMGUR_SECRET')
+client = pyimgur.Imgur(client_id, client_secret=client_secret)
 login_manager = LoginManager()
 login_manager.init_app(app)
 @login_manager.user_loader
@@ -35,10 +39,14 @@ global posts_list
 posts_list = []
 global current_page
 current_page = ""
+global liked_by_list
+liked_by_list = []
 global art_list
 art_list = []
 global yourposts_list
 yourposts_list = []
+global static_list
+static_list = []
 
 @app.route('/home')
 def home():
@@ -50,43 +58,56 @@ def home():
   posts_list = []
   global yourposts_list
   yourposts_list = []
+  global static_list 
+  static_list = []
   return redirect('/')
+
+# @app.route('/like/list/<int:post_id>')
+# def like_list(post_id):
+#   global liked_by_list
+#   liked_by_list = []
+#   x = Posts.query.get(post_id)
+#   liked_by_list = x.post_liked_by.split(',')
+#   return redirect('/yourposts')
 
 @app.route('/like/<int:post_id>')
 def like(post_id):
-  Posts.query.session.close()
-  post = Posts.query.filter_by(post_id = post_id).first()
-  liked_by = post.post_liked_by.split(',')
-  usernames = []
-  string = ""
-  for i in liked_by:
-    usernames.append(i)
-  if current_user.username in usernames:
-    flash("unliked", "unlike")
-    for user in liked_by:
-      if user == current_user.username:
-        liked_by.remove(user)
+  global incond
+  incond = 2
+  if current_user.is_authenticated == True:
+    Posts.query.session.close()
+    post = Posts.query.get(post_id)
+    liked_by = post.post_liked_by.split(',')
+    usernames = []
+    string = ""
+    for i in liked_by:
+      usernames.append(i)
+    if current_user.username in usernames:
+      for user in liked_by:
+        if user == current_user.username:
+          liked_by.remove(user)
 
-    for x in liked_by:
-      if string == "":
-        string = string + x
-      else:
-        string = string + f",{x}"
-    
-    post.post_liked_by = string
-    post.post_netlikes -= 1
-    db.session.commit()
-  else:
-    flash("liked", "like")
-    if post.post_liked_by == "":
-      post.post_liked_by = current_user.username
-      post.post_netlikes += 1
+      for x in liked_by:
+        if string == "":
+          string = string + x
+        else:
+          string = string + f",{x}"
+      
+      post.post_liked_by = string
+      post.post_netlikes -= 1
       db.session.commit()
     else:
-      post.post_liked_by = post.post_liked_by + f",{current_user.username}"
-      post.post_netlikes += 1
-      db.session.commit()
-  return ('', 204)
+      if post.post_liked_by == "":
+        post.post_liked_by = current_user.username
+        post.post_netlikes += 1
+        db.session.commit()
+      else:
+        post.post_liked_by = post.post_liked_by + f",{current_user.username}"
+        post.post_netlikes += 1
+        db.session.commit()
+  else:
+    flash('6')
+  return redirect('/')
 
 @app.route('/clearfilters')
 def clear():
@@ -122,6 +143,7 @@ def index():
   yourposts_list = []
   global posts_list
   global art_list
+  global static_list
   art_list = ["png", "jpg", "jpeg", "gif"]
   if incond == 0:
     Posts.query.session.close()
@@ -129,10 +151,19 @@ def index():
     random_list = list(range(0, len(max_id)))
     count = 0
     random.shuffle(random_list)
+    static_list = random_list
     while count < len(max_id):
       query = Posts.query.all()
       posts_list.append(query[random_list[count]])
       count += 1
+  if incond == 2:
+    posts_list = []
+    max_id = Posts.query.all()
+    count1 = 0
+    while count1 < len(max_id):
+      query = Posts.query.all()
+      posts_list.append(query[static_list[count1]])
+      count1 += 1
   return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list)
 
 #add newest and oldest
@@ -159,6 +190,7 @@ def filter():
       query = Posts.query.filter(Posts.post_creator.like(f"%{search}%")).all()
       for post in query:
         posts_list.append(post)
+    posts_list = posts_list[::-1]
     return redirect('/')
 
 @app.route('/signup', methods=["POST","GET"])
@@ -468,6 +500,7 @@ def deletepost(post_id):
 @app.route('/yourposts')
 @login_required
 def yourposts():
+  global liked_by_list
   global ypcond
   global current_page
   current_page = "/yourposts"
@@ -483,7 +516,7 @@ def yourposts():
     for post2 in query2:
       yourposts_list.append(post2)
     yourposts_list = yourposts_list[::-1]
-  return render_template('posts.html', posts=yourposts_list, art = art_list,len = len)
+  return render_template('posts.html', posts=yourposts_list, art = art_list,len = len, like_list = liked_by_list)
 
 @app.route('/delete/account')
 @login_required

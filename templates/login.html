@@ -191,7 +191,7 @@
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         <script>
-            window.onload = function(){alertify.notify('File type not allowed', 'error', 3)};
+            alertify.notify('File type not allowed', 'error', 3)
         </script>
         {% endif %}
         {% endwith %}

@@ -253,23 +253,23 @@
         {% for x in messages %}
         {% if x == '1' %}
         <script>
-            window.onload = function(){alertify.notify('Username Already Taken', 'error', 3)};
+            alertify.notify('Username Already Taken', 'error', 3)
         </script>
         {% elif x == '2' %}
         <script>
-            window.onload = function(){alertify.notify('File type not allowed', 'error', 3)};
+            alertify.notify('File type not allowed', 'error', 3)
         </script>
         {% elif x == '3' %}
         <script>
-            window.onload = function(){alertify.notify('Username Changed', 'success', 3)};
+            alertify.notify('Username Changed', 'success', 3)
         </script>
         {% elif x == '4' %}
         <script>
-            window.onload = function(){alertify.notify('Passsword Changed', 'success', 3)};
+            alertify.notify('Passsword Changed', 'success', 3)
         </script>
         {% elif x == '5' %}
         <script>
-            window.onload = function(){alertify.notify('Password was Incorrect', 'error', 3)};
+            alertify.notify('Password was Incorrect', 'error', 3)
         </script>
         {% endif %}
         {% endfor %}
