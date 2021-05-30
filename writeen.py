@@ -1,4 +1,5 @@
 #Made by Sushaan Patel
+import os
 import random
 import pyimgur
 from datetime import datetime
