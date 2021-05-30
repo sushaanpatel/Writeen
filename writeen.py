@@ -1,6 +1,6 @@
 #Made by Sushaan Patel
 import random
-import os
+import pyimgur
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -9,6 +9,7 @@ from flask_login import LoginManager, UserMixin, login_required, current_user, l
 from flask_sqlalchemy import SQLAlchemy
 from db_init import db, app, Users, Posts
 
+client = pyimgur.Imgur("9b830a0c2ba9625")
 login_manager = LoginManager()
 login_manager.init_app(app)
 @login_manager.user_loader
@@ -50,6 +51,42 @@ def home():
   yourposts_list = []
   return redirect('/')
 
+@app.route('/like/<int:post_id>')
+def like(post_id):
+  Posts.query.session.close()
+  post = Posts.query.filter_by(post_id = post_id).first()
+  liked_by = post.post_liked_by.split(',')
+  usernames = []
+  string = ""
+  for i in liked_by:
+    usernames.append(i)
+  if current_user.username in usernames:
+    flash("unliked", "unlike")
+    for user in liked_by:
+      if user == current_user.username:
+        liked_by.remove(user)
+
+    for x in liked_by:
+      if string == "":
+        string = string + x
+      else:
+        string = string + f",{x}"
+    
+    post.post_liked_by = string
+    post.post_netlikes -= 1
+    db.session.commit()
+  else:
+    flash("liked", "like")
+    if post.post_liked_by == "":
+      post.post_liked_by = current_user.username
+      post.post_netlikes += 1
+      db.session.commit()
+    else:
+      post.post_liked_by = post.post_liked_by + f",{current_user.username}"
+      post.post_netlikes += 1
+      db.session.commit()
+  return ('', 204)
+
 @app.route('/clearfilters')
 def clear():
   global posts_list
@@ -84,7 +121,7 @@ def index():
   yourposts_list = []
   global posts_list
   global art_list
-  art_list = os.listdir("static")
+  art_list = ["png", "jpg", "jpeg", "gif"]
   if incond == 0:
     Posts.query.session.close()
     max_id = Posts.query.all()
@@ -228,7 +265,7 @@ def create_text():
     if anonymity == "yes":
       creator = "Anonymous~" + current_user.username 
     Posts.query.session.close()
-    post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
+    post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_liked_by = "", post_netlikes = 0)
     db.session.add(post)
     db.session.commit()
     return redirect('/yourposts')
@@ -237,6 +274,7 @@ def create_text():
 @login_required
 def create_art():
   global errmsg
+  global filelink
   if request.method == "POST":
     title = request.form["post_title"]
     genre = request.form.get("post_genre")
@@ -253,11 +291,14 @@ def create_art():
     if y[1].lower() in allowed:
       filename = content.filename
       content.save(app.config['UPLOAD_FOLDER'] + secure_filename(current_user.username + "_" + str(filename).replace(" ", "_")))
+      filelink = client.upload_image("static/" + current_user.username + "_" + str(filename).replace(" ", "_"), title=filename)
+      if os.path.exists("static/" + current_user.username + "_" + str(filename).replace(" ", "_")):
+        os.remove("static/" + current_user.username + "_" + str(filename).replace(" ", "_"))
     else:
       flash("2")
       return redirect(current_page)
     Posts.query.session.close()
-    post = Posts(post_title = title, post_genre = genre, post_content =current_user.username + "_" + str(content.filename).replace(" ", "_"), post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date())
+    post = Posts(post_title = title, post_genre = genre, post_content = filelink.link, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_liked_by = "", post_netlikes = 0)
     db.session.add(post)
     db.session.commit()
     return redirect('/yourposts')
@@ -306,6 +347,7 @@ def searchposts():
       query2 = Posts.query.filter_by(post_creator = "Anonymous~" + current_user.username).all()
       for post2 in query2:
         yourposts_list.append(post2)
+      yourposts_list = yourposts_list[::-1]
     return redirect('/yourposts')
 
 @app.route('/change/username', methods = ["POST", "GET"])
@@ -313,12 +355,16 @@ def searchposts():
 def changeusername():
   if request.method == "POST":
     Users.query.session.close()
-    new_username = request.form['new_username']
+    new_username = request.form['new_username'].lower()
     x = Users.query.all()
     for i in x:
       if new_username == i.username:
         flash("1")
         return redirect('/account')
+    posts = Posts.query.filter_by(post_creator = current_user.username).all()
+    for i in posts:
+      i.post_creator = new_username
+      db.session.commit()
     user = Users.query.filter_by(username = current_user.username).first()
     user.username = new_username
     db.session.commit()
@@ -374,6 +420,37 @@ def edit_text(post_id):
     edit_post = Posts.query.get(post_id)
     return render_template('edit_text.html', post = edit_post)
 
+@app.route('/edit/art/<int:post_id>', methods = ["POST", "GET"])
+def edit_art(post_id):
+  global yourposts_list 
+  yourposts_list = []
+  global ypcond
+  ypcond = 0
+  if request.method == "POST":
+    Posts.query.session.close()
+    title = request.form["post_title"]
+    genre = request.form.get("post_genre")
+    media = request.form["post_media"]
+    citation = request.form["post_citation"]
+    anonymity = request.form.get("anonymous")
+    creator = current_user.username
+    x = datetime.now()
+    if anonymity == "yes":
+      creator = "Anonymous~" + current_user.username
+    post = Posts.query.get(post_id)
+    post.post_title = title
+    post.post_genre = genre
+    post.post_media = media
+    post.post_citation = citation
+    post.post_anonymity = anonymity
+    post.post_creator = creator
+    post.post_publishtime = x.date()
+    db.session.commit()
+    return redirect('/yourposts')
+  else:
+    edit_post = Posts.query.get(post_id)
+    return render_template('edit_art.html', post = edit_post)
+
 @app.route('/delete/post/<int:post_id>')
 def deletepost(post_id):
   global yourposts_list 
@@ -395,7 +472,7 @@ def yourposts():
   current_page = "/yourposts"
   global yourposts_list
   global art_list
-  art_list = os.listdir("static")
+  art_list = ["png", "jpg", "jpeg", "gif"]
   Posts.query.session.close()
   if ypcond == 0:
     query = Posts.query.filter_by(post_creator = current_user.username).all()
@@ -404,6 +481,7 @@ def yourposts():
     query2 = Posts.query.filter_by(post_creator = "Anonymous~" + current_user.username).all()
     for post2 in query2:
       yourposts_list.append(post2)
+    yourposts_list = yourposts_list[::-1]
   return render_template('posts.html', posts=yourposts_list, art = art_list,len = len)
 
 @app.route('/delete/account')

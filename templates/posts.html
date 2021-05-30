@@ -62,7 +62,7 @@
         <!-- Search Bar -->
         <div id="search_div" style="float: right;margin-right: 1%;max-width:500px;margin-top:1%;">
             <form action="/searchyourposts" method="POST">
-                <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;width:40%;" placeholder="Search">
+                <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;width:38%;" placeholder="Search">
                 <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
@@ -73,7 +73,7 @@
                 <a class="btn btn-default" href="/clearfilters">Clear</a>
             </form>
         </div>
-        <br><br>
+        <br><br><br>
         <div style="margin-left:4.5%;">
             {% if posts == [] %}
             <center>
@@ -87,10 +87,10 @@
             </center>
             {% else %}
             {% for post in posts %}
-            {% if post.post_content in art%}
-            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a style="font-size: 14px;height:max-content;" class="btn btn-danger">0 Likes</a> <a style="font-size: 14px;height:max-content;" href="/edit/art/{{post.post_id}}" class="btn btn-primary">Edit</a> <a style="font-size: 14px;height:max-content;" href="/delete/post/{{post.post_id}}" class="btn btn-default">Delete</a></b></h3>            
+            {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
+            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a style="font-size: 14px;height:max-content;" class="btn btn-danger">{{post.post_netlikes}} Likes</a> <a style="font-size: 14px;height:max-content;" href="/edit/art/{{post.post_id}}" class="btn btn-primary">Edit</a> <a style="font-size: 14px;height:max-content;" href="/delete/post/{{post.post_id}}" class="btn btn-default">Delete</a></b></h3>            
             {% else %}
-            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a style="font-size: 14px;height:max-content;" class="btn btn-danger">0 Likes</a> <a style="font-size: 14px;height:max-content;" href="/edit/text/{{post.post_id}}" class="btn btn-primary">Edit</a> <a style="font-size: 14px;height:max-content;" href="/delete/post/{{post.post_id}}" class="btn btn-default">Delete</a></b></h3>
+            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a style="font-size: 14px;height:max-content;" class="btn btn-danger">{{post.post_netlikes}} Likes</a> <a style="font-size: 14px;height:max-content;" href="/edit/text/{{post.post_id}}" class="btn btn-primary">Edit</a> <a style="font-size: 14px;height:max-content;" href="/delete/post/{{post.post_id}}" class="btn btn-default">Delete</a></b></h3>
             {% endif %}
             {% if len(post.post_creator.split('~')) == 2 %}
             <span><i>By {{post.post_creator.split('~')[0]}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
@@ -99,14 +99,15 @@
             <span><i>By {{post.post_creator}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
             {% endif %}
             <hr style="width: 20%; text-align:left;margin-left:0;">
-            {% if post.post_content in art %}
-            <img style="max-width: 75%;max-height: 75%;min-width: 20%;min-height: 20%;" src=../static/{{post.post_content}}>
+            {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art %}
+            <!-- <p>{{post.post_content}}</p> -->
+            <img style="max-width: 75%;max-height: 75%;min-width: 20%;min-height: 20%;" src="{{post.post_content}}">
             <br>
             {% else %}
             <p style="font-size: 16px;width:90%;">{{post.post_content}}</p>
             {% endif %}
             {% if post.post_media != "" %}
-            {% if post.post_content in art%}
+            {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
             <br>
             <p style="font-size:14px;width:80%;word-break:break-all;"><b>Caption : </b>{{post.post_media}}</p>
             {% else %}
@@ -147,23 +148,42 @@
                     search_div.innerHTML = 
                 `<form action="/searchyourposts" method="POST">
                     <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;">
-                        <option value="Business">Business*</option>
-                        <option value="Sports">Sports*</option>
-                        <option value="News">News*</option>
-                        <option value="Science">Science*</option>
-                        <option value="Tech">Technology*</option>
                         <option value='Fiction'>Fiction*</option>
-                        <option value='Comedy'>Comedy*</option>
-                        <option value='Rom-com'>Rom-Com*</option>
-                        <option value='Fantasy'>Fantasy*</option>
-                        <option value='Horror'>Horror*</option>
-                        <option value='Mystery'>Mystery*</option>
-                        <option value='Drama'>Drama*</option>
-                        <option value='Histroy'>Histroy*</option>
-                        <option value='Politics'>Politics*</option>
+                        <option value='Comedy'>Comedy*</option>        
+                        <option value='Rom-com'>Rom-com*</option>      
+                        <option value='Fantasy'>Fantasy*</option>      
+                        <option value='Horror'>Horror*</option>        
+                        <option value='Mystery'>Mystery*</option>      
+                        <option value='Historical'>Historical*</option>
+                        <option value='Business'>Business*</option>    
+                        <option value='Education'>Education*</option>  
+                        <option value='Science'>Science*</option>      
+                        <option value='Anecdotes'>Anecdotes*</option>  
+                        <option value='Politics'>Politics*</option>    
+                        <option value='Technology'>Technology*</option>
                         <option value='Sci-fi'>Sci-fi*</option>
+                        <option value='Sports'>Sports*</option>
                         <option value='Poetry'>Poetry*</option>
                         <option value='Adventure'>Adventure*</option>
+                        <option value='Random'>Random*</option>
+                        <option value='Motivational'>Motivational*</option>
+                        <option value='Fashion'>Fashion*</option>
+                        <option value='Art'>Art*</option>
+                        <option value='Music'>Music*</option>
+                        <option value='Movie'>Movie*</option>
+                        <option value='Series'>Series*</option>
+                        <option value='Travel'>Travel*</option>
+                        <option value='Health'>Health*</option>
+                        <option value='Illustrations'>Illustrations*</option>
+                        <option value='Anime'>Anime*</option>
+                        <option value='Photography'>Photography*</option>
+                        <option value='Lifestyle'>Lifestyle*</option>
+                        <option value='Food'>Food*</option>
+                        <option value='News'>News*</option>
+                        <option value='Nature'>Nature*</option>
+                        <option value='Gaming'>Gaming*</option>
+                        <option value='Quotes'>Quotes*</option>
+                        <option value='Other'>Other*</option>
                     </select>    
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:65px;" oninput="changeopt()">
                         <option value="title">Title</option>
@@ -178,7 +198,7 @@
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
                 `<form action="/searchyourposts" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:40%;" placeholder="Search">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:38%;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
                         <option value="genre">Genre</option>

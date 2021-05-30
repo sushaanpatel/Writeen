@@ -64,7 +64,7 @@
         <a href="/yourposts"><span class="glyphicon glyphicon-arrow-left" style="color: white;font-size:25px;margin-top:1%;margin-left:1%;margin-left:20px"></span></a>
         <center>
         <div id="post_div" style="border:2px solid white;width: 42%;text-align: left;border-radius:10px;min-width:450px;font-size:15px;margin-top:-5px;">
-            <form action="/edit/text/{{post.post_id}}" method="POST" style="margin: 13px;">
+            <form action="/edit/art/{{post.post_id}}" method="POST" style="margin: 13px;">
                 <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 18px;height: 40px;" oninput="changebtn()">{{post.post_title}}</textarea></b>
                 <br>
                 <div class="form-group">
@@ -109,7 +109,7 @@
                     </select>
                 </div>
                 <br>
-                <textarea type="text" class="form-control" id="post_content" name="post_content" placeholder="Content (Required or *)" style="height: 400px;" oninput="changebtn()">{{post.post_content}}</textarea>
+                <p>Post Image cant be edited</p>
                 <br>
                 <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Media Links">{{post.post_media}}</textarea>
                 <br>
@@ -146,8 +146,7 @@
             function changebtn(){
                 var btn = document.getElementById('submit_btn');
                 var title = document.getElementById('post_title').value;
-                var content = document.getElementById('post_content').value;
-                if (title !== "" && content !== ""){
+                if (title !== ""){
                     btn.disabled = false;
                     btn.className = "btn btn-primary"
                 }

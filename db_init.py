@@ -26,3 +26,5 @@ class Posts(db.Model):
   post_anonymity = db.Column(db.String(5), nullable = False)
   post_creator = db.Column(db.String(30), nullable = False)
   post_publishtime = db.Column(db.String(50), nullable = False)
+  post_liked_by = db.Column(db.String(60000), nullable = False) 
+  post_netlikes = db.Column(db.Integer, nullable = False)

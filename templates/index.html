@@ -108,23 +108,43 @@
                                 <div class="form-group">
                                     <label for="post_genre">Genre : </label>
                                     <select id="post_genre" name="post_genre" class="form-control" style="border: 0px;">
-                                        <option value="Business">Business*</option>
-                                        <option value="Sports">Sports*</option>
-                                        <option value="News">News*</option>
-                                        <option value="Science">Science*</option>
-                                        <option value="Tech">Technology*</option>
                                         <option value='Fiction'>Fiction*</option>
-                                        <option value='Comedy'>Comedy*</option>
-                                        <option value='Rom-com'>Rom-Com*</option>
-                                        <option value='Fantasy'>Fantasy*</option>
-                                        <option value='Horror'>Horror*</option>
-                                        <option value='Mystery'>Mystery*</option>
-                                        <option value='Drama'>Drama*</option>
-                                        <option value='Histroy'>Histroy*</option>
-                                        <option value='Politics'>Politics*</option>
+                                        <option value='Comedy'>Comedy*</option>        
+                                        <option value='Rom-com'>Rom-com*</option>      
+                                        <option value='Fantasy'>Fantasy*</option>      
+                                        <option value='Horror'>Horror*</option>        
+                                        <option value='Mystery'>Mystery*</option>      
+                                        <option value='Historical'>Historical*</option>
+                                        <option value='Business'>Business*</option>    
+                                        <option value='Education'>Education*</option>  
+                                        <option value='Science'>Science*</option>      
+                                        <option value=''>*</option>
+                                        <option value='Anecdotes'>Anecdotes*</option>  
+                                        <option value='Politics'>Politics*</option>    
+                                        <option value='Technology'>Technology*</option>
                                         <option value='Sci-fi'>Sci-fi*</option>
+                                        <option value='Sports'>Sports*</option>
                                         <option value='Poetry'>Poetry*</option>
                                         <option value='Adventure'>Adventure*</option>
+                                        <option value='Random'>Random*</option>
+                                        <option value='Motivational'>Motivational*</option>
+                                        <option value='Fashion'>Fashion*</option>
+                                        <option value='Art'>Art*</option>
+                                        <option value='Music'>Music*</option>
+                                        <option value='Movie'>Movie*</option>
+                                        <option value='Series'>Series*</option>
+                                        <option value='Travel'>Travel*</option>
+                                        <option value='Health'>Health*</option>
+                                        <option value='Illustrations'>Illustrations*</option>
+                                        <option value='Anime'>Anime*</option>
+                                        <option value='Photography'>Photography*</option>
+                                        <option value='Lifestyle'>Lifestyle*</option>
+                                        <option value='Food'>Food*</option>
+                                        <option value='News'>News*</option>
+                                        <option value='Nature'>Nature*</option>
+                                        <option value='Gaming'>Gaming*</option>
+                                        <option value='Quotes'>Quotes*</option>
+                                        <option value='Other'>Other*</option>
                                     </select>
                                 </div>
                                 <br>
@@ -177,7 +197,7 @@
             </center>
             {% else %}
             {% for post in posts %}
-            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <button class="btn btn-danger"><span onclick="changelike(this)" style="font-size: 20px;" id="unliked" class="fa">&#xf08a;</span></button></b></h3>
+            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a href="/like/{{post.post_id}}" class="btn btn-danger"><span style="font-size: 20px;" class="fa">&#xf08a;</span></a></b></h3>
             {% if len(post.post_creator.split('~')) == 2 %}
             <span><i>By {{post.post_creator.split('~')[0]}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
             {% endif %}
@@ -185,14 +205,14 @@
             <span><i>By {{post.post_creator}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
             {% endif %}
             <hr style="width: 20%; text-align:left;margin-left:0;">
-            {% if post.post_content in art %}
-            <img style="max-width: 75%;max-height: 75%;min-width: 20%;min-height: 20%;" src=../static/{{post.post_content}}>
+            {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
+            <img src="{{post.post_content}}" style="max-width: 75%;max-height: 75%;min-width: 20%;min-height: 20%;">
             <br>
             {% else %}
             <p style="font-size: 16px;width:90%;">{{post.post_content}}</p>
             {% endif %}
             {% if post.post_media != "" %}
-            {% if post.post_content in art%}
+            {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
             <br>
             <p style="font-size:14px;width:80%;word-break:break-all;"><b>Caption : </b>{{post.post_media}}</p>
             <br>
@@ -211,18 +231,6 @@
             {% endfor %}
             {% endif %}
             <a href="/home" class="btn btn-default" style="width: 50%;margin-left:19%;">Load More Posts</a><br><br>
-        <script>
-            function changelike(x){
-                if (x.id == "liked"){
-                    x.innerHTML = "&#xf08a;";
-                    x.id = "unliked"
-                } 
-                else if (x.id == "unliked"){
-                    x.innerHTML = "&#xf004;";
-                    x.id = "liked"
-                }
-            }
-        </script>
         </div>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -262,23 +270,42 @@
                     search_div.innerHTML = 
                 `<form action="/search" method="POST">
                     <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;">
-                        <option value="Business">Business*</option>
-                        <option value="Sports">Sports*</option>
-                        <option value="News">News*</option>
-                        <option value="Science">Science*</option>
-                        <option value="Tech">Technology*</option>
                         <option value='Fiction'>Fiction*</option>
-                        <option value='Comedy'>Comedy*</option>
-                        <option value='Rom-com'>Rom-Com*</option>
-                        <option value='Fantasy'>Fantasy*</option>
-                        <option value='Horror'>Horror*</option>
-                        <option value='Mystery'>Mystery*</option>
-                        <option value='Drama'>Drama*</option>
-                        <option value='Histroy'>Histroy*</option>
-                        <option value='Politics'>Politics*</option>
+                        <option value='Comedy'>Comedy*</option>        
+                        <option value='Rom-com'>Rom-com*</option>      
+                        <option value='Fantasy'>Fantasy*</option>      
+                        <option value='Horror'>Horror*</option>        
+                        <option value='Mystery'>Mystery*</option>      
+                        <option value='Historical'>Historical*</option>
+                        <option value='Business'>Business*</option>    
+                        <option value='Education'>Education*</option>  
+                        <option value='Science'>Science*</option>
+                        <option value='Anecdotes'>Anecdotes*</option>  
+                        <option value='Politics'>Politics*</option>    
+                        <option value='Technology'>Technology*</option>
                         <option value='Sci-fi'>Sci-fi*</option>
+                        <option value='Sports'>Sports*</option>
                         <option value='Poetry'>Poetry*</option>
                         <option value='Adventure'>Adventure*</option>
+                        <option value='Random'>Random*</option>
+                        <option value='Motivational'>Motivational*</option>
+                        <option value='Fashion'>Fashion*</option>
+                        <option value='Art'>Art*</option>
+                        <option value='Music'>Music*</option>
+                        <option value='Movie'>Movie*</option>
+                        <option value='Series'>Series*</option>
+                        <option value='Travel'>Travel*</option>
+                        <option value='Health'>Health*</option>
+                        <option value='Illustrations'>Illustrations*</option>
+                        <option value='Anime'>Anime*</option>
+                        <option value='Photography'>Photography*</option>
+                        <option value='Lifestyle'>Lifestyle*</option>
+                        <option value='Food'>Food*</option>
+                        <option value='News'>News*</option>
+                        <option value='Nature'>Nature*</option>
+                        <option value='Gaming'>Gaming*</option>
+                        <option value='Quotes'>Quotes*</option>
+                        <option value='Other'>Other*</option>
                     </select>    
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:75px;" oninput="changeopt()">
                         <option value="title">Title</option>
@@ -382,23 +409,42 @@
                     <div class="form-group">
                         <label for="post_genre">Genre : </label>
                         <select id="post_genre" name="post_genre" class="form-control" style="border: 0px;">
-                            <option value="Business">Business*</option>
-                            <option value="Sports">Sports*</option>
-                            <option value="News">News*</option>
-                            <option value="Science">Science*</option>
-                            <option value="Tech">Technology*</option>
                             <option value='Fiction'>Fiction*</option>
-                            <option value='Comedy'>Comedy*</option>
-                            <option value='Rom-com'>Rom-Com*</option>
-                            <option value='Fantasy'>Fantasy*</option>
-                            <option value='Horror'>Horror*</option>
-                            <option value='Mystery'>Mystery*</option>
-                            <option value='Drama'>Drama*</option>
-                            <option value='Histroy'>Histroy*</option>
-                            <option value='Politics'>Politics*</option>
+                            <option value='Comedy'>Comedy*</option>        
+                            <option value='Rom-com'>Rom-com*</option>      
+                            <option value='Fantasy'>Fantasy*</option>      
+                            <option value='Horror'>Horror*</option>        
+                            <option value='Mystery'>Mystery*</option>      
+                            <option value='Historical'>Historical*</option>
+                            <option value='Business'>Business*</option>    
+                            <option value='Education'>Education*</option>  
+                            <option value='Science'>Science*</option>      
+                            <option value='Anecdotes'>Anecdotes*</option>  
+                            <option value='Politics'>Politics*</option>    
+                            <option value='Technology'>Technology*</option>
                             <option value='Sci-fi'>Sci-fi*</option>
+                            <option value='Sports'>Sports*</option>
                             <option value='Poetry'>Poetry*</option>
                             <option value='Adventure'>Adventure*</option>
+                            <option value='Random'>Random*</option>
+                            <option value='Motivational'>Motivational*</option>
+                            <option value='Fashion'>Fashion*</option>
+                            <option value='Art'>Art*</option>
+                            <option value='Music'>Music*</option>
+                            <option value='Movie'>Movie*</option>
+                            <option value='Series'>Series*</option>
+                            <option value='Travel'>Travel*</option>
+                            <option value='Health'>Health*</option>
+                            <option value='Illustrations'>Illustrations*</option>
+                            <option value='Anime'>Anime*</option>
+                            <option value='Photography'>Photography*</option>
+                            <option value='Lifestyle'>Lifestyle*</option>
+                            <option value='Food'>Food*</option>
+                            <option value='News'>News*</option>
+                            <option value='Nature'>Nature*</option>
+                            <option value='Gaming'>Gaming*</option>
+                            <option value='Quotes'>Quotes*</option>
+                            <option value='Other'>Other*</option>
                         </select>
                     </div>
                     <br>
@@ -425,23 +471,42 @@
                     <div class="form-group">
                         <label for="post_genre">Genre : </label>
                         <select id="post_genre" name="post_genre" class="form-control" style="border: 0px;">
-                            <option value="Business">Business*</option>
-                            <option value="Sports">Sports*</option>
-                            <option value="News">News*</option>
-                            <option value="Science">Science*</option>
-                            <option value="Tech">Technology*</option>
                             <option value='Fiction'>Fiction*</option>
-                            <option value='Comedy'>Comedy*</option>
-                            <option value='Rom-com'>Rom-Com*</option>
-                            <option value='Fantasy'>Fantasy*</option>
-                            <option value='Horror'>Horror*</option>
-                            <option value='Mystery'>Mystery*</option>
-                            <option value='Drama'>Drama*</option>
-                            <option value='Histroy'>Histroy*</option>
-                            <option value='Politics'>Politics*</option>
+                            <option value='Comedy'>Comedy*</option>        
+                            <option value='Rom-com'>Rom-com*</option>      
+                            <option value='Fantasy'>Fantasy*</option>      
+                            <option value='Horror'>Horror*</option>        
+                            <option value='Mystery'>Mystery*</option>      
+                            <option value='Historical'>Historical*</option>
+                            <option value='Business'>Business*</option>    
+                            <option value='Education'>Education*</option>  
+                            <option value='Science'>Science*</option>      
+                            <option value='Anecdotes'>Anecdotes*</option>  
+                            <option value='Politics'>Politics*</option>    
+                            <option value='Technology'>Technology*</option>
                             <option value='Sci-fi'>Sci-fi*</option>
+                            <option value='Sports'>Sports*</option>
                             <option value='Poetry'>Poetry*</option>
                             <option value='Adventure'>Adventure*</option>
+                            <option value='Random'>Random*</option>
+                            <option value='Motivational'>Motivational*</option>
+                            <option value='Fashion'>Fashion*</option>
+                            <option value='Art'>Art*</option>
+                            <option value='Music'>Music*</option>
+                            <option value='Movie'>Movie*</option>
+                            <option value='Series'>Series*</option>
+                            <option value='Travel'>Travel*</option>
+                            <option value='Health'>Health*</option>
+                            <option value='Illustrations'>Illustrations*</option>
+                            <option value='Anime'>Anime*</option>
+                            <option value='Photography'>Photography*</option>
+                            <option value='Lifestyle'>Lifestyle*</option>
+                            <option value='Food'>Food*</option>
+                            <option value='News'>News*</option>
+                            <option value='Nature'>Nature*</option>
+                            <option value='Gaming'>Gaming*</option>
+                            <option value='Quotes'>Quotes*</option>
+                            <option value='Other'>Other*</option>
                         </select>
                     </div>
                     <br>
