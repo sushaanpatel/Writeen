@@ -97,14 +97,9 @@ def like(post_id):
       post.post_netlikes -= 1
       db.session.commit()
     else:
-      if post.post_liked_by == "":
-        post.post_liked_by = current_user.username
-        post.post_netlikes += 1
-        db.session.commit()
-      else:
-        post.post_liked_by = post.post_liked_by + f",{current_user.username}"
-        post.post_netlikes += 1
-        db.session.commit()
+      post.post_liked_by = post.post_liked_by + f",{current_user.username}"
+      post.post_netlikes += 1
+      db.session.commit()
   else:
     flash('6')
   return redirect('/')
@@ -152,7 +147,7 @@ def index():
     count = 0
     random.shuffle(random_list)
     static_list = random_list
-    while count < len(max_id):
+    while count < 2:
       query = Posts.query.all()
       posts_list.append(query[random_list[count]])
       count += 1
@@ -160,7 +155,7 @@ def index():
     posts_list = []
     max_id = Posts.query.all()
     count1 = 0
-    while count1 < len(max_id):
+    while count1 < 2:
       query = Posts.query.all()
       posts_list.append(query[static_list[count1]])
       count1 += 1
@@ -298,7 +293,7 @@ def create_text():
     if anonymity == "yes":
       creator = "Anonymous~" + current_user.username 
     Posts.query.session.close()
-    post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_liked_by = "", post_netlikes = 0)
+    post = Posts(post_title = title, post_genre = genre, post_content = content, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_liked_by = f"{current_user}", post_netlikes = 0)
     db.session.add(post)
     db.session.commit()
     return redirect('/yourposts')
@@ -331,7 +326,7 @@ def create_art():
       flash("2")
       return redirect(current_page)
     Posts.query.session.close()
-    post = Posts(post_title = title, post_genre = genre, post_content = filelink.link, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_liked_by = "", post_netlikes = 0)
+    post = Posts(post_title = title, post_genre = genre, post_content = filelink.link, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_liked_by = f"{current_user}", post_netlikes = 0)
     db.session.add(post)
     db.session.commit()
     return redirect('/yourposts')
