@@ -65,6 +65,7 @@
         <center>
         <div id="post_div" style="border:2px solid white;width: 42%;text-align: left;border-radius:10px;min-width:450px;font-size:15px;margin-top:-5px;">
             <form action="/edit/art/{{post.post_id}}" method="POST" style="margin: 13px;">
+                <p style="color: #ff4d4d;font-size:16.5px;text-align:center;">{{err}}</p>
                 <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 18px;height: 40px;" oninput="changebtn()">{{post.post_title}}</textarea></b>
                 <br>
                 <div class="form-group">
@@ -120,7 +121,7 @@
                 </div>
                 <br>
                 <center>
-                <input type="submit" class="btn btn-default" id="submit_btn" style="font-size: 18px; height: 40px;" value="Edit" disabled=true>
+                <input type="submit" class="btn btn-primary" id="submit_btn" style="font-size: 18px; height: 40px;" value="Edit">
                 </center> 
             </form>
         </div>
@@ -141,19 +142,6 @@
             function topFunction(){
                 document.body.scrollTop = 0;
                 document.documentElement.scrollTop = 0;
-            }
-
-            function changebtn(){
-                var btn = document.getElementById('submit_btn');
-                var title = document.getElementById('post_title').value;
-                if (title !== ""){
-                    btn.disabled = false;
-                    btn.className = "btn btn-primary"
-                }
-                else{
-                    btn.disabled = true;
-                    btn.className = "btn btn-default"
-                }
             }
         </script>
     </body>

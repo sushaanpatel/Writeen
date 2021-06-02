@@ -41,8 +41,6 @@ global current_page
 current_page = ""
 global liked_by_list
 liked_by_list = []
-global art_list
-art_list = []
 global yourposts_list
 yourposts_list = []
 global static_list
@@ -86,13 +84,11 @@ def like(post_id):
       for user in liked_by:
         if user == current_user.username:
           liked_by.remove(user)
-
       for x in liked_by:
         if string == "":
           string = string + x
         else:
           string = string + f",{x}"
-      
       post.post_liked_by = string
       post.post_netlikes -= 1
       db.session.commit()
@@ -137,28 +133,28 @@ def index():
   global yourposts_list
   yourposts_list = []
   global posts_list
-  global art_list
   global static_list
   art_list = ["png", "jpg", "jpeg", "gif"]
   if incond == 0:
+    posts_list = []
     Posts.query.session.close()
     max_id = Posts.query.all()
-    random_list = list(range(0, len(max_id)))
+    random_list = []
+    for i in max_id:
+      random_list.append(i.post_id)
     count = 0
     random.shuffle(random_list)
     static_list = random_list
     while count < len(max_id):
-      query = Posts.query.all()
-      posts_list.append(query[random_list[count]])
+      post = Posts.query.filter_by(post_id = random_list[count]).first()
+      posts_list.append(post)
       count += 1
   if incond == 2:
     posts_list = []
-    max_id = Posts.query.all()
     count1 = 0
-    posts_list = []
     while count1 < len(static_list):
-      query = Posts.query.all()
-      posts_list.append(query[static_list[count1]])
+      post = Posts.query.filter_by(post_id = static_list[count1]).first()
+      posts_list.append(post)
       count1 += 1
   return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list)
 
@@ -168,7 +164,9 @@ def filter():
   global posts_list
   global current_page
   global incond
+  global static_list
   if request.method == "POST":
+    static_list = []
     posts_list = []
     incond = 1
     search = request.form['search_bar'].lower()
@@ -187,6 +185,8 @@ def filter():
       for post in query:
         posts_list.append(post)
     posts_list = posts_list[::-1]
+    for i in posts_list:
+      static_list.append(i.post_id)
     return redirect('/')
 
 @app.route('/signup', methods=["POST","GET"])
@@ -332,7 +332,6 @@ def create_art():
     db.session.commit()
     return redirect('/yourposts')
 
-#add change password route
 @app.route('/account')
 @login_required
 def acc():
@@ -347,7 +346,6 @@ def acc():
   Posts.query.session.close()
   return render_template('account.html', current_user = current_user, errmsg=errormsg)
 
-# add the edit and delete besides title, add newest and oldest
 @app.route('/searchyourposts', methods = ["POST"])
 def searchposts():
   global ypcond
@@ -422,6 +420,7 @@ def edit_text(post_id):
   yourposts_list = []
   global ypcond
   ypcond = 0
+  global err
   if request.method == "POST":
     Posts.query.session.close()
     title = request.form["post_title"]
@@ -432,6 +431,15 @@ def edit_text(post_id):
     anonymity = request.form.get("anonymous")
     creator = current_user.username
     x = datetime.now()
+    if title == "" and content == "":
+      err = "Title and Content can't be empty"
+      return redirect(f'/edit/text/{post_id}')
+    if title != "" and content =="":
+      err = "Content can't be empty"
+      return redirect(f'/edit/text/{post_id}')
+    if title == "" and content != "":
+      err = "Title can't be empty"
+      return redirect(f'/edit/text/{post_id}')
     if anonymity == "yes":
       creator = "Anonymous~" + current_user.username
     post = Posts.query.get(post_id)
@@ -447,7 +455,7 @@ def edit_text(post_id):
     return redirect('/yourposts')
   else:
     edit_post = Posts.query.get(post_id)
-    return render_template('edit_text.html', post = edit_post)
+    return render_template('edit_text.html', post = edit_post, err=err)
 
 @app.route('/edit/art/<int:post_id>', methods = ["POST", "GET"])
 def edit_art(post_id):
@@ -455,6 +463,7 @@ def edit_art(post_id):
   yourposts_list = []
   global ypcond
   ypcond = 0
+  global err
   if request.method == "POST":
     Posts.query.session.close()
     title = request.form["post_title"]
@@ -464,6 +473,9 @@ def edit_art(post_id):
     anonymity = request.form.get("anonymous")
     creator = current_user.username
     x = datetime.now()
+    if title == "":
+      err = "Title can't be empty"
+      return redirect(f'/edit/art/{post_id}')
     if anonymity == "yes":
       creator = "Anonymous~" + current_user.username
     post = Posts.query.get(post_id)
@@ -478,7 +490,7 @@ def edit_art(post_id):
     return redirect('/yourposts')
   else:
     edit_post = Posts.query.get(post_id)
-    return render_template('edit_art.html', post = edit_post)
+    return render_template('edit_art.html', post = edit_post, err = err)
 
 @app.route('/delete/post/<int:post_id>')
 def deletepost(post_id):
@@ -492,7 +504,7 @@ def deletepost(post_id):
   db.session.commit()
   return redirect('/yourposts')
 
-# imgur api and edit art
+#edit art js error
 @app.route('/yourposts')
 @login_required
 def yourposts():
@@ -501,10 +513,12 @@ def yourposts():
   global current_page
   current_page = "/yourposts"
   global yourposts_list
-  global art_list
   art_list = ["png", "jpg", "jpeg", "gif"]
+  global err
+  err = ""
   Posts.query.session.close()
   if ypcond == 0:
+    yourposts_list = []
     query = Posts.query.filter_by(post_creator = current_user.username).all()
     for post in query:
       yourposts_list.append(post)
