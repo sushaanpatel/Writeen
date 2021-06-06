@@ -35,6 +35,7 @@ global ermsg
 ermsg =""
 global errormsg
 errormsg = ""
+global post_filter
 global posts_list
 posts_list = []
 global current_page
@@ -58,7 +59,7 @@ def home():
   yourposts_list = []
   global static_list 
   static_list = []
-  return redirect('/')
+  return redirect('/explore')
 
 # @app.route('/like/list/<int:post_id>')
 # def like_list(post_id):
@@ -98,7 +99,7 @@ def like(post_id):
       db.session.commit()
   else:
     flash('6')
-  return redirect('/')
+  return redirect('/explore')
 
 @app.route('/clearfilters')
 def clear():
@@ -117,13 +118,24 @@ def clear():
     incond = 0
   return redirect(current_page)
 
-#try google login, comment, report post, profile pic
-#add like button, add refeshed 
 @app.route('/')
 def index():
+  return render_template("about_us.html")
+
+@app.route('/filter/<string:catagory>')
+def filterhome(catagory):
+  global post_filter
+  global current_page
+  current_page = '/'
+  post_filter = catagory
+  return redirect('/search')
+
+#try google login, comment, report post, profile pic 
+@app.route('/explore')
+def explore():
   global incond
   global current_page
-  current_page = "/"
+  current_page = "/explore"
   global errmsg
   errmsg = ""
   global ermsg
@@ -165,10 +177,16 @@ def filter():
   global current_page
   global incond
   global static_list
+  global post_filter
   if request.method == "POST":
     static_list = []
     posts_list = []
     incond = 1
+    # if current_page == '/':
+    #   query = Posts.query.filter_by(post_genre=post_filter).all()
+    #   for post in query:
+    #     posts_list.append(post)
+    # else:
     search = request.form['search_bar'].lower()
     filters = request.form['filter']
     Posts.query.session.close()
@@ -187,7 +205,7 @@ def filter():
     posts_list = posts_list[::-1]
     for i in posts_list:
       static_list.append(i.post_id)
-    return redirect('/')
+    return redirect('/explore')
 
 @app.route('/signup', methods=["POST","GET"])
 def signup():
@@ -399,6 +417,7 @@ def changeusername():
     return redirect('/account')
 
 @app.route('/change/password', methods = ["POST", "GET"])
+@login_required
 def changepassword():
   if request.method == "POST":
     Users.query.session.close()
@@ -415,6 +434,7 @@ def changepassword():
       return redirect('/account')
 
 @app.route('/edit/text/<int:post_id>', methods = ["POST", "GET"])
+@login_required
 def edit_text(post_id):
   global yourposts_list 
   yourposts_list = []
@@ -458,6 +478,7 @@ def edit_text(post_id):
     return render_template('edit_text.html', post = edit_post, err=err)
 
 @app.route('/edit/art/<int:post_id>', methods = ["POST", "GET"])
+@login_required
 def edit_art(post_id):
   global yourposts_list 
   yourposts_list = []
@@ -493,6 +514,7 @@ def edit_art(post_id):
     return render_template('edit_art.html', post = edit_post, err = err)
 
 @app.route('/delete/post/<int:post_id>')
+@login_required
 def deletepost(post_id):
   global yourposts_list 
   yourposts_list = []

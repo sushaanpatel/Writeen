@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Sign-up</title>
+        <title>Home - Writeen</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="{{url_for('static', filename = 'icons/favicon32.png')}}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/default.min.css"/>
@@ -44,26 +45,31 @@
                 height: 35px;
                 border-radius: 5px;
                 background-color: #3a3a3a;
+                border-color: lightgray;
             }
             input[type=file]{
                 border-radius: 5px;
             }
-            div.form-group select.form-control, input.form-control, textarea.form-control, div.form-group input{
+            div.form-group select.form-control, input.form-control, textarea.form-control{
                 background-color: #3a3a3a;
                 color: white;
             }
             input.btn[type=file]:hover{
                 color: grey;
             }
-            div.contain{
-                max-width: 40%;
-                min-width: 350px;
+            hr{
+                transform: rotate(45deg);
+            }
+            .card{
+                width: 103.5%;
+                min-width: 150px;
+                max-width: 400px;
             }
         </style>
     </head>
     <body>
         <!-- Nav Bar and Top Button -->
-        <button id="topbutton" class="btn" style="background-color: #424242;" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
+        <button id="topbutton" class="btn" style="background-color: #424242" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
         <nav class="navbar navbar-inverse navbar-static-top" style="font-family: 'Lato', sans-serif;">
             <div class="container-fluid">
               <div class="navbar-header">
@@ -91,7 +97,6 @@
             </div>
             </div>
         </nav>
-        <!-- Create Pop-up -->
         <div class="modal fade" id="myModal" role="dialog">
             <div class="modal-dialog">
                 <div class="modal-content" style="background-color: #222222;">
@@ -121,6 +126,7 @@
                                         <option value='Business'>Business*</option>    
                                         <option value='Education'>Education*</option>  
                                         <option value='Science'>Science*</option>      
+                                        <option value=''>*</option>
                                         <option value='Anecdotes'>Anecdotes*</option>  
                                         <option value='Politics'>Politics*</option>    
                                         <option value='Technology'>Technology*</option>
@@ -162,7 +168,7 @@
                                 <br>
                                 <center>
                                 <input type="submit" class="btn btn-default" id="submit_btn" style="font-size: 18px; height: 40px;" value="Post" disabled=true>
-                                </center>
+                                </center> 
                             </form>
                         </div>
                     </div>
@@ -170,32 +176,31 @@
             </div>
         </div>
         <center>
-        <div class="contain" style="background-color: #3a3a3a;height: 400px;border-radius:10px;">
-            <h1><span class="glyphicon glyphicon-list-alt" style="font-size: 26px;margin-top: 7%;"></span> Sign-up</h1>
-            <form action="/signup" method="POST">
-                <p style="color: #ff4d4d;font-size:19px;">{{ errmsg }}</p>
-                <input type="text" id="new_email" name="new_email" class="form-control" placeholder="Email" style="width: 80%;font-size: 20px;margin-bottom: 1%;">
-                <input type="text" id="new_username" name="new_username" class="form-control" placeholder="Username" style="width: 80%;font-size: 20px;margin-bottom: 1%;" oninput="checkusername()">
-                <input type="password" id="new_password" name="new_password" class="form-control" placeholder="Password" style="width: 80%;font-size: 20px;">
-                <table style="margin-bottom: 10px;">
-                    <tr>
-                        <th><input type="checkbox" id="new_remember_me" name="new_remember_me"></th>
-                        <td>Remember Me</td>
-                    </tr>
-                </table>
-                <input type="submit" class="btn btn-primary" id="signupbtn" value="Contiune" style="font-size: medium;height: auto;">
-            </form>
+        <div style="background-color: black;width:98%;">
+            <img src="static/icons/writeen_big_logo.png" style="max-width: 90%;max-height:90%;min-width:20%;min-height:20%;">
+        </div>
+        <br>
+        <p style="font-size:20px;width:90%;">It's a special place on the internet where we share anything we can <b style="color: pink;">imagine</b>, <b style="color: orange;">create</b>, and <b style="color: lightblue;">desire</b> without judgment. Join the community of creatives building new worlds! <b style="color: pink;">Your story</b>, <b style="color: orange;">your voice</b>, <b style="color: lightblue;">forever shared</b>.</p>
+        <br>
+        <h4>Get Started</h4>
+        <br>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3"><a href="/filter/Art"><img src="static/icons/Art.png" class="card"></a></div>
+                <div class="col-sm-3"><a href="/filter/Fiction"><img src="static/icons/Fiction.png" class="card"></a></div>
+                <div class="col-sm-3"><a href="/filter/Anecdotes"><img src="static/icons/Anecdotes.png" class="card"></a></div>
+                <div class="col-sm-3"><a href="/filter/Education"><img src="static/icons/Education.png" class="card"></a></div>
+            </div>
             <br>
-            <a href="/login" style="font-size: 18px;">Have an account?</a>
+            <div class="row">
+                <div class="col-sm-3"><a href="/filter/Fashion"><img src="static/icons/Fashion.png" class="card"></a></div>
+                <div class="col-sm-3"><a href="/filter/Poems"><img src="static/icons/Poems.png" class="card"></a></div>
+                <div class="col-sm-3"><a href="/filter/Politics"><img src="static/icons/Politics.png" class="card"></a></div>
+                <div class="col-sm-3"><a href="/filter/Others"><img src="static/icons/Others.png" class="card"></a></div>
+            </div>
         </div>
         </center>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <script>
-            alertify.notify('File type not allowed', 'error', 3)
-        </script>
-        {% endif %}
-        {% endwith %}
+        <br><br>
         <script>
             var mybutton = document.getElementById("topbutton");
             window.onscroll = function(){scrollFunction()};
@@ -211,111 +216,6 @@
             function topFunction(){
                 document.body.scrollTop = 0;
                 document.documentElement.scrollTop = 0;
-            }
-
-            function changeformat(){
-                var post_div = document.getElementById('post_div');
-                var post_type = document.getElementById('post_type').value;
-                if (post_type == "txt"){
-                    post_div.innerHTML = 
-                `<form action="/create/text" method="POST">
-                    <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;" oninput="changebtn()"></textarea></b>
-                    <br>
-                    <div class="form-group">
-                        <label for="post_genre">Genre : </label>
-                        <select id="post_genre" name="post_genre" class="form-control" style="border: 0px;">
-                            <option value="Business">Business*</option>
-                            <option value="Sports">Sports*</option>
-                            <option value="News">News*</option>
-                            <option value="Science">Science*</option>
-                            <option value="Tech">Technology*</option>
-                            <option value='Fiction'>Fiction*</option>
-                            <option value='Comedy'>Comedy*</option>
-                            <option value='Rom-com'>Rom-Com*</option>
-                            <option value='Fantasy'>Fantasy*</option>
-                            <option value='Horror'>Horror*</option>
-                            <option value='Mystery'>Mystery*</option>
-                            <option value='Drama'>Drama*</option>
-                            <option value='Histroy'>Histroy*</option>
-                            <option value='Politics'>Politics*</option>
-                            <option value='Sci-fi'>Sci-fi*</option>
-                            <option value='Poetry'>Poetry*</option>
-                            <option value='Adventure'>Adventure*</option>
-                        </select>
-                    </div>
-                    <br>
-                    <textarea type="text" class="form-control" id="post_content" name="post_content" placeholder="Content (Required or *)" style="height: 400px;" oninput="changebtn()"></textarea>
-                    <br>
-                    <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Media Links"></textarea>
-                    <br>
-                    <textarea type="text" class="form-control" id="post_citation" name="post_citation" placeholder="Citation"></textarea>
-                    <br>
-                    <div class="form-group">
-                        <label for="anonymous">Anonymous : </label><select style="border: 0px;" class="form-control" id="anonymous" name="anonymous"><option value="yes">Yes</option><option value="no" selected>No</option></select>
-                    </div>
-                    <br>
-                    <center>
-                    <input type="submit" class="btn btn-default" id="submit_btn" style="font-size: 18px; height: 40px;" value="Post" disabled=true>
-                    </center>
-                </form>`
-                }
-                if (post_type == "art"){
-                    post_div.innerHTML = 
-                `<form action="/create/art" method="POST" enctype="multipart/form-data">
-                    <b><textarea type="text" class="form-control" id="post_title" name="post_title" placeholder="Title (Required or *)" style="font-size: 16px;height: 40px;" oninput="changebtn()"></textarea></b>
-                    <br>
-                    <div class="form-group">
-                        <label for="post_genre">Genre : </label>
-                        <select id="post_genre" name="post_genre" class="form-control" style="border: 0px;">
-                            <option value="Business">Business*</option>
-                            <option value="Sports">Sports*</option>
-                            <option value="News">News*</option>
-                            <option value="Science">Science*</option>
-                            <option value="Tech">Technology*</option>
-                            <option value='Fiction'>Fiction*</option>
-                            <option value='Comedy'>Comedy*</option>
-                            <option value='Rom-com'>Rom-Com*</option>
-                            <option value='Fantasy'>Fantasy*</option>
-                            <option value='Horror'>Horror*</option>
-                            <option value='Mystery'>Mystery*</option>
-                            <option value='Drama'>Drama*</option>
-                            <option value='Histroy'>Histroy*</option>
-                            <option value='Politics'>Politics*</option>
-                            <option value='Sci-fi'>Sci-fi*</option>
-                            <option value='Poetry'>Poetry*</option>
-                            <option value='Adventure'>Adventure*</option>
-                        </select>
-                    </div>
-                    <br>
-                    <input type="file" class="btn" id="post_content" name="post_content" placeholder="Content (Required or *)" style="font-size:15px;" oninput="changebtn()">
-                    <br>
-                    <textarea type="text" class="form-control" id="post_media" name="post_media" placeholder="Caption"></textarea>
-                    <br>
-                    <textarea type="text" class="form-control" id="post_citation" name="post_citation" placeholder="Citation"></textarea>
-                    <br>
-                    <div class="form-group">
-                        <label for="anonymous">Anonymous : </label><select style="border: 0px;" class="form-control" id="anonymous" name="anonymous"><option value="yes">Yes</option><option value="no" selected>No</option></select>
-                    </div>
-                    <br>
-                    <center>
-                    <input type="submit" class="btn btn-default" id="submit_btn" style="font-size: 18px; height: 40px;" value="Post" disabled=true>
-                    </center>
-                </form>`
-                }
-            }
-
-            function changebtn(){
-                var btn = document.getElementById('submit_btn');
-                var title = document.getElementById('post_title').value;
-                var content = document.getElementById('post_content').value;
-                if (title !== "" && content !== ""){
-                    btn.disabled = false;
-                    btn.className = "btn btn-primary"
-                }
-                else{
-                    btn.disabled = true;
-                    btn.className = "btn btn-default"
-                }
             }
         </script>
     </body>
