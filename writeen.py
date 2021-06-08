@@ -178,15 +178,19 @@ def filter():
   global incond
   global static_list
   global post_filter
-  if request.method == "POST":
+  incond = 1
+  if current_page == '/':
     static_list = []
     posts_list = []
-    incond = 1
-    # if current_page == '/':
-    #   query = Posts.query.filter_by(post_genre=post_filter).all()
-    #   for post in query:
-    #     posts_list.append(post)
-    # else:
+    search = post_filter
+    query = Posts.query.filter_by(post_genre=search).all()
+    for post in query:
+      posts_list.append(post)
+    posts_list = posts_list[::-1]
+    for i in posts_list:
+      static_list.append(i.post_id)
+    return redirect('/explore')
+  if request.method == "POST":
     search = request.form['search_bar'].lower()
     filters = request.form['filter']
     Posts.query.session.close()

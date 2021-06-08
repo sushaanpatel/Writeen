@@ -3,6 +3,7 @@
     <head>
         <title>Home - Writeen</title>
         <meta charset="utf-8">
+        <meta name="description" content="This entertainment website is the one-stop destination for open blogging covering all genres. Blog or post whatever comes to your mind. Want to see the world through someone else's eyes? Join Writeen for some fun and pastime.">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="{{url_for('static', filename = 'icons/favicon32.png')}}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -61,9 +62,10 @@
                 transform: rotate(45deg);
             }
             .card{
-                width: 103.5%;
+                width: 105%;
                 min-width: 150px;
-                max-width: 400px;
+                max-width: 330px;
+                margin-bottom: 6.5%;
             }
         </style>
     </head>
@@ -184,19 +186,18 @@
         <br>
         <h4>Get Started</h4>
         <br>
-        <div class="container">
+        <div class="container" style="width: 85%;">
             <div class="row">
-                <div class="col-sm-3"><a href="/filter/Art"><img src="static/icons/Art.png" class="card"></a></div>
-                <div class="col-sm-3"><a href="/filter/Fiction"><img src="static/icons/Fiction.png" class="card"></a></div>
-                <div class="col-sm-3"><a href="/filter/Anecdotes"><img src="static/icons/Anecdotes.png" class="card"></a></div>
-                <div class="col-sm-3"><a href="/filter/Education"><img src="static/icons/Education.png" class="card"></a></div>
+                <div class="col-sm-3"><a href="/filter/Art"><img src="static/icons/Art.png" class="card" alt="art_title"></a></div>
+                <div class="col-sm-3"><a href="/filter/Fiction"><img src="static/icons/Fiction.png" class="card" alt="fiction_title"></a></div>
+                <div class="col-sm-3"><a href="/filter/Anecdotes"><img src="static/icons/Anecdotes.png" class="card" alt="anecdotes_title"></a></div>
+                <div class="col-sm-3"><a href="/filter/Education"><img src="static/icons/Education.png" class="card" alt="edu_title"></a></div>
             </div>
-            <br>
             <div class="row">
-                <div class="col-sm-3"><a href="/filter/Fashion"><img src="static/icons/Fashion.png" class="card"></a></div>
-                <div class="col-sm-3"><a href="/filter/Poems"><img src="static/icons/Poems.png" class="card"></a></div>
-                <div class="col-sm-3"><a href="/filter/Politics"><img src="static/icons/Politics.png" class="card"></a></div>
-                <div class="col-sm-3"><a href="/filter/Others"><img src="static/icons/Others.png" class="card"></a></div>
+                <div class="col-sm-3"><a href="/filter/Fashion"><img src="static/icons/Fashion.png" class="card" alt="fashion_title"></a></div>
+                <div class="col-sm-3"><a href="/filter/Poetry"><img src="static/icons/Poetry.png" class="card" alt="poetry_title"></a></div>
+                <div class="col-sm-3"><a href="/filter/Politics"><img src="static/icons/Politics.png" class="card" alt="politics_title"></a></div>
+                <div class="col-sm-3"><a href="/filter/Other"><img src="static/icons/Others.png" class="card" alt="other_title"></a></div>
             </div>
         </div>
         </center>

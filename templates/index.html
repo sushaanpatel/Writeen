@@ -3,6 +3,7 @@
     <head>
         <title>Explore - Writeen</title>
         <meta charset="utf-8">
+        <meta name="description" content="Explore content written and created by a diverse community of users">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="icon" href="{{url_for('static', filename = 'icons/favicon32.png')}}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -74,7 +75,7 @@
               </div>
               <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
-                <li><a href="/home" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-search"></span> Explore</a></li>
+                <li><a href="/home" onclick="scroll_reset()" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-search"></span> Explore</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
                 <li><a style="color: white;font-weight: 400;" data-toggle="modal" data-target="#myModal"><span class="glyphicon glyphicon-edit"></span> Create</a></li>
@@ -191,7 +192,7 @@
             <div style="margin-right: 10%;" >
                 <br>
                 <table style="margin-top:0.5%;max-width:800px;min-width:45px;">
-                    <td><img style="max-width: 100%;max-height:100%;" src="static/icons/404robot.png"></td>
+                    <td><img style="max-width: 100%;max-height:100%;" alt="404 error" src="static/icons/404robot.png"></td>
                     <td><p style="font-size: 16px;">404 No Posts Found :(<br>Please Check your search again</p><p><li style="font-size: 13px;">Make sure that all words are spelled correctly.</li><li style="font-size: 13px;">Try different keywords.</li><li style="font-size: 13px;">Try more general keywords.</li><li style="font-size: 13px;">Try fewer keywords.</li></p></td>
                 </table>
             </div>
@@ -235,7 +236,7 @@
             <br><hr width="90%" style="margin-left: 0;"><br>
             {% endfor %}
             {% endif %}
-            <a href="/home" class="btn btn-default" style="width: 50%;margin-left:20%;">Load More Posts</a><br><br>
+            <a href="/home" onclick="scroll_reset()" class="btn btn-default" style="width: 50%;margin-left:20%;">Load More Posts</a><br><br>
         </div>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -270,6 +271,11 @@
             function save_scroll(){
                 sessionStorage.setItem("bodyscroll", document.body.scrollTop)
                 sessionStorage.setItem("elemscroll", document.documentElement.scrollTop)
+            }
+
+            function scroll_reset(){
+                sessionStorage.setItem("bodyscroll", 0)
+                sessionStorage.setItem("elemscroll", 0)
             }
 
             function scrollFunction(){
