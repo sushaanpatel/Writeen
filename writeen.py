@@ -125,12 +125,30 @@ def clear():
 
 @app.route('/')
 def index():
-  return render_template("about_us.html")
+  try:
+    global incond
+    global current_page
+    current_page = "/"
+    global errmsg
+    errmsg = ""
+    global ermsg
+    ermsg = ""
+    global errormsg
+    errormsg = ""
+    global yourposts_list
+    yourposts_list = []
+    global posts_list
+    global static_list
+    return render_template("about_us.html")
+  except:
+    flash('err')
+    return redirect(current_page)
 
 @app.route('/filter/<string:catagory>')
 def filterhome(catagory):
   try:
     global post_filter
+    post_filter = ""
     global current_page
     current_page = '/'
     post_filter = catagory
