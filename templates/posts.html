@@ -128,6 +128,21 @@
             {% endfor %}
             {% endif %}
         </div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for x in messages %}
+        {% if x == '2' %}
+        <script>
+            alertify.notify('File type not allowed', 'error', 3)
+        </script>
+        {% elif x == 'err' %}
+        <script>
+            alertify.alert("Aw Snap :(","An error has occurred, please reload and try again")
+        </script>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <script>
             var mybutton = document.getElementById("topbutton");
             window.onscroll = function(){scrollFunction()};

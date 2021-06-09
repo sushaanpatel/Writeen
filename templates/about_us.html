@@ -200,6 +200,29 @@
             </div>
         </div>
         </center>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for x in messages %}
+        {% if x == "1" %}
+        <script>
+            alertify.notify('Username Already Taken', 'error', 3)
+        </script>
+        {% elif x == "2" %}
+        <script>
+            alertify.notify('File type not allowed', 'error', 3)
+        </script>
+        {% elif x == "6" %}
+        <script>
+            alertify.notify("Please <a href='/login'>Login</a> to like Posts", 'error', 3)
+        </script>
+        {% elif x == 'err' %}
+        <script>
+            alertify.alert("Aw Snap :(","An error has occurred, please reload and try again")
+        </script>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
         <br><br>
         <script>
             var mybutton = document.getElementById("topbutton");

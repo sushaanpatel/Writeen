@@ -253,6 +253,10 @@
         <script>
             alertify.notify("Please <a href='/login'>Login</a> to like Posts", 'error', 3)
         </script>
+        {% elif x == 'err' %}
+        <script>
+            alertify.alert("Aw Snap :(","An error has occurred, please reload and try again")
+        </script>
         {% endif %}
         {% endfor %}
         {% endif %}
