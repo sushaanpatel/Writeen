@@ -263,6 +263,8 @@ def login():
   global current_page
   global yourposts_list
   yourposts_list = []
+  if current_user.is_authenticated == True:
+    return redirect('/explore')
   if request.method == "POST":
     name = request.form['acc_username'].lower()
     password = request.form['acc_password']
