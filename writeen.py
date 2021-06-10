@@ -1,5 +1,6 @@
 #Made by Sushaan Patel
 import os
+import time
 import random
 import pyimgur
 import dotenv
@@ -150,7 +151,9 @@ def filterhome(catagory):
     global post_filter
     post_filter = ""
     global current_page
+    time.sleep(0.1)
     current_page = '/'
+    time.sleep(0.1)
     post_filter = catagory
     return redirect('/search')
   except:
