@@ -260,29 +260,37 @@ def signup():
       Users.query.session.close()
       new_rememeber = True if request.form.get('new_remember_me') else False
       if new_name == "" and new_pass == "" and new_email == "":
+        errmsg = ""
         errmsg = "Please enter your Credentails"
         return redirect('/signup')
       if new_name != "" and new_pass == "" and new_email =="":
+        errmsg = ""
         errmsg = "Please enter your Credentails"
         return redirect('/signup')
       if new_name != "" and new_pass != "" and new_email == "":
+        errmsg = ""
         errmsg = "Please enter your Credentails"
         return redirect('/signup')
       if new_name == "" and new_pass == "" and new_email != "":
+        errmsg = ""
         errmsg = "Please enter your Credentails"
         return redirect('/signup')
       if new_name == "" and new_pass != "" and new_email != "":
+        errmsg = ""
         errmsg = "Please enter your Credentails"
         return redirect('/signup')
       if '~' in new_name:
+        errmsg = ""
         errmsg = "'~' is not allowed in username"
         return redirect('/signup')
       if new_name == "anonymous":
+        errmsg = ""
         errmsg = "'Anonymous' can not used as a username"
         return redirect('/signup')
       x = Users.query.all() 
       for i in x:
         if new_name == i.username:
+          errmsg = ""
           errmsg = "Username Already Taken"
           return redirect('/signup')
       y = Users(username = new_name, password = generate_password_hash(new_pass, method = "sha256"), email = new_email)
@@ -331,9 +339,11 @@ def login():
           login_user(user, remember=remember)
           return redirect('/home')
         else:
+          ermsg = ""
           ermsg = "Password is incorret"
           return redirect('/login')
       else:
+        ermsg = ""
         ermsg = "Account not found"
         return redirect('/login')
     else:
