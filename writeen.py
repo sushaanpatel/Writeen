@@ -130,6 +130,10 @@ def index():
     current_page = "/"
     global yourposts_list
     yourposts_list = []
+    global posts_list
+    posts_list = []
+    static_list = []
+    global static_list
     return render_template("about_us.html")
   except:
     flash('err')
