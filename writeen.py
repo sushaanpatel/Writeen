@@ -307,6 +307,7 @@ def login():
     if current_user.is_authenticated == True:
       return redirect('/explore')
     if request.method == "POST":
+      global name
       name = request.form['acc_username'].lower()
       password = request.form['acc_password']
       remember = True if request.form.get('remember_me') else False
@@ -321,18 +322,20 @@ def login():
       if name == "" and password != "":
         ermsg = "Please enter your Credentails"
         return redirect('/login')
+      user_list = []
       for i in x:
-        if name == i.username: #if exists
-          if check_password_hash(i.password, password): #checks passwords
-            user = Users.query.filter_by(username = name).first()
-            login_user(user, remember=remember)
-            return redirect('/home')
-          else:
-            ermsg = "Password is incorret"
-            return redirect('/login')
+        user_list.append(i.username)
+      if name in user_list:
+        user = Users.query.filter_by(username = name).first()
+        if check_password_hash(user.password, password): #checks passwords
+          login_user(user, remember=remember)
+          return redirect('/home')
         else:
-          ermsg = "Account not found"
+          ermsg = "Password is incorret"
           return redirect('/login')
+      else:
+        ermsg = "Account not found"
+        return redirect('/login')
     else:
       return render_template('login.html', errmsg=ermsg)
   except:
@@ -668,3 +671,8 @@ def deleteacc():
 
 if __name__ == "__main__":
   app.run(debug=True)
+
+# x = Users.query.all()
+# for i in x:
+#   if "kavishi" == i.username:
+#     print("login")
