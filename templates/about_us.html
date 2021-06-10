@@ -380,6 +380,20 @@
                 </form>`
                 }
             }
+
+            function changebtn(){
+                var btn = document.getElementById('submit_btn');
+                var title = document.getElementById('post_title').value;
+                var content = document.getElementById('post_content').value;
+                if (title !== "" && content !== ""){
+                    btn.disabled = false;
+                    btn.className = "btn btn-primary"
+                }
+                else{
+                    btn.disabled = true;
+                    btn.className = "btn btn-default"
+                }
+            }
         </script>
     </body>
 </html>
