@@ -132,8 +132,8 @@ def index():
     yourposts_list = []
     global posts_list
     posts_list = []
-    static_list = []
     global static_list
+    static_list = []
     return render_template("about_us.html")
   except:
     flash('err')
