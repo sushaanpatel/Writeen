@@ -36,7 +36,6 @@ global ermsg
 ermsg =""
 global errormsg
 errormsg = ""
-global post_filter
 global posts_list
 posts_list = []
 global current_page
@@ -127,19 +126,10 @@ def clear():
 @app.route('/')
 def index():
   try:
-    global incond
     global current_page
     current_page = "/"
-    global errmsg
-    errmsg = ""
-    global ermsg
-    ermsg = ""
-    global errormsg
-    errormsg = ""
     global yourposts_list
     yourposts_list = []
-    global posts_list
-    global static_list
     return render_template("about_us.html")
   except:
     flash('err')
@@ -148,14 +138,23 @@ def index():
 @app.route('/filter/<string:catagory>')
 def filterhome(catagory):
   try:
-    global post_filter
-    post_filter = ""
+    global incond
+    incond = 1
+    global posts_list
     global current_page
-    time.sleep(0.1)
     current_page = '/'
-    time.sleep(0.1)
-    post_filter = catagory
-    return redirect('/search')
+    global static_list
+    Posts.query.session.close()
+    static_list = []
+    posts_list = []
+    search = catagory
+    query = Posts.query.filter_by(post_genre=search).all()
+    for post in query:
+      posts_list.append(post)
+    posts_list = posts_list[::-1]
+    for i in posts_list:
+      static_list.append(i.post_id)
+    return redirect('/explore')
   except:
     flash('err')
     return redirect(current_page)
@@ -167,12 +166,6 @@ def explore():
     global incond
     global current_page
     current_page = "/explore"
-    global errmsg
-    errmsg = ""
-    global ermsg
-    ermsg = ""
-    global errormsg
-    errormsg = ""
     global yourposts_list
     yourposts_list = []
     global posts_list
@@ -212,19 +205,7 @@ def filter():
     global current_page
     global incond
     global static_list
-    global post_filter
-    incond = 1
-    if current_page == '/':
-      static_list = []
-      posts_list = []
-      search = post_filter
-      query = Posts.query.filter_by(post_genre=search).all()
-      for post in query:
-        posts_list.append(post)
-      posts_list = posts_list[::-1]
-      for i in posts_list:
-        static_list.append(i.post_id)
-      return redirect('/explore')
+    incond = 1      
     if request.method == "POST":
       search = request.form['search_bar'].lower()
       filters = request.form['filter']
