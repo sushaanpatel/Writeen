@@ -15,6 +15,8 @@ from db_init import db, app, Users, Posts
 dotenv.load_dotenv(dotenv_path = ".env")
 client_id = os.environ.get('IMGUR_ID')
 client_secret = os.environ.get('IMGUR_SECRET')
+global db_pass
+db_pass = os.environ.get('DB')
 client = pyimgur.Imgur(client_id, client_secret=client_secret)
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -166,40 +168,40 @@ def filterhome(catagory):
 #try google login, comment, report post, profile pic 
 @app.route('/explore')
 def explore():
-  try:
-    global incond
-    global current_page
-    current_page = "/explore"
-    global yourposts_list
-    yourposts_list = []
-    global posts_list
-    global static_list
-    art_list = ["png", "jpg", "jpeg", "gif"]
-    if incond == 0:
-      posts_list = []
-      Posts.query.session.close()
-      max_id = Posts.query.all()
-      random_list = []
-      for i in max_id:
-        random_list.append(i.post_id)
-      count = 0
-      random.shuffle(random_list)
-      static_list = random_list
-      while count < len(max_id):
-        post = Posts.query.filter_by(post_id = random_list[count]).first()
-        posts_list.append(post)
-        count += 1
-    if incond == 2:
-      posts_list = []
-      count1 = 0
-      while count1 < len(static_list):
-        post = Posts.query.filter_by(post_id = static_list[count1]).first()
-        posts_list.append(post)
-        count1 += 1
-    return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list)
-  except:
-    flash('err')
-    return redirect(current_page)
+  # try:
+  global incond
+  global current_page
+  current_page = "/explore"
+  global yourposts_list
+  yourposts_list = []
+  global posts_list
+  global static_list
+  art_list = ["png", "jpg", "jpeg", "gif"]
+  if incond == 0:
+    posts_list = []
+    Posts.query.session.close()
+    max_id = Posts.query.all()
+    random_list = []
+    for i in max_id:
+      random_list.append(i.post_id)
+    count = 0
+    random.shuffle(random_list)
+    static_list = random_list
+    while count < len(max_id):
+      post = Posts.query.filter_by(post_id = random_list[count]).first()
+      posts_list.append(post)
+      count += 1
+  if incond == 2:
+    posts_list = []
+    count1 = 0
+    while count1 < len(static_list):
+      post = Posts.query.filter_by(post_id = static_list[count1]).first()
+      posts_list.append(post)
+      count1 += 1
+  return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list)
+  # except:
+  #   flash('err')
+  #   return redirect(current_page)
 
 #add newest and oldest
 @app.route('/search', methods=["POST", "GET"])
