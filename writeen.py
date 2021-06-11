@@ -12,10 +12,9 @@ from flask_login import LoginManager, UserMixin, login_required, current_user, l
 from flask_sqlalchemy import SQLAlchemy
 from db_init import db, app, Users, Posts
 
-dotenv.load_dotenv(dotenv_path = ".env")
+dotenv.load_dotenv()
 client_id = os.environ.get('IMGUR_ID')
 client_secret = os.environ.get('IMGUR_SECRET')
-global db_pass
 db_pass = os.environ.get('DB')
 client = pyimgur.Imgur(client_id, client_secret=client_secret)
 login_manager = LoginManager()
