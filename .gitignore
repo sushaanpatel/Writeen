@@ -1,3 +1,4 @@
 .env
+db_init.py
 gmail_Oauth.json
 imgur_Oauth.json
