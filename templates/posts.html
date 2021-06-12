@@ -68,6 +68,15 @@
             input.btn[type=file]:hover{
                 color: grey;
             }
+            pre{
+                background-color: #222222;
+                font-family: inherit;
+                border: 0px;
+                color: white;
+                font-size: 16px;
+                width: 90%;
+                max-width: 90%;
+            }
         </style>
     </head>
     <body>
@@ -118,22 +127,22 @@
             <img style="max-width: 75%;max-height: 75%;min-width: 20%;min-height: 20%;" src="{{post.post_content}}">
             <br>
             {% else %}
-            <p style="font-size: 16px;width:90%;">{{post.post_content}}</p>
+            <pre>{{post.post_content}}</pre>
             {% endif %}
             {% if post.post_media != "" %}
             {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
             <br>
-            <p style="font-size:14px;width:80%;word-break:break-all;"><b>Caption : </b>{{post.post_media}}</p>
+            <pre style="font-size:14px;width:80%;word-break:break-all;"><b>Caption : </b>{{post.post_media}}</pre>
             {% else %}
             <br>
             <p>Media Links</p>
-            <p style="font-size:14px;width:80%;word-break:break-all;">{{post.post_media}}</p>
+            <pre style="font-size:14px;width:80%;word-break:break-all;">{{post.post_media}}</pre>
             {% endif %}
             {% endif %}
             {% if post.post_citation != "" %}
             <br>
             <p>Citation</p>
-            <p style="font-size: 14px;width:80%;word-break:break-all;">{{post.post_citation}}</p>
+            <pre style="font-size: 14px;width:80%;word-break:break-all;">{{post.post_citation}}</pre>
             {% endif %}
             <br><hr width="90%" style="margin-left: 0;"><br>
             {% endfor %}
