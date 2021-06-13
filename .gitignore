@@ -1,3 +1,5 @@
 .env
 gmail_Oauth.json
-imgur_Oauth.json
+imgur_Oauth.jsonvenv
+__pycache__/
+*.pyc
