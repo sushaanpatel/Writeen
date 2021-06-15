@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
-from db_init import db, app, Users, Posts
+from db_init import db, app, Users, Posts, ask_us_form
 
 dotenv.load_dotenv()
 client_id = os.environ.get('IMGUR_ID')
@@ -139,6 +139,28 @@ def index():
   except:
     flash('err')
     return redirect(current_page)
+
+@app.route('/aboutus', methods = ["POST", "GET"])
+def aboutus():
+  try:
+    global current_page
+    if request.method == "POST":
+      if current_user.is_authenticated == False:
+        flash('6')
+        return redirect('/aboutus')
+      firstname = request.form["fname"]
+      content1 = request.form["content"]
+      uname = current_user.username
+      entry =  ask_us_form(fname = firstname, content = content1, username = uname)
+      db.session.add(entry)
+      db.session.commit()
+      flash('8')
+      return redirect('/aboutus')
+    else:
+      return render_template('about_us2.html')
+  except:
+    flash('err')
+    return redirect(current_page)  
 
 @app.route('/filter/<string:catagory>')
 def filterhome(catagory):
@@ -670,8 +692,3 @@ def deleteacc():
 
 if __name__ == "__main__":
   app.run(debug=True)
-
-# x = Users.query.all()
-# for i in x:
-#   if "kavishi" == i.username:
-#     print("login")

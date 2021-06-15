@@ -32,3 +32,9 @@ class Posts(db.Model):
   post_publishtime = db.Column(db.String(50), nullable = False)
   post_liked_by = db.Column(db.String(60000), nullable = False) 
   post_netlikes = db.Column(db.Integer, nullable = False)
+
+class ask_us_form(db.Model):
+  entry_id = db.Column(db.Integer, primary_key = True)
+  fname = db.Column(db.String(60))
+  content = db.Column(db.String(5000))
+  username = db.Column(db.String(60))
