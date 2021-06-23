@@ -235,6 +235,8 @@ def filter():
     incond = 1
     posts_list = []  
     if request.method == "POST":
+      time.sleep(0.5)
+      posts_list = []
       search = request.form['search_bar'].lower()
       filters = request.form['filter']
       Posts.query.session.close()
