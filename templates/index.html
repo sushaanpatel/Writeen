@@ -77,6 +77,7 @@
                 font-size: 16px;
                 width: 90%;
                 max-width: 90%;
+                white-space: pre-wrap;
             }
         </style>
     </head>
@@ -141,7 +142,6 @@
                                         <option value='Business'>Business*</option>    
                                         <option value='Education'>Education*</option>  
                                         <option value='Science'>Science*</option>      
-                                        <option value=''>*</option>
                                         <option value='Anecdotes'>Anecdotes*</option>  
                                         <option value='Politics'>Politics*</option>    
                                         <option value='Technology'>Technology*</option>
@@ -233,7 +233,7 @@
             {% endif %}
             <hr style="width: 20%; text-align:left;margin-left:0;">
             {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
-            <img src="{{post.post_content}}" style="max-width: 75%;max-height: 75%;min-width: 20%;min-height: 20%;">
+            <img src="{{post.post_content}}" style="max-width: 70%;max-height: 70%;min-width: 25%;min-height: 25%;">
             <br>
             {% else %}
             <pre>{{post.post_content}}</pre>
@@ -315,6 +315,7 @@
                 document.body.scrollTop = 0;
                 document.documentElement.scrollTop = 0;
             }
+            
             function changeopt(){
                 var search_div = document.getElementById('search_div');
                 var filter = document.getElementById('filter');
@@ -415,7 +416,7 @@
                         <option value="oldest">Oldest</option>
                         <!-- <option value="questions">Question</option> -->
                     </select>
-                    <input type="submit" class="btn btn-default" value="Sort" disabled=true>
+                    <input type="submit" class="btn btn-primary" value="Sort">
                     <a class="btn btn-default" href="/clearfilters">Clear</a>
                 </form>`
                 }
@@ -431,7 +432,7 @@
                         <option value="oldest" selected>Oldest</option>
                         <!-- <option value="questions">Question</option> -->
                     </select>
-                    <input type="submit" class="btn btn-default" value="Sort" disabled=true>
+                    <input type="submit" class="btn btn-primary" value="Sort">
                     <a class="btn btn-default" href="/clearfilters">Clear</a>
                 </form>`
                 }

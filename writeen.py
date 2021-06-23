@@ -232,7 +232,8 @@ def filter():
     global current_page
     global incond
     global static_list
-    incond = 1      
+    incond = 1
+    posts_list = []  
     if request.method == "POST":
       search = request.form['search_bar'].lower()
       filters = request.form['filter']
@@ -246,9 +247,19 @@ def filter():
         for post in query:
           posts_list.append(post)
       if filters == "author":
-        query = Posts.query.filter(Posts.post_creator.like(f"%{search}%")).all()
-        for post in query:
-          posts_list.append(post)
+        query = Posts.query.all()
+        for i in query:
+          if search in i.post_creator.split('~')[0].lower():
+            posts_list.append(i)
+      if filters == "oldest":
+        query = Posts.query.all()
+        for i in query:
+          posts_list.append(i)
+        posts_list = posts_list[::-1]
+      if filters == "newest":
+        query = Posts.query.all()
+        for i in query:
+          posts_list.append(i)
       posts_list = posts_list[::-1]
       for i in posts_list:
         static_list.append(i.post_id)
