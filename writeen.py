@@ -429,11 +429,11 @@ def create_art():
       creator = "Anonymous~" + current_user.username
     y = content.filename.split('.')
     if y[1].lower() in allowed:
-      filename = content.filename
-      content.save(app.config['UPLOAD_FOLDER'] + secure_filename(current_user.username + "_" + str(filename).replace(" ", "_")))
-      filelink = client.upload_image("static/" + current_user.username + "_" + str(filename).replace(" ", "_"), title=filename)
-      if os.path.exists("static/" + current_user.username + "_" + str(filename).replace(" ", "_")):
-        os.remove("static/" + current_user.username + "_" + str(filename).replace(" ", "_"))
+      filename = current_user.username + "_" + str(content.filename).replace(" ", "_")
+      content.save(app.config['UPLOAD_FOLDER'] + filename)
+      filelink = client.upload_image("static/" + filename, title=filename)
+      if os.path.exists("static/" + filename):
+        os.remove("static/" + filename)
     else:
       flash("2")
       return redirect(current_page)
