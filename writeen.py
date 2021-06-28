@@ -412,40 +412,39 @@ def create_text():
 @app.route('/create/art', methods=["POST", "GET"])
 @login_required
 def create_art():
-  try:
-    global current_page
-    global errmsg
-    global filelink
-    if request.method == "POST":
-      title = request.form["post_title"]
-      genre = request.form.get("post_genre")
-      content = request.files["post_content"]
-      media = request.form["post_media"]
-      citation = request.form["post_citation"]
-      anonymity = request.form.get("anonymous")
-      creator = current_user.username
-      x = datetime.now()
-      allowed = ['png','jpg','jpeg','gif']
-      if anonymity == "yes":
-        creator = "Anonymous~" + current_user.username
-      y = content.filename.split('.')
-      if y[1].lower() in allowed:
-        filename = content.filename
-        content.save(app.config['UPLOAD_FOLDER'] + secure_filename(current_user.username + "_" + str(filename).replace(" ", "_")))
-        filelink = client.upload_image("static/" + current_user.username + "_" + str(filename).replace(" ", "_"), title=filename)
-        if os.path.exists("static/" + current_user.username + "_" + str(filename).replace(" ", "_")):
-          os.remove("static/" + current_user.username + "_" + str(filename).replace(" ", "_"))
-      else:
-        flash("2")
-        return redirect(current_page)
-      Posts.query.session.close()
-      post = Posts(post_title = title, post_genre = genre, post_content = filelink.link, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_liked_by = f"{current_user.username}", post_netlikes = 1)
-      db.session.add(post)
-      db.session.commit()
-      return redirect('/yourposts')
-  except:
-    flash('err')
-    return redirect(current_page)
+  global current_page
+  global errmsg
+  global filelink
+  if request.method == "POST":
+    title = request.form["post_title"]
+    genre = request.form.get("post_genre")
+    content = request.files["post_content"]
+    media = request.form["post_media"]
+    citation = request.form["post_citation"]
+    anonymity = request.form.get("anonymous")
+    creator = current_user.username
+    x = datetime.now()
+    allowed = ['png','jpg','jpeg','gif']
+    if anonymity == "yes":
+      creator = "Anonymous~" + current_user.username
+    y = content.filename.split('.')
+    if y[1].lower() in allowed:
+      filename = content.filename
+      content.save(app.config['UPLOAD_FOLDER'] + secure_filename(current_user.username + "_" + str(filename).replace(" ", "_")))
+      filelink = client.upload_image("static/" + current_user.username + "_" + str(filename).replace(" ", "_"), title=filename)
+      if os.path.exists("static/" + current_user.username + "_" + str(filename).replace(" ", "_")):
+        os.remove("static/" + current_user.username + "_" + str(filename).replace(" ", "_"))
+    else:
+      flash("2")
+      return redirect(current_page)
+    Posts.query.session.close()
+    post = Posts(post_title = title, post_genre = genre, post_content = filelink.link, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_liked_by = f"{current_user.username}", post_netlikes = 1)
+    db.session.add(post)
+    db.session.commit()
+    return redirect('/yourposts')
+  # except:
+  #   flash('err')
+  #   return redirect(current_page)
 
 @app.route('/account')
 @login_required
