@@ -206,7 +206,6 @@ def explore():
       for i in max_id:
         random_list.append(i.post_id)
       count = 0
-      random.shuffle(random_list)
       static_list = random_list
       while count < len(max_id):
         post = Posts.query.filter_by(post_id = random_list[count]).first()
@@ -219,6 +218,7 @@ def explore():
         post = Posts.query.filter_by(post_id = static_list[count1]).first()
         posts_list.append(post)
         count1 += 1
+    posts_list = posts_list[::-1]
     return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list)
   except:
     flash('err')
@@ -262,6 +262,22 @@ def filter():
         query = Posts.query.all()
         for i in query:
           posts_list.append(i)
+      if filters == "editorial":
+        query = Posts.query.all()
+        for i in query:
+          if "writeenblogs" in i.post_creator.split('~')[0].lower():
+            posts_list.append(i)
+      if filters == "random":
+        max_id = Posts.query.all()
+        random_list = []
+        for i in max_id:
+          random_list.append(i.post_id)
+        count = 0
+        random.shuffle(random_list)
+        while count < len(max_id):
+          post = Posts.query.filter_by(post_id = random_list[count]).first()
+          posts_list.append(post)
+          count += 1
       posts_list = posts_list[::-1]
       for i in posts_list:
         static_list.append(i.post_id)

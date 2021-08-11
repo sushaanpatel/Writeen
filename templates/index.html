@@ -200,6 +200,8 @@
                     <option value="author">Author</option>
                     <option value="newest">Newest</option>
                     <option value="oldest">Oldest</option>
+                    <option value="editorial">Editorial</option>
+                    <option value="random">Random</option>
                     <!-- <option value="questions">Question</option> -->
                 </select>
                 <input type="submit" class="btn btn-primary" value="Sort">
@@ -366,6 +368,8 @@
                         <option value="author">Author</option>
                         <option value="newest">Newest</option>
                         <option value="oldest">Oldest</option>
+                        <option value="editorial">Editorial</option>
+                        <option value="random">Random</option>
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
@@ -382,6 +386,8 @@
                         <option value="author">Author</option>
                         <option value="newest">Newest</option>
                         <option value="oldest">Oldest</option>
+                        <option value="editorial">Editorial</option>
+                        <option value="random">Random</option>
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
@@ -398,6 +404,8 @@
                         <option value="author" selected>Author</option>
                         <option value="newest">Newest</option>
                         <option value="oldest">Oldest</option>
+                        <option value="editorial">Editorial</option>
+                        <option value="random">Random</option>
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
@@ -414,6 +422,8 @@
                         <option value="author">Author</option>
                         <option value="newest" selected>Newest</option>
                         <option value="oldest">Oldest</option>
+                        <option value="editorial">Editorial</option>
+                        <option value="random">Random</option>
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
@@ -430,6 +440,44 @@
                         <option value="author">Author</option>
                         <option value="newest">Newest</option>
                         <option value="oldest" selected>Oldest</option>
+                        <option value="editorial">Editorial</option>
+                        <option value="random">Random</option>
+                        <!-- <option value="questions">Question</option> -->
+                    </select>
+                    <input type="submit" class="btn btn-primary" value="Sort">
+                    <a class="btn btn-default" href="/clearfilters">Clear</a>
+                </form>`
+                }
+                else if (filter.value == "editorial"){
+                    search_div.innerHTML = 
+                `<form action="/search" method="POST">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:130px;" oninput="changeopt()">
+                        <option value="title">Title</option>
+                        <option value="genre">Genre</option>
+                        <option value="author">Author</option>
+                        <option value="newest">Newest</option>
+                        <option value="oldest">Oldest</option>
+                        <option value="editorial" selected>Editorial</option>
+                        <option value="random">Random</option>
+                        <!-- <option value="questions">Question</option> -->
+                    </select>
+                    <input type="submit" class="btn btn-primary" value="Sort">
+                    <a class="btn btn-default" href="/clearfilters">Clear</a>
+                </form>`
+                }
+                else if (filter.value == "random"){
+                    search_div.innerHTML = 
+                `<form action="/search" method="POST">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
+                    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:130px;" oninput="changeopt()">
+                        <option value="title">Title</option>
+                        <option value="genre">Genre</option>
+                        <option value="author">Author</option>
+                        <option value="newest">Newest</option>
+                        <option value="oldest">Oldest</option>
+                        <option value="editorial">Editorial</option>
+                        <option value="random" selected>Random</option>
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
