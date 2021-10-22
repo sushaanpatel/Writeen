@@ -77,14 +77,31 @@
                 width: 90%;
                 max-width: 90%;
             }
+            .card{
+                width: 95%;
+                min-width:350px;
+                height: max-content;
+                border: 3px solid #333333;
+                border-radius: 10px;
+              }
+            hr{
+                background-color:white;
+                height: 1.3px;
+            }
+            .body{
+                overflow-y: scroll;
+            }
+            .body::-webkit-scrollbar{
+                display: none;
+            }
         </style>
     </head>
-    <body>
+    <body class="body">
         <!-- Nav Bar and Top Button -->
         <button id="topbutton" class="btn" style="background-color: #424242" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
         <a href="/account"><span class="glyphicon glyphicon-arrow-left" style="color: white;font-size:25px;margin-top:1%;margin-left:1%;"></span></a>
         <!-- Search Bar -->
-        <div id="search_div" style="float: right;margin-right: 1%;max-width:500px;margin-top:1%;">
+        <div id="search_div" style="float: right;max-width:500px;margin-top:1%;">
             <form action="/searchyourposts" method="POST">
                 <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;width:38%;" placeholder="Search">
                 <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
@@ -103,51 +120,59 @@
             <center>
                 <div style="margin-right: 10%;" >
                     <br>
-                    <table style="margin-top:0.5%;max-width:800px;min-width:45px;">
-                        <td><img style="max-width: 100%;max-height:100%;" alt="404 error" src="static/icons/404robot.png"></td>
-                        <td><p style="font-size: 16px;">404 No Posts Found :(<br>Please Check your search again</p><p><li style="font-size: 13px;">Make sure that all words are spelled correctly.</li><li style="font-size: 13px;">Try different keywords.</li><li style="font-size: 13px;">Try more general keywords.</li><li style="font-size: 13px;">Try fewer keywords.</li></p></td>
-                    </table>
+                    <h1 style="margin-top:0.5%;max-width:800px;min-width:45px;">No Products Found, Add Posts by clicking on <span class="glyphicon glyphicon-edit"></span>Create on the account page</h1>
                 </div>
             </center>
             {% else %}
             {% for post in posts %}
-            {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
-            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a style="font-size: 14px;height:max-content;" class="btn btn-danger">{{post.post_netlikes}} Likes</a> <a style="font-size: 14px;height:max-content;" href="/edit/art/{{post.post_id}}" class="btn btn-primary">Edit</a> <a style="font-size: 14px;height:max-content;" href="/delete/post/{{post.post_id}}" class="btn btn-default">Delete</a></b></h3>            
-            {% else %}
-            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a style="font-size: 14px;height:max-content;" class="btn btn-danger">{{post.post_netlikes}} Likes</a> <a style="font-size: 14px;height:max-content;" href="/edit/text/{{post.post_id}}" class="btn btn-primary">Edit</a> <a style="font-size: 14px;height:max-content;" href="/delete/post/{{post.post_id}}" class="btn btn-default">Delete</a></b></h3>
-            {% endif %}
-            {% if len(post.post_creator.split('~')) == 2 %}
-            <span><i>By {{post.post_creator.split('~')[0]}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
-            {% endif %}
-            {% if len(post.post_creator.split('~')) == 1 %}
-            <span><i>By {{post.post_creator}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
-            {% endif %}
-            <hr style="width: 20%; text-align:left;margin-left:0;">
-            {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art %}
-            <img style="max-width: 75%;max-height: 75%;min-width: 20%;min-height: 20%;" src="{{post.post_content}}">
-            <br>
-            {% else %}
-            <pre>{{post.post_content}}</pre>
-            {% endif %}
-            {% if post.post_media != "" %}
-            {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
-            <br>
-            <pre style="font-size:14px;width:80%;word-break:break-all;"><b>Caption : </b>{{post.post_media}}</pre>
-            {% else %}
-            <br>
-            <p>Media Links</p>
-            <pre style="font-size:14px;width:80%;word-break:break-all;">{{post.post_media}}</pre>
-            {% endif %}
-            {% endif %}
-            {% if post.post_citation != "" %}
-            <br>
-            <p>Citation</p>
-            <pre style="font-size: 14px;width:80%;word-break:break-all;">{{post.post_citation}}</pre>
-            {% endif %}
-            <br><hr width="90%" style="margin-left: 0;"><br>
+            <div class="card">
+                <div style="margin-left:10px;padding-top:2px;">
+                    <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}}</b></h3>
+                    {% if len(post.post_creator.split('~')) == 2 %}
+                    <span><i>By {{post.post_creator.split('~')[0]}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
+                    {% endif %}
+                    {% if len(post.post_creator.split('~')) == 1 %}
+                    <span><i>By {{post.post_creator}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
+                    {% endif %}
+                    <hr style="width: 20%; text-align:left;margin-left:0;">
+                    {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art %}
+                    <img style="max-width: 75%;max-height: 75%;min-width: 20%;min-height: 20%;" src="{{post.post_content}}">
+                    <br>
+                    {% else %}
+                    <pre>{{post.post_content}}</pre>
+                    {% endif %}
+                    {% if post.post_media != "" %}
+                    {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
+                    <br>
+                    <pre style="font-size:14px;width:80%;word-break:break-all;"><b>Caption : </b>{{post.post_media}}</pre>
+                    {% else %}
+                    <br>
+                    <p>Media Links</p>
+                    <pre style="font-size:14px;width:80%;word-break:break-all;">{{post.post_media}}</pre>
+                    {% endif %}
+                    {% endif %}
+                    {% if post.post_citation != "" %}
+                    <br>
+                    <p>Citation</p>
+                    <pre style="font-size: 14px;width:80%;word-break:break-all;">{{post.post_citation}}</pre>
+                    {% endif %}
+                    <br><hr width="95%">
+                    <div style="text-align: center;">
+                        <a style="font-size: 18px;height:max-content;" class="btn btn-danger">{{post.post_netlikes}} Likes</a> 
+                        {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art %}
+                        <a style="font-size: 18px;height:max-content;" href="/edit/art/{{post.post_id}}" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></a>
+                        {% else %}
+                        <a style="font-size: 18px;height:max-content;" href="/edit/text/{{post.post_id}}" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></a>
+                        {% endif %} 
+                        <a style="font-size: 18px;height:max-content;" href="/delete/post/{{post.post_id}}" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></a>
+                    </div>
+                    <br>
+                    </div>
+                </div>
+                <br>
             {% endfor %}
             {% endif %}
-        </div>
+            </div>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         {% for x in messages %}

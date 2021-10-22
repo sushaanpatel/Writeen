@@ -82,9 +82,15 @@
                 max-width: 280px;
                 margin-bottom: 6.5%;
             }
+            .body{
+                overflow-y: scroll;
+            }
+            .body::-webkit-scrollbar{
+                display: none;
+            }
         </style>
     </head>
-    <body>
+    <body class="body">
         <!-- Nav Bar and Top Button -->
         <button id="topbutton" class="btn" style="background-color: #424242" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
         <nav class="navbar navbar-inverse navbar-static-top" style="font-family: 'Lato', sans-serif;">

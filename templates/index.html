@@ -81,9 +81,26 @@
                 max-width: 90%;
                 white-space: pre-wrap;
             }
+            .card{
+                width: 99%;
+                min-width:350px;
+                height: max-content;
+                border: 3px solid #333333;
+                border-radius: 10px;
+              }
+            hr{
+                background-color:white;
+                height: 1.3px;
+            }
+            .body{
+                overflow-y: scroll;
+            }
+            .body::-webkit-scrollbar{
+                display: none;
+            }
         </style>
     </head>
-    <body>
+    <body class="body">
         <!-- Nav Bar and Top Button -->
         <button id="topbutton" class="btn" style="background-color: #424242" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
         <nav class="navbar navbar-inverse navbar-static-top" style="font-family: 'Lato', sans-serif;">
@@ -94,7 +111,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>                 
                 </button>
-                <a class="navbar-brand" href="/" style="color: white;font-family: 'Playfair Display', serif;vertical-align: top;"><b>Writeen</b></a>
+                <a class="navbar-brand" href="/explore/" style="color: white;font-family: 'Playfair Display', serif;vertical-align: top;"><b>Writeen</b></a>
               </div>
               <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
@@ -194,7 +211,7 @@
         </div>
         <!-- Search Bar -->
         <div id="search_div" style="float: right;margin-right: 1%;max-width:500px">
-            <form action="/search" method="POST">
+            <form action="/explore/" method="POST">
                 <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:45%;" placeholder="Search">
                 <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                     <option value="title">Title</option>
@@ -210,8 +227,8 @@
                 <a class="btn btn-default" href="/clearfilters">Clear</a>
             </form>
         </div>
-        <br><br>
-        <div style="margin-left:4.5%;">
+        <br><br><br>
+        <div class="container-fluid" style="width: 95%;">
             {% if posts == [] %}
             <center>
             <div style="margin-right: 10%;" >
@@ -224,44 +241,60 @@
             </center>
             {% else %}
             {% for post in posts %}
-            {% if current_user.username in post.post_liked_by.split(',') %}
-            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a href="/like/{{post.post_id}}" class="btn btn-danger"><span style="font-size: 20px;" class="fa">&#xf004;</span></a></b></h3>
-            {% else %}
-            <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}} <a href="/like/{{post.post_id}}" class="btn btn-danger"><span style="font-size: 20px;" class="fa">&#xf08a;</span></a></b></h3>
-            {% endif %}
-            {% if len(post.post_creator.split('~')) == 2 %}
-            <span><i>By {{post.post_creator.split('~')[0]}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
-            {% endif %}
-            {% if len(post.post_creator.split('~')) == 1 %}
-            <span><i>By {{post.post_creator}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
-            {% endif %}
-            <hr style="width: 20%; text-align:left;margin-left:0;">
-            {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
-            <img src="{{post.post_content}}" style="max-width: 70%;max-height: 70%;min-width: 25%;min-height: 25%;">
+            <div class="card">
+                <div style="margin-left:10px;padding-top:2px;">
+                    {% if current_user.username in post.post_liked_by.split(',') %}
+                    <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}}</b></h3>
+                    {% else %}
+                    <h3 style="max-width: max-content;font-size:2.5rem;"><b>{{post.post_title}}</b></h3>
+                    {% endif %}
+                    {% if len(post.post_creator.split('~')) == 2 %}
+                    <span><i>By {{post.post_creator.split('~')[0]}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
+                    {% endif %}
+                    {% if len(post.post_creator.split('~')) == 1 %}
+                    <span><i>By {{post.post_creator}}</i>, Genre : {{post.post_genre}}, {{post.post_publishtime}}</span>
+                    {% endif %}
+                    <hr style="width: 20%; text-align:left;margin-left:0;">
+                    {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
+                    <img src="{{post.post_content}}" style="max-width: 70%;max-height: 70%;min-width: 25%;min-height: 25%;">
+                    <br>
+                    {% else %}
+                    <pre>{{post.post_content}}</pre>
+                    {% endif %}
+                    {% if post.post_media != "" %}
+                    {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
+                    <br>
+                    <pre><b>Caption : </b>{{post.post_media}}</pre>
+                    <br>
+                    {% else %}
+                    <br>
+                    <p>Media Links</p>
+                    <pre style="font-size:14px;width:80%;word-break:break-all;">{{post.post_media}}</pre>
+                    <br>
+                    {% endif %}
+                    {% endif %}
+                    {% if post.post_citation != "" %}
+                    <p>Citation</p>
+                    <pre style="font-size: 14px;width:80%;word-break:break-all;">{{post.post_citation}}</pre>
+                    {% endif %}
+                    <br><hr width="95%" style="background-color: white;">
+                    <div style="text-align: center;">
+                        {% if current_user.username in post.post_liked_by.split(',') %}
+                        <a href="/like/{{post.post_id}}" class="btn btn-danger"><span style="font-size: 20px;" class="fa">&#xf004;</span></a>
+                        {% else %}
+                        <a href="/like/{{post.post_id}}" class="btn btn-danger"><span style="font-size: 20px;" class="fa">&#xf08a;</span></a>
+                        {% endif %}
+                    </div>
+                    <br>
+                </div>
+            </div>
             <br>
-            {% else %}
-            <pre>{{post.post_content}}</pre>
-            {% endif %}
-            {% if post.post_media != "" %}
-            {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art%}
-            <br>
-            <pre><b>Caption : </b>{{post.post_media}}</pre>
-            <br>
-            {% else %}
-            <br>
-            <p>Media Links</p>
-            <pre style="font-size:14px;width:80%;word-break:break-all;">{{post.post_media}}</pre>
-            <br>
-            {% endif %}
-            {% endif %}
-            {% if post.post_citation != "" %}
-            <p>Citation</p>
-            <pre style="font-size: 14px;width:80%;word-break:break-all;">{{post.post_citation}}</pre>
-            {% endif %}
-            <br><hr width="90%" style="margin-left: 0;"><br>
             {% endfor %}
             {% endif %}
-            <a href="/home" onclick="scroll_reset()" class="btn btn-default" style="width: 50%;margin-left:20%;">Load More Posts</a><br><br>
+            <br>
+            <!-- {% if msg == "searched" %} -->
+            <center><a href="/home" onclick="scroll_reset()" class="btn btn-default" style="font-size:25px;border-radius:100%;height:50px;"><span class='glyphicon glyphicon-repeat' style="margin-top: 5px;"></span></a> </center><br><br>
+            <!-- {% endif %} -->
         </div>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -325,7 +358,7 @@
                 var filter = document.getElementById('filter');
                 if (filter.value == "genre"){
                     search_div.innerHTML = 
-                `<form action="/search" method="POST">
+                `<form action="/explore/" method="POST">
                     <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;">
                         <option value='Fiction'>Fiction*</option>
                         <option value='Comedy'>Comedy*</option>        
@@ -380,7 +413,7 @@
                 }
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
-                `<form action="/search" method="POST">
+                `<form action="/explore/" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:45%;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:75px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
@@ -398,7 +431,7 @@
                 }
                 else if (filter.value == "author"){
                     search_div.innerHTML = 
-                `<form action="/search" method="POST">
+                `<form action="/explore/" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:45%;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:75px;" oninput="changeopt()">
                         <option value="title">Title</option>
@@ -416,7 +449,7 @@
                 }
                 else if (filter.value == "newest"){
                     search_div.innerHTML = 
-                `<form action="/search" method="POST">
+                `<form action="/explore/" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:130px;" oninput="changeopt()">
                         <option value="title">Title</option>
@@ -434,7 +467,7 @@
                 }
                 else if (filter.value == "oldest"){
                     search_div.innerHTML = 
-                `<form action="/search" method="POST">
+                `<form action="/explore/" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:130px;" oninput="changeopt()">
                         <option value="title">Title</option>
@@ -452,7 +485,7 @@
                 }
                 else if (filter.value == "editorial"){
                     search_div.innerHTML = 
-                `<form action="/search" method="POST">
+                `<form action="/explore/" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:130px;" oninput="changeopt()">
                         <option value="title">Title</option>
@@ -470,7 +503,7 @@
                 }
                 else if (filter.value == "random"){
                     search_div.innerHTML = 
-                `<form action="/search" method="POST">
+                `<form action="/explore/" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:130px;" oninput="changeopt()">
                         <option value="title">Title</option>
@@ -488,7 +521,7 @@
                 }
                 //else if (filter.value == "questions"){
                 //    search_div.innerHTML = 
-                //`<form action="/search" method="POST">
+                //`<form action="/explore/" method="POST">
                 //    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;" placeholder="Search">
                 //    <select id="filter" name="filter" style="border-radius: 5px;border: 0px;" oninput="changeopt()">
                 //        <option value="title">Title</option>
