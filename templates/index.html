@@ -115,7 +115,7 @@
               </div>
               <div class="collapse navbar-collapse" id="myNavbar">
               <ul class="nav navbar-nav">
-                <li><a href="/home" onclick="scroll_reset()" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-search"></span> Explore</a></li>
+                <li><a href="/explore/" onclick="scroll_reset()" style="color: white;font-weight: 400;"><span class="glyphicon glyphicon-search"></span> Explore</a></li>
                 <li><a href="/aboutus" style="color: white;font-weight: 400;">About Us</a></li>
               </ul>
               <ul class="nav navbar-nav navbar-right">
@@ -210,21 +210,20 @@
             </div>
         </div>
         <!-- Search Bar -->
-        <div id="search_div" style="float: right;margin-right: 1%;max-width:500px">
-            <form action="/search" method="POST">
-                <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:45%;" placeholder="Search">
+        <div id="search_div" style="float: right;margin-right: 1%;max-width:500px;text-align:right;margin-right:10px;">
+            <form action="/explore/" method="POST">
+                <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:42%;" placeholder="Search">
                 <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
                     <option value="author">Author</option>
-                    <option value="newest">Newest</option>
                     <option value="oldest">Oldest</option>
                     <option value="editorial">Editorial</option>
                     <option value="random">Random</option>
                     <!-- <option value="questions">Question</option> -->
                 </select>
                 <input type="submit" class="btn btn-primary" value="Sort">
-                <a class="btn btn-default" href="/clearfilters">Clear</a>
+                <a class="btn btn-default" href="/explore/">Clear</a>
             </form>
         </div>
         <br><br><br>
@@ -292,9 +291,9 @@
             {% endfor %}
             {% endif %}
             <br>
-            <!-- {% if msg == "searched" %} -->
-            <center><a href="/home" onclick="scroll_reset()" class="btn btn-default" style="font-size:25px;border-radius:100%;height:50px;"><span class='glyphicon glyphicon-repeat' style="margin-top: 5px;"></span></a> </center><br><br>
-            <!-- {% endif %} -->
+            {% if msg == "searched" %}
+            <center><a href="/explore/" onclick="scroll_reset()" class="btn btn-default" style="font-size:25px;border-radius:100%;height:50px;"><span class='glyphicon glyphicon-repeat' style="margin-top: 5px;"></span></a> </center><br><br>
+            {% endif %}
         </div>
         {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -408,13 +407,13 @@
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters/index">Clear</a>
+                    <a class="btn btn-default" href="/explore/">Clear</a>
                 </form>`
                 }
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
                 `<form action="/explore/" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:45%;" placeholder="Search">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:42%;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:75px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
                         <option value="genre">Genre</option>
@@ -426,13 +425,13 @@
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters">Clear</a>
+                    <a class="btn btn-default" href="/explore/">Clear</a>
                 </form>`
                 }
                 else if (filter.value == "author"){
                     search_div.innerHTML = 
                 `<form action="/explore/" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:45%;" placeholder="Search">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:42%;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:75px;" oninput="changeopt()">
                         <option value="title">Title</option>
                         <option value="genre">Genre</option>
@@ -444,7 +443,7 @@
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters">Clear</a>
+                    <a class="btn btn-default" href="/explore/">Clear</a>
                 </form>`
                 }
                 else if (filter.value == "newest"){
@@ -462,7 +461,7 @@
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters">Clear</a>
+                    <a class="btn btn-default" href="/explore/">Clear</a>
                 </form>`
                 }
                 else if (filter.value == "oldest"){
@@ -480,7 +479,7 @@
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters">Clear</a>
+                    <a class="btn btn-default" href="/explore/">Clear</a>
                 </form>`
                 }
                 else if (filter.value == "editorial"){
@@ -498,7 +497,7 @@
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters">Clear</a>
+                    <a class="btn btn-default" href="/explore/">Clear</a>
                 </form>`
                 }
                 else if (filter.value == "random"){
@@ -516,7 +515,7 @@
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters">Clear</a>
+                    <a class="btn btn-default" href="/explore/">Clear</a>
                 </form>`
                 }
                 //else if (filter.value == "questions"){

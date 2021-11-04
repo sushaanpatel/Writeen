@@ -99,11 +99,11 @@
     <body class="body">
         <!-- Nav Bar and Top Button -->
         <button id="topbutton" class="btn" style="background-color: #424242" onclick="topFunction()"><span style="font-size: 18px;" class="glyphicon glyphicon-chevron-up"></span></button>
-        <a href="/account"><span class="glyphicon glyphicon-arrow-left" style="color: white;font-size:25px;margin-top:1%;margin-left:1%;"></span></a>
+        <a href="/account"><span class="glyphicon glyphicon-arrow-left" style="color: white;font-size:25px;margin-top:2%;margin-left:1%;"></span></a>
         <!-- Search Bar -->
-        <div id="search_div" style="float: right;max-width:500px;margin-top:1%;">
-            <form action="/searchyourposts" method="POST">
-                <input type="searchyourposts" id="search_bar" name="search_bar" style="border-radius: 5px;width:38%;" placeholder="Search">
+        <div id="search_div" style="float: right;max-width:500px;margin-top:2%;text-align:right;margin-right:10px;">
+            <form action="/yourposts" method="POST">
+                <input type="text" id="search_bar" name="search_bar" style="border-radius: 5px;width:50%;" placeholder="Search">
                 <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                     <option value="title">Title</option>
                     <option value="genre">Genre</option>
@@ -111,7 +111,6 @@
                     <!-- <option value="questions">Question</option> -->
                 </select>
                 <input type="submit" class="btn btn-primary" value="Sort">
-                <a class="btn btn-default" href="/clearfilters">Clear</a>
             </form>
         </div>
         <br><br><br>
@@ -173,6 +172,9 @@
             {% endfor %}
             {% endif %}
             </div>
+            {% if msg == "searched" %}
+            <center><a href="/yourposts" class="btn btn-default" style="font-size:25px;border-radius:100%;height:50px;"><span class='glyphicon glyphicon-repeat' style="margin-top: 5px;"></span></a> </center><br><br>
+            {% endif %}
         {% with messages = get_flashed_messages() %}
         {% if messages %}
         {% for x in messages %}
@@ -221,7 +223,7 @@
                 var filter = document.getElementById('filter');
                 if (filter.value == "genre"){
                     search_div.innerHTML = 
-                `<form action="/searchyourposts" method="POST">
+                `<form action="/yourposts" method="POST">
                     <select id="search_bar" name="search_bar" style="border-radius: 5px;border: 0px;">
                         <option value='Fiction'>Fiction*</option>
                         <option value='Comedy'>Comedy*</option>        
@@ -267,13 +269,12 @@
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters/index">Clear</a>
                 </form>`
                 }
                 else if (filter.value == "title"){
                     search_div.innerHTML = 
-                `<form action="/searchyourposts" method="POST">
-                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:38%;" placeholder="Search">
+                `<form action="/yourposts" method="POST">
+                    <input type="search" id="search_bar" name="search_bar" style="border-radius: 5px;width:50%;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:60px;" oninput="changeopt()">
                         <option value="title" selected>Title</option>
                         <option value="genre">Genre</option>
@@ -281,12 +282,12 @@
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters">Clear</a>
+                    
                 </form>`
                 }
                 else if (filter.value == "all"){
                     search_div.innerHTML = 
-                `<form action="/searchyourposts" method="POST">
+                `<form action="/yourposts" method="POST">
                     <input type="search" id="search_bar" name="search_bar" style="border-radius: 0px;width:0;visibility: hidden;height:0px;" placeholder="Search">
                     <select id="filter" name="filter" style="border-radius: 5px;border: 0px;width:130px;" oninput="changeopt()">
                         <option value="title">Title</option>
@@ -295,7 +296,6 @@
                         <!-- <option value="questions">Question</option> -->
                     </select>
                     <input type="submit" class="btn btn-primary" value="Sort">
-                    <a class="btn btn-default" href="/clearfilters">Clear</a>
                 </form>`
                 }
                 //else if (filter.value == "questions"){

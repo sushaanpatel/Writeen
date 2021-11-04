@@ -7,7 +7,7 @@ import dotenv
 from datetime import datetime
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask import Flask, render_template, url_for, request, redirect, flash
+from flask import Flask, render_template, url_for, request, redirect, flash, session
 from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from db_init import db, app, Users, Posts, ask_us_form
@@ -27,55 +27,22 @@ def load_user(user_id):
 def unauthorized():
   return redirect('/login')
 
-global ypcond
-ypcond = 0
-global incond
-incond = 0
-global errmsg
-errmsg = ""
-global ermsg
-ermsg =""
-global errormsg
-errormsg = ""
-global posts_list
-posts_list = []
-global current_page
-current_page = ""
-global liked_by_list
-liked_by_list = []
-global yourposts_list
-yourposts_list = []
-global static_list
-static_list = []
+def check(key, val):
+  if session.get(key) == None:
+    session[key] = val
 
-@app.route('/home')
-def home():
-  global ypcond
-  ypcond = 0
-  global incond
-  incond = 0
-  global posts_list
-  posts_list = []
-  global yourposts_list
-  yourposts_list = []
-  global static_list 
-  static_list = []
-  return redirect('/explore')
-
-# @app.route('/like/list/<int:post_id>')
-# def like_list(post_id):
-#   global liked_by_list
-#   liked_by_list = []
-#   x = Posts.query.get(post_id)
-#   liked_by_list = x.post_liked_by.split(',')
-#   return redirect('/yourposts')
+@app.before_first_request
+def before():
+  session.clear()
+  check('errmsg', "")
+  check('ermsg', "")
+  check('errormsg', "")
+  check('currentp',"")
+  check('static_list', [])
 
 @app.route('/like/<int:post_id>')
 def like(post_id):
   try:
-    global incond
-    global current_page
-    incond = 2
     if current_user.is_authenticated == True:
       Posts.query.session.close()
       post = Posts.query.get(post_id)
@@ -102,48 +69,23 @@ def like(post_id):
         db.session.commit()
     else:
       flash('6')
-    return redirect('/explore')
+    return redirect('/explore/l=1&filter=none')
   except:
     flash('err')
-    return redirect(current_page)
-
-@app.route('/clearfilters')
-def clear():
-  global posts_list
-  global yourposts_list
-  global current_page
-  global ypcond
-  global incond
-  Users.query.session.close()
-  Posts.query.session.close()
-  if current_page == "/yourposts":
-    yourposts_list = []
-    ypcond = 0
-  else:
-    posts_list = []
-    incond = 0
-  return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/')
 def index():
   try:
-    global current_page
-    current_page = "/"
-    global yourposts_list
-    yourposts_list = []
-    global posts_list
-    posts_list = []
-    global static_list
-    static_list = []
+    session['currentp'] = "/"
     return render_template("about_us.html")
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/aboutus', methods = ["POST", "GET"])
 def aboutus():
   try:
-    global current_page
     if request.method == "POST":
       if current_user.is_authenticated == False:
         flash('6')
@@ -160,82 +102,18 @@ def aboutus():
       return render_template('about_us2.html')
   except:
     flash('err')
-    return redirect(current_page)  
+    return redirect(session['currentp'])  
 
-@app.route('/filter/<string:catagory>')
-def filterhome(catagory):
-  try:
-    global incond
-    incond = 1
-    global posts_list
-    global current_page
-    current_page = '/'
-    global static_list
-    Posts.query.session.close()
-    static_list = []
-    posts_list = []
-    search = catagory
-    query = Posts.query.filter_by(post_genre=search).all()
-    for post in query:
-      posts_list.append(post)
-    posts_list = posts_list[::-1]
-    for i in posts_list:
-      static_list.append(i.post_id)
-    return redirect('/explore')
-  except:
-    flash('err')
-    return redirect(current_page)
+#add with paginate and upgraded UI
 
-#try google login, comment, report post, profile pic 
-@app.route('/explore')
-def explore():
+#try comment, report post, profile pic 
+@app.route('/explore/', defaults={'l':0,'fil':None}, methods=["POST","GET"])
+@app.route('/explore/l=<int:l>&filter=<string:fil>', methods=["POST","GET"])
+def explore(l, fil):
   try:
-    global incond
-    global current_page
-    current_page = "/explore"
-    global yourposts_list
-    yourposts_list = []
-    global posts_list
-    global static_list
+    session['currentp'] = "/explore/"
     art_list = ["png", "jpg", "jpeg", "gif"]
-    if incond == 0:
-      posts_list = []
-      Posts.query.session.close()
-      max_id = Posts.query.all()
-      random_list = []
-      for i in max_id:
-        random_list.append(i.post_id)
-      count = 0
-      static_list = random_list
-      while count < len(max_id):
-        post = Posts.query.filter_by(post_id = random_list[count]).first()
-        posts_list.append(post)
-        count += 1
-    if incond == 2:
-      posts_list = []
-      count1 = 0
-      while count1 < len(static_list):
-        post = Posts.query.filter_by(post_id = static_list[count1]).first()
-        posts_list.append(post)
-        count1 += 1
-    posts_list = posts_list[::-1]
-    return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list)
-  except:
-    flash('err')
-    return redirect(current_page)
-
-#add newest and oldest
-@app.route('/search', methods=["POST", "GET"])
-def filter():
-  try:
-    global posts_list
-    global current_page
-    global incond
-    global static_list
-    incond = 1
-    posts_list = []  
     if request.method == "POST":
-      time.sleep(0.5)
       posts_list = []
       search = request.form['search_bar'].lower()
       filters = request.form['filter']
@@ -257,11 +135,6 @@ def filter():
         query = Posts.query.all()
         for i in query:
           posts_list.append(i)
-        posts_list = posts_list[::-1]
-      if filters == "newest":
-        query = Posts.query.all()
-        for i in query:
-          posts_list.append(i)
       if filters == "editorial":
         query = Posts.query.all()
         for i in query:
@@ -279,20 +152,54 @@ def filter():
           posts_list.append(post)
           count += 1
       posts_list = posts_list[::-1]
+      session['static_list'] = []
       for i in posts_list:
-        static_list.append(i.post_id)
-      return redirect('/explore')
+        session['static_list'].append(i.post_id)
+      posts_list = posts_list[::-1]
+      session['msg'] = "searched"
+      return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list, msg = session['msg'])
+    else:
+      if l == 1:
+        posts_list = []
+        count1 = 0
+        while count1 < len(session['static_list']):
+          post = Posts.query.filter_by(post_id = session['static_list'][count1]).first()
+          posts_list.append(post)
+          count1 += 1
+        posts_list = posts_list[::-1]
+        return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list, msg = session['msg'])
+      if l == 2:
+        session['static_list'] = []
+        posts_list = []
+        query = Posts.query.filter_by(post_genre=fil).all()
+        for post in query:
+          posts_list.append(post)
+        posts_list = posts_list[::-1]
+        for i in posts_list:
+          session['static_list'].append(i.post_id)
+        session['msg'] = "searched"
+        return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list, msg = session['msg'])
+      posts_list = []
+      max_id = Posts.query.all()
+      random_list = []
+      for i in max_id:
+        random_list.append(i.post_id)
+      count = 0
+      session['static_list'] = random_list
+      while count < len(max_id):
+        post = Posts.query.filter_by(post_id = random_list[count]).first()
+        posts_list.append(post)
+        count += 1
+      posts_list = posts_list[::-1]
+      session['msg'] = ""
+      return render_template('index.html', current_user = current_user, posts=posts_list, len = len, art = art_list, msg = session['msg'])
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/signup', methods=["POST","GET"])
 def signup():
   try:
-    global errmsg
-    global yourposts_list
-    global current_page
-    yourposts_list = []
     if request.method == "POST":
       new_name = request.form['new_username'].lower()
       new_pass = request.form['new_password']
@@ -300,75 +207,62 @@ def signup():
       Users.query.session.close()
       new_rememeber = True if request.form.get('new_remember_me') else False
       if new_name == "" and new_pass == "" and new_email == "":
-        errmsg = ""
-        errmsg = "Please enter your Credentails"
+        session['errmsg'] = "Please enter your Credentails"
         return redirect('/signup')
       if new_name != "" and new_pass == "" and new_email =="":
-        errmsg = ""
-        errmsg = "Please enter your Credentails"
+        session['errmsg'] = "Please enter your Credentails"
         return redirect('/signup')
       if new_name != "" and new_pass != "" and new_email == "":
-        errmsg = ""
-        errmsg = "Please enter your Credentails"
+        session['errmsg'] = "Please enter your Credentails"
         return redirect('/signup')
       if new_name == "" and new_pass == "" and new_email != "":
-        errmsg = ""
-        errmsg = "Please enter your Credentails"
+        session['errmsg'] = "Please enter your Credentails"
         return redirect('/signup')
       if new_name == "" and new_pass != "" and new_email != "":
-        errmsg = ""
-        errmsg = "Please enter your Credentails"
+        session['errmsg'] = "Please enter your Credentails"
         return redirect('/signup')
       if '~' in new_name:
-        errmsg = ""
-        errmsg = "'~' is not allowed in username"
+        session['errmsg'] = "'~' is not allowed in username"
         return redirect('/signup')
       if new_name == "anonymous":
-        errmsg = ""
-        errmsg = "'Anonymous' can not used as a username"
+        session['errmsg'] = "'Anonymous' can not used as a username"
         return redirect('/signup')
       x = Users.query.all() 
       for i in x:
         if new_name == i.username:
-          errmsg = ""
-          errmsg = "Username Already Taken"
+          session['errmsg'] = "Username Already Taken"
           return redirect('/signup')
       y = Users(username = new_name, password = generate_password_hash(new_pass, method = "sha256"), email = new_email)
       db.session.add(y)
       db.session.commit()
       user = Users.query.filter_by(username = new_name).first()
       login_user(user, remember=new_rememeber)
-      return redirect('/home')
+      return redirect('/explore/')
     else:
-      return render_template('signup.html', errmsg=errmsg)
+      return render_template('signup.html', errmsg=session['errmsg'])
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/login', methods=["POST", "GET"])
 def login():
   try:
-    global ermsg
-    global current_page
-    global yourposts_list
-    yourposts_list = []
     if current_user.is_authenticated == True:
       return redirect('/explore')
     if request.method == "POST":
-      global name
       name = request.form['acc_username'].lower()
       password = request.form['acc_password']
       remember = True if request.form.get('remember_me') else False
       Users.query.session.close()
       x = Users.query.all()
       if name == "" and password == "":
-        ermsg = "Please enter your Credentails"
+        session['ermsg'] = "Please enter your Credentails"
         return redirect('/login')
       if name != "" and password == "":
-        ermsg = "Please enter your Credentails"
+        session['ermsg'] = "Please enter your Credentails"
         return redirect('/login')
       if name == "" and password != "":
-        ermsg = "Please enter your Credentails"
+        session['ermsg'] = "Please enter your Credentails"
         return redirect('/login')
       user_list = []
       for i in x:
@@ -377,20 +271,18 @@ def login():
         user = Users.query.filter_by(username = name).first()
         if check_password_hash(user.password, password): #checks passwords
           login_user(user, remember=remember)
-          return redirect('/home')
+          return redirect('/explore/')
         else:
-          ermsg = ""
-          ermsg = "Password is incorret"
+          session['ermsg'] = "Password is incorret"
           return redirect('/login')
       else:
-        ermsg = ""
-        ermsg = "Account not found"
+        session['ermsg'] = "Account not found"
         return redirect('/login')
     else:
-      return render_template('login.html', errmsg=ermsg)
+      return render_template('login.html', errmsg=session['ermsg'])
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/logout')
 @login_required
@@ -403,8 +295,6 @@ def logout():
 @login_required
 def create_text():
   try:
-    global current_page
-    global errmsg
     if request.method == "POST":
       title = request.form["post_title"]
       genre = request.form.get("post_genre")
@@ -423,15 +313,12 @@ def create_text():
       return redirect('/yourposts')
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/create/art', methods=["POST", "GET"])
 @login_required
 def create_art():
   try:
-    global current_page
-    global errmsg
-    global filelink
     if request.method == "POST":
       title = request.form["post_title"]
       genre = request.form.get("post_genre")
@@ -442,6 +329,7 @@ def create_art():
       creator = current_user.username
       x = datetime.now()
       allowed = ['png','jpg','jpeg','gif']
+      filelink = None
       if anonymity == "yes":
         creator = "Anonymous~" + current_user.username
       y = content.filename.split('.')
@@ -453,7 +341,7 @@ def create_art():
           os.remove("static/" + filename)
       else:
         flash("2")
-        return redirect(current_page)
+        return redirect(session['currentp'])
       Posts.query.session.close()
       post = Posts(post_title = title, post_genre = genre, post_content = filelink.link, post_media = media, post_citation = citation, post_anonymity = anonymity, post_creator = creator, post_publishtime = x.date(), post_liked_by = f"{current_user.username}", post_netlikes = 1)
       db.session.add(post)
@@ -461,66 +349,22 @@ def create_art():
       return redirect('/yourposts')
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/account')
 @login_required
 def acc():
   try:
-    global current_page
-    global ypcond 
-    global errormsg
-    global yourposts_list
-    ypcond = 0
-    yourposts_list = []
-    current_page = "/account"
-    Users.query.session.close()
-    Posts.query.session.close()
-    return render_template('account.html', current_user = current_user, errmsg=errormsg)
+    session['currentp'] = "/account"
+    return render_template('account.html', current_user = current_user)
   except:
     flash('err')
-    return redirect(current_page)
-
-@app.route('/searchyourposts', methods = ["POST"])
-def searchposts():
-  try:
-    global ypcond
-    global yourposts_list
-    global current_page
-    if request.method == "POST":
-      ypcond = 1
-      yourposts_list = []
-      search = request.form['search_bar'].lower()
-      filters = request.form['filter']
-      Posts.query.session.close()
-      if filters == "title":
-        query = Posts.query.filter(Posts.post_title.like(f"%{search}%")).all()
-        for post in query:
-          if current_user.username in post.post_creator.split('~'):
-            yourposts_list.append(post)
-      if filters == "genre":
-        query = Posts.query.filter_by(post_genre=search).all()
-        for post in query:
-          if current_user.username in post.post_creator.split('~'):
-            yourposts_list.append(post)
-      if filters == "all":
-        query = Posts.query.filter_by(post_creator = current_user.username).all()
-        for post in query:
-          yourposts_list.append(post)
-        query2 = Posts.query.filter_by(post_creator = "Anonymous~" + current_user.username).all()
-        for post2 in query2:
-          yourposts_list.append(post2)
-        yourposts_list = yourposts_list[::-1]
-      return redirect('/yourposts')
-  except:
-    flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/change/username', methods = ["POST", "GET"])
 @login_required
 def changeusername():
   try:
-    global current_page
     if request.method == "POST":
       Users.query.session.close()
       new_username = request.form['new_username'].lower()
@@ -540,13 +384,12 @@ def changeusername():
       return redirect('/account')
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/change/password', methods = ["POST", "GET"])
 @login_required
 def changepassword():
   try:
-    global current_page
     if request.method == "POST":
       Users.query.session.close()
       current_pass = request.form["current_pass"]
@@ -562,18 +405,12 @@ def changepassword():
         return redirect('/account')
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/edit/text/<int:post_id>', methods = ["POST", "GET"])
 @login_required
 def edit_text(post_id):
   try:
-    global current_page
-    global yourposts_list 
-    yourposts_list = []
-    global ypcond
-    ypcond = 0
-    global err
     if request.method == "POST":
       Posts.query.session.close()
       title = request.form["post_title"]
@@ -585,13 +422,13 @@ def edit_text(post_id):
       creator = current_user.username
       x = datetime.now()
       if title == "" and content == "":
-        err = "Title and Content can't be empty"
+        session['errormsg'] = "Title and Content can't be empty"
         return redirect(f'/edit/text/{post_id}')
       if title != "" and content =="":
-        err = "Content can't be empty"
+        session['errormsg'] = "Content can't be empty"
         return redirect(f'/edit/text/{post_id}')
       if title == "" and content != "":
-        err = "Title can't be empty"
+        session['errormsg'] = "Title can't be empty"
         return redirect(f'/edit/text/{post_id}')
       if anonymity == "yes":
         creator = "Anonymous~" + current_user.username
@@ -608,21 +445,15 @@ def edit_text(post_id):
       return redirect('/yourposts')
     else:
       edit_post = Posts.query.get(post_id)
-      return render_template('edit_text.html', post = edit_post, err=err)
+      return render_template('edit_text.html', post = edit_post, err=session['errormsg'])
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/edit/art/<int:post_id>', methods = ["POST", "GET"])
 @login_required
 def edit_art(post_id):
   try:
-      global current_page
-      global yourposts_list 
-      yourposts_list = []
-      global ypcond
-      ypcond = 0
-      global err
       if request.method == "POST":
         Posts.query.session.close()
         title = request.form["post_title"]
@@ -633,7 +464,7 @@ def edit_art(post_id):
         creator = current_user.username
         x = datetime.now()
         if title == "":
-          err = "Title can't be empty"
+          session['errormsg'] = "Title can't be empty"
           return redirect(f'/edit/art/{post_id}')
         if anonymity == "yes":
           creator = "Anonymous~" + current_user.username
@@ -649,44 +480,54 @@ def edit_art(post_id):
         return redirect('/yourposts')
       else:
         edit_post = Posts.query.get(post_id)
-        return render_template('edit_art.html', post = edit_post, err = err)
+        return render_template('edit_art.html', post = edit_post, err = session['errormsg'])
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/delete/post/<int:post_id>')
 @login_required
 def deletepost(post_id):
   try:
-    global current_page
-    global yourposts_list 
-    yourposts_list = []
-    global ypcond
-    ypcond = 0
-    Posts.query.session.close()
     delete_post = Posts.query.get(post_id)
     db.session.delete(delete_post)
     db.session.commit()
     return redirect('/yourposts')
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
-#edit art js error
-@app.route('/yourposts')
+@app.route('/yourposts', methods = ["POST", "GET"])
 @login_required
 def yourposts():
   try:
-    global liked_by_list
-    global ypcond
-    global current_page
-    current_page = "/yourposts"
-    global yourposts_list
+    session['currentp'] = "/yourposts"
     art_list = ["png", "jpg", "jpeg", "gif"]
-    global err
-    err = ""
-    Posts.query.session.close()
-    if ypcond == 0:
+    if request.method == "POST":
+      yourposts_list = []
+      search = request.form['search_bar'].lower()
+      filters = request.form['filter']
+      if filters == "title":
+        query = Posts.query.filter(Posts.post_title.like(f"%{search}%")).all()
+        for post in query:
+          if current_user.username in post.post_creator.split('~'):
+            yourposts_list.append(post)
+      if filters == "genre":
+        query = Posts.query.filter_by(post_genre=search).all()
+        for post in query:
+          if current_user.username in post.post_creator.split('~'):
+            yourposts_list.append(post)
+      if filters == "all":
+        query = Posts.query.filter_by(post_creator = current_user.username).all()
+        for post in query:
+          yourposts_list.append(post)
+        query2 = Posts.query.filter_by(post_creator = "Anonymous~" + current_user.username).all()
+        for post2 in query2:
+          yourposts_list.append(post2)
+      yourposts_list = yourposts_list[::-1]
+      msg = "searched"
+      return render_template('posts.html', posts = yourposts_list, art = art_list, len = len, msg = msg)  
+    else:
       yourposts_list = []
       query = Posts.query.filter_by(post_creator = current_user.username).all()
       for post in query:
@@ -695,17 +536,16 @@ def yourposts():
       for post2 in query2:
         yourposts_list.append(post2)
       yourposts_list = yourposts_list[::-1]
-    return render_template('posts.html', posts=yourposts_list, art = art_list,len = len, like_list = liked_by_list)
+      msg = ""
+    return render_template('posts.html', posts = yourposts_list, art = art_list, len = len, msg = msg)
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 @app.route('/delete/account')
 @login_required
 def deleteacc():
   try:
-    global current_page
-    Users.query.session.close()
     delete = Users.query.filter_by(username = current_user.username).first()
     deletepost = Posts.query.filter_by(post_creator = current_user.username).all()
     logout_user()
@@ -717,7 +557,7 @@ def deleteacc():
     return redirect('/signup')
   except:
     flash('err')
-    return redirect(current_page)
+    return redirect(session['currentp'])
 
 if __name__ == "__main__":
   app.run(debug=True)
