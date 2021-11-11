@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, render_template, url_for, request, redirect, flash, session
 from flask_login import LoginManager, UserMixin, login_required, current_user, login_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
-from db_init import db, app, Users, Posts, ask_us_form
+from db_init import db, app, Users, Posts, ask_us_form, Comments
 
 dotenv.load_dotenv()
 client_id = os.environ.get('IMGUR_ID')
@@ -73,6 +73,32 @@ def like(post_id):
   except:
     flash('err')
     return redirect(session['currentp'])
+
+@app.route('/comment/<int:p_id>', methods=['POST'])
+def comment_on_post(p_id):
+  # try:
+  if current_user.is_authenticated == True:
+    if request.method == 'POST':
+      comment = request.form['comment']
+      date = datetime.now()
+      new = Comments(comment = comment, user_id = current_user.id, username = current_user.username, p_id = p_id, date = date.date())
+      db.session.add(new)
+      db.session.commit()
+      return redirect('/explore/l=1&filter=none')
+  else:
+    flash('6')
+    return redirect('/explore/l=1&filter=none')
+
+@app.route('/delete/comment/<int:com_id>')
+def del_com(com_id):
+  try:
+    comment = Comments.query.get(com_id)
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect('/explore/l=1&filter=none')
+  except:
+    flash('err')
+    return redirect('/explore/l=1&filter=none')
 
 @app.route('/')
 def index():

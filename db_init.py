@@ -33,6 +33,17 @@ class Posts(db.Model):
   post_publishtime = db.Column(db.String(50), nullable = False)
   post_liked_by = db.Column(db.Text(60000), nullable = False) 
   post_netlikes = db.Column(db.Integer, nullable = False)
+  comments = db.relationship('Comments',backref='post',lazy=True, viewonly = True)
+
+class Comments(db.Model):
+  users = db.relationship(Users)
+  posts = db.relationship(Posts)
+  com_id = db.Column(db.Integer, primary_key = True)
+  user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable = False)
+  username = db.Column(db.String(30), nullable = False)
+  p_id = db.Column(db.Integer, db.ForeignKey('posts.post_id'), nullable = False)
+  date = db.Column(db.String(50), nullable = False)
+  comment = db.Column(db.String(1000), nullable = False)
 
 class ask_us_form(db.Model):
   entry_id = db.Column(db.Integer, primary_key = True)

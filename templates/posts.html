@@ -157,6 +157,7 @@
                     {% endif %}
                     <br><hr width="95%">
                     <div style="text-align: center;">
+                        <a style="font-size: 18px;height:max-content;" class="btn btn-default">{{post.comments|length}} Comments</a>
                         <a style="font-size: 18px;height:max-content;" class="btn btn-danger">{{post.post_netlikes}} Likes</a> 
                         {% if post.post_content.split('.')[(len(post.post_content.split('.'))-1)] in art %}
                         <a style="font-size: 18px;height:max-content;" href="/edit/art/{{post.post_id}}" class="btn btn-primary"><span class="glyphicon glyphicon-pencil"></span></a>

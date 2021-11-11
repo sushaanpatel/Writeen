@@ -278,11 +278,28 @@
                     {% endif %}
                     <br><hr width="95%" style="background-color: white;">
                     <div style="text-align: center;">
+                        <button class="btn" data-toggle="collapse" data-target="#{{post.post_id}}"><span style="font-size: 20px;color:black;" class="glyphicon glyphicon-comment"></span></button>
                         {% if current_user.username in post.post_liked_by.split(',') %}
-                        <a href="/like/{{post.post_id}}" class="btn btn-danger"><span style="font-size: 20px;" class="fa">&#xf004;</span></a>
+                        <a href="/like/{{post.post_id}}" class="btn btn-danger"><span style="font-size: 20px;padding:3px;" class="fa">&#xf004;</span></a>
                         {% else %}
-                        <a href="/like/{{post.post_id}}" class="btn btn-danger"><span style="font-size: 20px;" class="fa">&#xf08a;</span></a>
+                        <a href="/like/{{post.post_id}}" class="btn btn-danger"><span style="font-size: 20px;padding:3px;" class="fa">&#xf08a;</span></a>
                         {% endif %}
+                        <!-- add bootstrap and display comments -->
+                        <center>
+                        <div class="collapse" id="{{post.post_id}}" style="width: 60%;">
+                            {% for i in post.comments%}
+                            <br>
+                            <p style="font-size: 18px;"><i style="color: grey;">{{i.date}}</i>&ThickSpace;&middot;&ThickSpace;<b>{{i.username}}</b>&ThickSpace;&ThickSpace;|&ThickSpace;&ThickSpace;{{i.comment}}&ThickSpace;&ThickSpace;<a href="/delete/comment/{{i.com_id}}"><span class="glyphicon glyphicon-trash"></span></a></p>
+                            {% endfor %}
+                            <br>
+                            <b>{{post.comments|length}}</b> Comments & <b>{{post.post_netlikes}}</b> Likes
+                            <br><br>
+                            <form action="/comment/{{post.post_id}}" method="POST">
+                                <input type="text" placeholder="Give your Thougths" name="comment" style="width: 75%;">
+                                <button type="submit" class="btn"><span style="font-size: 16px;color:black;" class="glyphicon glyphicon-comment"></span></button>
+                            </form>
+                        </div>
+                        </center>
                     </div>
                     <br>
                 </div>
