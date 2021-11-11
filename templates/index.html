@@ -289,7 +289,7 @@
                         <div class="collapse" id="{{post.post_id}}" style="width: 60%;">
                             {% for i in post.comments%}
                             <br>
-                            <p style="font-size: 18px;"><i style="color: grey;">{{i.date}}</i>&ThickSpace;&middot;&ThickSpace;<b>{{i.username}}</b>&ThickSpace;&ThickSpace;|&ThickSpace;&ThickSpace;{{i.comment}}&ThickSpace;&ThickSpace;<a href="/delete/comment/{{i.com_id}}"><span class="glyphicon glyphicon-trash"></span></a></p>
+                            <p style="font-size: 18px;"><i style="color: grey;">{{i.date}}</i>&ThickSpace;&ThickSpace;<b>{{i.username}}</b>&ThickSpace;&ThickSpace;|&ThickSpace;&ThickSpace;{{i.comment}}&ThickSpace;&ThickSpace;{%if current_user.id == i.user_id%}<a href="/delete/comment/{{i.com_id}}"><span class="glyphicon glyphicon-trash"></span></a>{%endif%}</p>
                             {% endfor %}
                             <br>
                             <b>{{post.comments|length}}</b> Comments & <b>{{post.post_netlikes}}</b> Likes
