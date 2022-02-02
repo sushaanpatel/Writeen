@@ -306,8 +306,9 @@ def login():
         return redirect('/login')
     else:
       return render_template('login.html', errmsg=session['ermsg'])
-  except:
+  except Exception as e:
     flash('err')
+    print(e)
     return redirect(session['currentp'])
 
 @app.route('/logout')
@@ -471,7 +472,10 @@ def edit_text(post_id):
       return redirect('/yourposts')
     else:
       edit_post = Posts.query.get(post_id)
-      return render_template('edit_text.html', post = edit_post, err=session['errormsg'])
+      if edit_post.post_creator == current_user.username:
+        return render_template('edit_text.html', post = edit_post, err=session['errormsg'])
+      else:
+        return redirect('/yourposts')
   except:
     flash('err')
     return redirect(session['currentp'])
@@ -506,7 +510,10 @@ def edit_art(post_id):
         return redirect('/yourposts')
       else:
         edit_post = Posts.query.get(post_id)
-        return render_template('edit_art.html', post = edit_post, err = session['errormsg'])
+        if edit_post.post_creator == current_user.username:
+          return render_template('edit_art.html', post = edit_post, err = session['errormsg'])
+        else:
+          return redirect('/yourposts')
   except:
     flash('err')
     return redirect(session['currentp'])
