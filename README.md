@@ -5,4 +5,4 @@ Currently hosted at https://writeen.herokuapp.com/
 
 .env, and Oauths are hidden due to sensitive information
 
-Note: The website is no longer live, as Heroku started is no longer free :(
+Note: The website is no longer live, as Heroku is no longer free :(
